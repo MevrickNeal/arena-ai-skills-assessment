@@ -3511,12 +3511,14 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
       <div class="form-group full">
         <label class="form-label">Which AI Coding & Productivity Tools? (Click all that apply)</label>
         <div class="pill-group" id="toolTiles">
+          <label class="pill-btn"><input type="checkbox" value="Google Antigravity" class="tool-check"><span class="pill-text">Google Antigravity</span></label>
           <label class="pill-btn"><input type="checkbox" value="GitHub Copilot" class="tool-check"><span class="pill-text">GitHub Copilot</span></label>
           <label class="pill-btn"><input type="checkbox" value="ChatGPT Plus / Team" class="tool-check"><span class="pill-text">ChatGPT Plus / Team</span></label>
           <label class="pill-btn"><input type="checkbox" value="Google Gemini / Vertex" class="tool-check"><span class="pill-text">Google Gemini / Vertex</span></label>
           <label class="pill-btn"><input type="checkbox" value="Claude (Anthropic)" class="tool-check"><span class="pill-text">Claude (Anthropic)</span></label>
           <label class="pill-btn"><input type="checkbox" value="Cursor IDE" class="tool-check"><span class="pill-text">Cursor IDE</span></label>
           <label class="pill-btn"><input type="checkbox" value="Windsurf" class="tool-check"><span class="pill-text">Windsurf</span></label>
+          <label class="pill-btn"><input type="checkbox" value="MiniMax" class="tool-check"><span class="pill-text">MiniMax</span></label>
           <label class="pill-btn"><input type="checkbox" value="v0.dev / Bolt.new" class="tool-check"><span class="pill-text">v0.dev / Bolt.new</span></label>
           <label class="pill-btn"><input type="checkbox" value="Tabnine" class="tool-check"><span class="pill-text">Tabnine</span></label>
           <label class="pill-btn"><input type="checkbox" value="Ollama / Local LLM" class="tool-check"><span class="pill-text">Ollama / Local LLM</span></label>
@@ -7998,7 +8000,7 @@ function renderTechStackStatsDashboard() {
   });
 
   // 3. AI Tools Count
-  const allKnownTools = ['GitHub Copilot', 'ChatGPT Plus / Team', 'Google Gemini / Vertex', 'Claude (Anthropic)', 'Cursor IDE', 'Windsurf', 'v0.dev / Bolt.new', 'Tabnine', 'Ollama / Local LLM', 'Midjourney / Stable Diffusion'];
+  const allKnownTools = ['Google Antigravity', 'GitHub Copilot', 'ChatGPT Plus / Team', 'Google Gemini / Vertex', 'Claude (Anthropic)', 'Cursor IDE', 'Windsurf', 'MiniMax', 'v0.dev / Bolt.new', 'Tabnine', 'Ollama / Local LLM', 'Midjourney / Stable Diffusion'];
   let toolCounts = {};
   allKnownTools.forEach(t => toolCounts[t] = { count: 0, devs: [] });
 

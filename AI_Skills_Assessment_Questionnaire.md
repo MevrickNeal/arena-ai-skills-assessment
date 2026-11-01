@@ -94,7 +94,7 @@
 | # | Question | Response |
 |---|----------|----------|
 | E1 | Are you currently using any AI tools in your daily work? (Y/N) | |
-| E2 | If yes, which tools? (e.g., GitHub Copilot, ChatGPT, etc.) | |
+| E2 | If yes, which tools? (e.g., Google Antigravity, GitHub Copilot, ChatGPT, Claude, Cursor, MiniMax, etc.) | |
 | E3 | How has AI improved your productivity? (Brief description) | |
 | E4 | Are there areas in your current work where AI could be applied but isn't yet? | |
 | E5 | What AI initiatives would you like the company to pursue? | |
