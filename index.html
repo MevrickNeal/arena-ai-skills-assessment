@@ -1241,14 +1241,20 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     </div>
 
     <!-- CLOUD SYNC & REFRESH (COORDINATOR ONLY) -->
-    <button class="btn btn-sync coordinator-only" onclick="openCloudModal()" title="Connect to Google Sheet / Google Form Apps Script">
-      ☁️ Cloud Sync
+    <button class="btn btn-sync coordinator-only" onclick="openCloudModal()" title="Connect to Google Sheet & GitHub Parallel Backup">
+      ☁️ Cloud & GitHub
     </button>
     <button class="btn btn-glass coordinator-only" onclick="syncFromCloud(true)" title="Fetch live submissions from Google Sheet">
       🔄 Fetch Live
     </button>
+    <button class="btn btn-glass coordinator-only" onclick="retractFromGitHub(true)" title="Retract backup submissions from GitHub repo (data/submissions.json)">
+      📥 Retract GitHub
+    </button>
     
-    <!-- EXPORT BUTTONS (COORDINATOR ONLY) -->
+    <!-- EXPORT & IMPORT EXCEL (COORDINATOR ONLY) -->
+    <button class="btn btn-export-excel coordinator-only" onclick="triggerExcelUpload()" title="Upload developer exported Excel files (.xlsx) to view their stats and answers">
+      📥 Upload Excel
+    </button>
     <button class="btn btn-export-excel coordinator-only" onclick="exportToExcel()" title="Export all interviews to formatted Excel workbook (.xlsx)">
       📊 Excel
     </button>
@@ -1361,6 +1367,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         </div>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-export-excel" onclick="triggerExcelUpload()" title="Upload & import developer Excel files (.xlsx) to view all stats and answers">📥 Upload Excel</button>
         <button class="btn btn-primary" onclick="startNewInterview()">➕ Start Next Developer</button>
         <button class="btn btn-glass" onclick="changeTargetCount(1)" title="Add an extra slot above 15">➕ Add Slot</button>
         <button class="btn btn-glass" onclick="changeTargetCount(-1)" title="Remove pending slot">➖ Remove Slot</button>
@@ -1392,7 +1399,10 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         </div>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn btn-export-excel" onclick="exportToExcel()">📊 Download as Excel (.xlsx)</button>
+        <button class="btn btn-export-excel" onclick="triggerExcelUpload()" title="Upload developer exported Excel files (.xlsx) to view all answers">📥 Upload Developer Excel</button>
+        <button class="btn btn-glass" onclick="syncFromCloud(true)" title="Sync latest submissions from Google Cloud Sheet">☁️ Sync Cloud</button>
+        <button class="btn btn-glass" onclick="retractFromGitHub(true)" title="Retract latest backup from GitHub repo (data/submissions.json)">📥 Retract GitHub</button>
+        <button class="btn btn-export-excel" onclick="exportToExcel()">📊 Download Excel (.xlsx)</button>
         <button class="btn btn-glass" onclick="renderRawDataTable()">🔄 Refresh Sheet</button>
       </div>
     </div>
@@ -1968,35 +1978,84 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
   </div>
 </div>
 
-<!-- ═══ MODAL: CLOUD SYNC SETTINGS (GOOGLE APPS SCRIPT / GOOGLE SHEET) ═══ -->
+<!-- ═══ MODAL: CLOUD & GITHUB PARALLEL SYNC SETTINGS ═══ -->
 <div class="modal-overlay" id="cloudModal">
-  <div class="modal-card" style="max-width:540px; text-align:left;">
+  <div class="modal-card" style="max-width:580px; text-align:left; max-height:90vh; overflow-y:auto;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
       <div class="modal-icon" style="width:48px; height:48px; font-size:24px; margin:0; background:rgba(107,45,139,0.15); color:var(--arena-plum);">☁️</div>
       <div>
-        <h3 class="modal-title" style="margin:0; font-size:18px;">Google Sheet & Cloud Live Sync</h3>
-        <p class="modal-desc" style="margin:0; font-size:12px;">Connect to your Google Apps Script Web App URL</p>
+        <h3 class="modal-title" style="margin:0; font-size:18px;">Cloud & GitHub Parallel Live Sync</h3>
+        <p class="modal-desc" style="margin:0; font-size:12px;">Real-time sync to Google Sheet with parallel auto-backup to GitHub</p>
       </div>
     </div>
     
-    <div class="glass-callout" style="font-size:12px; margin-bottom:16px;">
-      <span>💡</span>
-      <div>
-        Paste the <strong>Web App URL</strong> generated from your Google Sheet Apps Script (e.g. <code>https://script.google.com/macros/s/.../exec</code>). When developers submit, their data streams live into your Google Sheet and dashboard!
+    <!-- SECTION 1: GOOGLE APPS SCRIPT / GOOGLE SHEET -->
+    <div style="margin-bottom:18px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <label class="form-label" style="margin:0; font-size:13px; font-weight:700;">1. Google Apps Script Web App URL</label>
+        <span style="font-size:11px; padding:2px 8px; border-radius:10px; background:rgba(37,99,235,0.1); color:#2563eb; font-weight:600;">Google Sheets</span>
+      </div>
+      <input type="text" id="cloudSyncUrlInput" class="form-control" value="https://script.google.com/macros/s/AKfycb2VgGIZnNF0douqJHZrkQUl7VxiNqrkbaPTjADPdKRddoeEKMNepDI2g0MwszmOCoL9g/exec" placeholder="https://script.google.com/macros/s/.../exec">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+        <input type="checkbox" id="autoSyncCheck" style="width:16px; height:16px; cursor:pointer;">
+        <label for="autoSyncCheck" style="font-size:12px; color:#475569; cursor:pointer;">Auto-fetch live submissions every 30 seconds</label>
+      </div>
+      <div id="cloudStatusMsg" style="font-size:12px; margin-top:8px; padding:8px 12px; border-radius:6px; display:none;"></div>
+    </div>
+
+    <!-- SECTION 2: GITHUB REPO PARALLEL STORE -->
+    <div style="border-top:1px solid #e2e8f0; padding-top:14px; margin-bottom:18px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <label class="form-label" style="margin:0; font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px;">
+          <span>📦</span> 2. GitHub Repo Parallel Store (Auto-Backup)
+        </label>
+        <span style="font-size:11px; padding:2px 8px; border-radius:10px; background:rgba(16,185,129,0.12); color:#10b981; font-weight:600;">data/submissions.json</span>
+      </div>
+      
+      <p style="font-size:12px; color:#64748b; margin-bottom:10px; line-height:1.4;">
+        If Google Sheets ever has a sync delay or error, you can retract all raw dossiers directly from your GitHub repository at any time!
+      </p>
+
+      <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+        <button class="btn btn-primary" type="button" onclick="retractFromGitHub(true)" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          📥 Retract Data from GitHub
+        </button>
+        <button class="btn btn-glass" type="button" onclick="pushToGitHubRepo(true)">
+          📤 Push All to GitHub Backup
+        </button>
+      </div>
+
+      <div class="form-group" style="margin-bottom:8px;">
+        <label class="form-label" style="font-size:12px;">GitHub Personal Access Token (PAT) <span style="font-weight:normal; color:#94a3b8;">— Optional for browser auto-push</span></label>
+        <input type="password" id="ghTokenInput" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="font-size:12px;">
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <input type="checkbox" id="autoGhBackupCheck" style="width:16px; height:16px; cursor:pointer;">
+        <label for="autoGhBackupCheck" style="font-size:12px; color:#475569; cursor:pointer;">Auto parallel-backup to GitHub every 60 seconds</label>
+      </div>
+
+      <div id="ghBackupStatusMsg" style="font-size:11px; color:#64748b;">
+        Repository: <a href="https://github.com/MevrickNeal/arena-ai-skills-assessment/blob/main/data/submissions.json" target="_blank" style="color:#2563eb; text-decoration:underline;">MevrickNeal/arena-ai-skills-assessment/data/submissions.json</a>
       </div>
     </div>
 
-    <div class="form-group" style="margin-bottom:16px;">
-      <label class="form-label">Google Apps Script Web App URL</label>
-      <input type="text" id="cloudSyncUrlInput" class="form-control" value="https://script.google.com/macros/s/AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw/exec">
+    <!-- SECTION 3: EXCEL DOSSIER IMPORT -->
+    <div style="border-top:1px solid #e2e8f0; padding-top:14px; margin-bottom:18px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <label class="form-label" style="margin:0; font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px;">
+          <span>📊</span> 3. Upload & View Developer Excels (.xlsx)
+        </label>
+        <span style="font-size:11px; padding:2px 8px; border-radius:10px; background:rgba(168,85,247,0.12); color:#9333ea; font-weight:600;">Excel Import</span>
+      </div>
+      <p style="font-size:12px; color:#64748b; margin-bottom:10px;">
+        Upload individual or batch Excel files exported by developers. Their dossiers will be parsed and merged so you can view all answers by name.
+      </p>
+      <button class="btn btn-export-excel" type="button" onclick="triggerExcelUpload()">
+        📁 Select & Upload Excel File(s)
+      </button>
     </div>
-
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
-      <input type="checkbox" id="autoSyncCheck" style="width:16px; height:16px; cursor:pointer;">
-      <label for="autoSyncCheck" style="font-size:13px; color:#475569; cursor:pointer;">Auto-fetch live submissions every 30 seconds</label>
-    </div>
-
-    <div id="cloudStatusMsg" style="font-size:12px; margin-bottom:16px; padding:8px 12px; border-radius:6px; display:none;"></div>
 
     <div class="modal-btn-row" style="justify-content:flex-end;">
       <button class="btn btn-glass" onclick="testCloudConnection()">🧪 Test Connection</button>
@@ -2066,8 +2125,14 @@ const DOMAINS_G = [
 // ════════════════════════════════════════════════════════════
 let currentRole = localStorage.getItem('arena_current_role') || 'coordinator'; // 'coordinator' or 'developer'
 let coordinatorPin = localStorage.getItem('arena_coord_pin') || '2026';
-let cloudSyncUrl = localStorage.getItem('arena_cloud_sync_url') || 'https://script.google.com/macros/s/AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw/exec';
+let cloudSyncUrl = localStorage.getItem('arena_cloud_sync_url') || 'https://script.google.com/macros/s/AKfycb2VgGIZnNF0douqJHZrkQUl7VxiNqrkbaPTjADPdKRddoeEKMNepDI2g0MwszmOCoL9g/exec';
+// Auto-migrate from deprecated URL if stored locally
+if (cloudSyncUrl === 'https://script.google.com/macros/s/AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw/exec') {
+  cloudSyncUrl = 'https://script.google.com/macros/s/AKfycb2VgGIZnNF0douqJHZrkQUl7VxiNqrkbaPTjADPdKRddoeEKMNepDI2g0MwszmOCoL9g/exec';
+  localStorage.setItem('arena_cloud_sync_url', cloudSyncUrl);
+}
 let autoSyncInterval = null;
+let autoGhInterval = null;
 
 // Check URL hash for direct access: #developer or #coordinator
 if (window.location.hash === '#developer') {
@@ -2182,10 +2247,21 @@ function submitPin() {
 }
 
 // ════════════════════════════════════════════════════════════
-// CLOUD SYNC CONFIGURATION & LIVE DATA SYNC
+// CLOUD, GITHUB & EXCEL IMPORT / SYNC ENGINE
 // ════════════════════════════════════════════════════════════
 function openCloudModal() {
   document.getElementById('cloudSyncUrlInput').value = cloudSyncUrl;
+  const token = localStorage.getItem('arena_github_pat') || '';
+  const tokenInput = document.getElementById('ghTokenInput');
+  if (tokenInput) tokenInput.value = token;
+  const autoGh = localStorage.getItem('arena_auto_gh_backup') === 'true';
+  const autoGhCheck = document.getElementById('autoGhBackupCheck');
+  if (autoGhCheck) autoGhCheck.checked = autoGh;
+  const lastBackup = localStorage.getItem('arena_last_gh_backup');
+  const statusMsg = document.getElementById('ghBackupStatusMsg');
+  if (statusMsg && lastBackup) {
+    statusMsg.innerHTML = `Repository: <a href="https://github.com/MevrickNeal/arena-ai-skills-assessment/blob/main/data/submissions.json" target="_blank" style="color:#2563eb; text-decoration:underline;">MevrickNeal/arena-ai-skills-assessment/data/submissions.json</a><br><span style="color:#10b981; font-weight:600;">✓ Last backed up to GitHub: ${lastBackup}</span>`;
+  }
   document.getElementById('cloudModal').classList.add('show');
 }
 
@@ -2197,6 +2273,22 @@ function saveCloudSettings() {
   const url = document.getElementById('cloudSyncUrlInput').value.trim();
   cloudSyncUrl = url;
   localStorage.setItem('arena_cloud_sync_url', url);
+
+  const tokenInput = document.getElementById('ghTokenInput');
+  if (tokenInput) {
+    localStorage.setItem('arena_github_pat', tokenInput.value.trim());
+  }
+
+  const autoGhCheck = document.getElementById('autoGhBackupCheck');
+  if (autoGhCheck) {
+    localStorage.setItem('arena_auto_gh_backup', autoGhCheck.checked ? 'true' : 'false');
+    if (autoGhCheck.checked && !autoGhInterval) {
+      autoGhInterval = setInterval(() => pushToGitHubRepo(false), 60000);
+    } else if (!autoGhCheck.checked && autoGhInterval) {
+      clearInterval(autoGhInterval);
+      autoGhInterval = null;
+    }
+  }
 
   const autoSync = document.getElementById('autoSyncCheck').checked;
   if (autoSync) {
@@ -2240,7 +2332,7 @@ function testCloudConnection() {
     .catch(err => {
       msg.style.background = '#fef2f2';
       msg.style.color = '#b91c1c';
-      msg.textContent = '⚠️ Could not connect. Make sure "Who has access" is set to "Anyone" in your deployment.';
+      msg.textContent = '⚠️ Could not connect to Google Apps Script. (You can still retract data from GitHub backup anytime!)';
     });
 }
 
@@ -2251,7 +2343,10 @@ function syncFromCloud(showNotification) {
   }
 
   fetch(cloudSyncUrl)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
     .then(result => {
       if (result && Array.isArray(result.data)) {
         // Merge cloud data with local data by id or empId
@@ -2272,39 +2367,497 @@ function syncFromCloud(showNotification) {
           }
         });
 
+        if (allAssessments.length > targetDevelopers) {
+          targetDevelopers = allAssessments.length;
+          localStorage.setItem('arena_target_count', targetDevelopers);
+        }
+
         saveToStorage();
         updateDashboardStats();
         renderRoster();
+        if (typeof renderRawDataTable === 'function') renderRawDataTable();
 
         if (showNotification) {
-          alert(`☁️ Cloud Sync Complete!
-Total Active Submissions: ${allAssessments.length} developers.
-Synced with your Google Sheet.`);
+          alert(`☁️ Cloud Sync Complete!\nTotal Active Submissions: ${allAssessments.length} developers.\nSynced with your Google Sheet.`);
         }
+      } else {
+        retractFromGitHub(false);
       }
     })
     .catch(err => {
-      console.warn('Cloud sync error:', err);
+      console.warn('Google Cloud sync unreachable, falling back to GitHub backup store:', err);
+      retractFromGitHub(false);
       if (showNotification) {
-        alert('⚠️ Could not connect to Google Apps Script. Check your URL in Cloud Sync settings.');
+        alert('⚠️ Google Apps Script could not be reached.\nAutomatically checked and retracted latest submissions from GitHub repo backup!');
       }
     });
 }
 
-// Push a single submission to Google Sheet Apps Script
-function pushSubmissionToCloud(data) {
-  if (!cloudSyncUrl) return;
+// Retract submissions directly from GitHub repository (data/submissions.json)
+function retractFromGitHub(showNotification) {
+  const ghUrl = 'https://raw.githubusercontent.com/MevrickNeal/arena-ai-skills-assessment/main/data/submissions.json?nocache=' + Date.now();
 
-  fetch(cloudSyncUrl, {
-    method: 'POST',
-    mode: 'no-cors', // Google Apps Script Web App redirects
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(() => {
-    console.log('Submission pushed to Google Sheet successfully');
-  }).catch(err => {
-    console.warn('Could not push to Google Sheet:', err);
+  fetch(ghUrl)
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(items => {
+      if (Array.isArray(items)) {
+        let addedCount = 0;
+        let updatedCount = 0;
+
+        items.forEach(ghDev => {
+          if (!ghDev || (!ghDev.empId && !ghDev.name && !ghDev.id)) return;
+          const idx = allAssessments.findIndex(localDev =>
+            (localDev.empId && ghDev.empId && localDev.empId.toLowerCase() === ghDev.empId.toLowerCase()) ||
+            (localDev.id && ghDev.id && localDev.id === ghDev.id)
+          );
+          if (idx >= 0) {
+            allAssessments[idx] = ghDev;
+            updatedCount++;
+          } else {
+            allAssessments.push(ghDev);
+            addedCount++;
+          }
+        });
+
+        if (allAssessments.length > targetDevelopers) {
+          targetDevelopers = allAssessments.length;
+          localStorage.setItem('arena_target_count', targetDevelopers);
+        }
+
+        saveToStorage();
+        updateDashboardStats();
+        renderRoster();
+        if (typeof renderRawDataTable === 'function') renderRawDataTable();
+
+        const nowStr = new Date().toLocaleTimeString();
+        localStorage.setItem('arena_last_gh_retract', nowStr);
+
+        if (showNotification) {
+          alert(`📥 GitHub Data Retracted Successfully!\n\nFound ${items.length} records in GitHub repository (data/submissions.json).\n• Added: ${addedCount} new developer(s)\n• Updated: ${updatedCount} existing record(s)\n• Total Active Submissions: ${allAssessments.length}`);
+        }
+      } else {
+        if (showNotification) alert('ℹ️ GitHub submissions.json is currently empty ([]).');
+      }
+    })
+    .catch(err => {
+      console.warn('GitHub retract error:', err);
+      if (showNotification) {
+        alert('⚠️ Could not retract from GitHub: ' + err.message + '\nMake sure data/submissions.json exists on GitHub.');
+      }
+    });
+}
+
+// Push all assessments to GitHub repository (data/submissions.json)
+async function pushToGitHubRepo(showNotification) {
+  const token = (document.getElementById('ghTokenInput') ? document.getElementById('ghTokenInput').value.trim() : '') || localStorage.getItem('arena_github_pat') || '';
+
+  if (!token) {
+    if (showNotification) {
+      alert('🔑 GitHub Personal Access Token Required:\n\nPlease enter your GitHub PAT in the "Cloud & GitHub Live Sync" settings modal to push directly from your browser to the GitHub repository.\n\n(Alternatively, server-side auto-commit works if configured in your Google Apps Script!)');
+      openCloudModal();
+    }
+    return;
+  }
+
+  const owner = 'MevrickNeal';
+  const repo = 'arena-ai-skills-assessment';
+  const path = 'data/submissions.json';
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+  try {
+    let sha = '';
+    const getRes = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    if (getRes.ok) {
+      const fileData = await getRes.json();
+      sha = fileData.sha;
+    }
+
+    const jsonStr = JSON.stringify(allAssessments, null, 2);
+    const contentStr = btoa(unescape(encodeURIComponent(jsonStr)));
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `chore: Parallel backup ${allAssessments.length} developer assessments to data/submissions.json`,
+        content: contentStr,
+        sha: sha,
+        branch: 'main'
+      })
+    });
+
+    if (putRes.ok) {
+      const nowStr = new Date().toLocaleTimeString();
+      localStorage.setItem('arena_last_gh_backup', nowStr);
+      const statusMsg = document.getElementById('ghBackupStatusMsg');
+      if (statusMsg) {
+        statusMsg.innerHTML = `Repository: <a href="https://github.com/MevrickNeal/arena-ai-skills-assessment/blob/main/data/submissions.json" target="_blank" style="color:#2563eb; text-decoration:underline;">MevrickNeal/arena-ai-skills-assessment/data/submissions.json</a><br><span style="color:#10b981; font-weight:600;">✓ Backed up to GitHub at ${nowStr} (${allAssessments.length} records)</span>`;
+      }
+      if (showNotification) {
+        alert(`✅ Pushed to GitHub Repository Successfully!\n\n${allAssessments.length} developer dossiers backed up to data/submissions.json at ${nowStr}.`);
+      }
+    } else {
+      const errData = await putRes.json();
+      throw new Error(errData.message || 'GitHub API returned an error.');
+    }
+  } catch(err) {
+    console.error('Failed to push to GitHub:', err);
+    if (showNotification) {
+      alert(`⚠️ Could not push to GitHub repo: ${err.message}`);
+    }
+  }
+}
+
+// Push a single submission to Google Sheet Apps Script & Parallel GitHub
+function pushSubmissionToCloud(data) {
+  if (cloudSyncUrl) {
+    fetch(cloudSyncUrl, {
+      method: 'POST',
+      mode: 'no-cors', // Google Apps Script Web App redirects
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(() => {
+      console.log('Submission pushed to Google Sheet successfully');
+    }).catch(err => {
+      console.warn('Could not push to Google Sheet:', err);
+    });
+  }
+
+  // Auto parallel push to GitHub if token configured
+  if (localStorage.getItem('arena_auto_gh_backup') === 'true' && localStorage.getItem('arena_github_pat')) {
+    pushToGitHubRepo(false);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// EXCEL IMPORT & DOSSIER RECOVERY ENGINE
+// ════════════════════════════════════════════════════════════
+function triggerExcelUpload() {
+  const input = document.getElementById('excelFileInput');
+  if (input) input.click();
+}
+
+function handleExcelUpload(event) {
+  const files = event.target.files;
+  if (!files || files.length === 0) return;
+
+  if (typeof XLSX === 'undefined') {
+    alert('SheetJS (XLSX) library is still initializing. Please try again in 5 seconds.');
+    return;
+  }
+
+  let filesProcessed = 0;
+  let totalImported = 0;
+  let totalUpdated = 0;
+
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const importedDevs = parseAssessmentWorkbook(workbook);
+
+        importedDevs.forEach(dev => {
+          if (!dev.name && !dev.empId) return;
+          const existingIdx = allAssessments.findIndex(localDev =>
+            (localDev.empId && dev.empId && localDev.empId.toLowerCase() === dev.empId.toLowerCase()) ||
+            (localDev.name && dev.name && localDev.name.toLowerCase() === dev.name.toLowerCase()) ||
+            (localDev.id && dev.id && localDev.id === dev.id)
+          );
+
+          if (existingIdx >= 0) {
+            allAssessments[existingIdx] = Object.assign({}, allAssessments[existingIdx], dev);
+            totalUpdated++;
+          } else {
+            allAssessments.push(dev);
+            totalImported++;
+          }
+        });
+      } catch (err) {
+        console.error('Error parsing Excel file:', file.name, err);
+        alert(`⚠️ Could not parse "${file.name}": ${err.message}`);
+      } finally {
+        filesProcessed++;
+        if (filesProcessed === files.length) {
+          if (allAssessments.length > targetDevelopers) {
+            targetDevelopers = allAssessments.length;
+            localStorage.setItem('arena_target_count', targetDevelopers);
+          }
+          saveToStorage();
+          updateDashboardStats();
+          renderRoster();
+          if (typeof renderRawDataTable === 'function') renderRawDataTable();
+
+          // If connected to cloud, push imported developers to Google Sheet
+          if (cloudSyncUrl && totalImported > 0) {
+            allAssessments.forEach(d => pushSubmissionToCloud(d));
+          }
+
+          alert(`📊 Excel Dossier Import Complete!\n\nProcessed: ${files.length} file(s)\n• Added: ${totalImported} new developer(s)\n• Updated: ${totalUpdated} existing profile(s)\n• Total Submissions in Dashboard: ${allAssessments.length}\n\nYou can now click any developer in the Roster or Raw Data Sheet to view all their answers, stats, and remarks!`);
+        }
+      }
+    };
+    reader.readAsArrayBuffer(file);
   });
+
+  event.target.value = '';
+}
+
+function parseAssessmentWorkbook(wb) {
+  const developers = [];
+
+  // CASE 1: Google Sheet export or Raw Sheet export with "Raw JSON Data" column
+  for (let sheetName of wb.SheetNames) {
+    const ws = wb.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+    if (!rows || rows.length < 2) continue;
+
+    const headerRow = rows[0] || [];
+    let jsonColIdx = -1;
+    for (let c = 0; c < headerRow.length; c++) {
+      const cellVal = String(headerRow[c] || '').toLowerCase();
+      if (cellVal.includes('raw json') || cellVal.includes('payload')) {
+        jsonColIdx = c;
+        break;
+      }
+    }
+
+    if (jsonColIdx >= 0) {
+      for (let r = 1; r < rows.length; r++) {
+        const val = rows[r][jsonColIdx];
+        if (val) {
+          try {
+            const parsed = (typeof val === 'string') ? JSON.parse(val) : val;
+            if (parsed && (parsed.name || parsed.empId)) {
+              developers.push(parsed);
+            }
+          } catch(e) {}
+        }
+      }
+      if (developers.length > 0) return developers;
+    }
+  }
+
+  // CASE 2: Multi-sheet workbook exported by Arena Dashboard
+  const rosterSheetName = wb.SheetNames.find(s => s.toLowerCase().includes('roster') || s.toLowerCase().includes('summary')) || wb.SheetNames[0];
+  const wsRoster = wb.Sheets[rosterSheetName];
+  const rosterRows = XLSX.utils.sheet_to_json(wsRoster, { header: 1 });
+
+  let rosterHeaderIdx = -1;
+  for (let i = 0; i < Math.min(rosterRows.length, 10); i++) {
+    const rowStr = (rosterRows[i] || []).map(x => String(x).toLowerCase()).join(' | ');
+    if (rowStr.includes('name') && (rowStr.includes('id') || rowStr.includes('project') || rowStr.includes('emp'))) {
+      rosterHeaderIdx = i;
+      break;
+    }
+  }
+
+  const devMap = new Map();
+
+  if (rosterHeaderIdx >= 0) {
+    const headers = rosterRows[rosterHeaderIdx].map(h => String(h || '').trim().toLowerCase());
+    const nameCol = headers.findIndex(h => h === 'name' || h.includes('developer name'));
+    const empIdCol = headers.findIndex(h => h.includes('emp') || h.includes('employee id') || h === 'id');
+    const deptCol = headers.findIndex(h => h.includes('dept') || h.includes('department'));
+    const titleCol = headers.findIndex(h => h.includes('title') || h.includes('designation'));
+    const projCol = headers.findIndex(h => h.includes('project') && !h.includes('role'));
+    const roleCol = headers.findIndex(h => h.includes('role'));
+    const yrArenaCol = headers.findIndex(h => h.includes('arena') || h.includes('company'));
+    const yrTotalCol = headers.findIndex(h => h.includes('total exp') || h.includes('experience'));
+    const langCol = headers.findIndex(h => h.includes('language'));
+    const knowScoreCol = headers.findIndex(h => h.includes('knowledge score'));
+    const skillScoreCol = headers.findIndex(h => h.includes('tech skills score') || h.includes('skills score'));
+    const overallScoreCol = headers.findIndex(h => h.includes('overall') || h.includes('ai score'));
+    const potentialCol = headers.findIndex(h => h.includes('potential'));
+    const usingAiCol = headers.findIndex(h => h.includes('using ai'));
+    const toolsCol = headers.findIndex(h => h.includes('active ai tools') || h.includes('tools'));
+    const notesCol = headers.findIndex(h => h.includes('notes') || h.includes('coordinator notes'));
+
+    for (let r = rosterHeaderIdx + 1; r < rosterRows.length; r++) {
+      const row = rosterRows[r];
+      if (!row || row.length === 0) continue;
+      const name = nameCol >= 0 ? String(row[nameCol] || '').trim() : '';
+      const empId = empIdCol >= 0 ? String(row[empIdCol] || '').trim() : '';
+      if (!name && !empId) continue;
+
+      const devObj = {
+        id: 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        name: name,
+        empId: empId,
+        department: deptCol >= 0 ? String(row[deptCol] || '') : '',
+        title: titleCol >= 0 ? String(row[titleCol] || '') : '',
+        project: projCol >= 0 ? String(row[projCol] || '') : '',
+        role: roleCol >= 0 ? String(row[roleCol] || '') : '',
+        yearsCompany: yrArenaCol >= 0 ? String(row[yrArenaCol] || '') : '',
+        yearsTotal: yrTotalCol >= 0 ? String(row[yrTotalCol] || '') : '',
+        languages: langCol >= 0 && row[langCol] ? String(row[langCol]).split(',').map(s => s.trim()) : [],
+        avgKnowledge: knowScoreCol >= 0 ? String(row[knowScoreCol] || '—') : '—',
+        avgSkills: skillScoreCol >= 0 ? String(row[skillScoreCol] || '—') : '—',
+        overallScore: overallScoreCol >= 0 ? String(row[overallScoreCol] || '—') : '—',
+        aiPotential: potentialCol >= 0 ? String(row[potentialCol] || '') : '',
+        usingAI: usingAiCol >= 0 ? String(row[usingAiCol] || 'yes') : 'yes',
+        aiTools: toolsCol >= 0 && row[toolsCol] ? String(row[toolsCol]).split(',').map(s => s.trim()) : [],
+        noteImpression: notesCol >= 0 ? String(row[notesCol] || '') : '',
+        knowledge: {},
+        skills: {},
+        customSkills: [],
+        timestamp: new Date().toISOString()
+      };
+
+      const key = (empId || name).toLowerCase();
+      devMap.set(key, devObj);
+    }
+  }
+
+  // Sheet 2: Tech Stacks & Remarks
+  const skillsSheetName = wb.SheetNames.find(s => s.toLowerCase().includes('tech') || s.toLowerCase().includes('skills'));
+  if (skillsSheetName) {
+    const wsSkills = wb.Sheets[skillsSheetName];
+    const sRows = XLSX.utils.sheet_to_json(wsSkills, { header: 1 });
+    let sHIdx = -1;
+    for (let i = 0; i < Math.min(sRows.length, 10); i++) {
+      const rStr = (sRows[i] || []).map(x => String(x).toLowerCase()).join(' | ');
+      if (rStr.includes('tool') || rStr.includes('tech stack') || rStr.includes('rating')) {
+        sHIdx = i; break;
+      }
+    }
+    if (sHIdx >= 0) {
+      const headers = sRows[sHIdx].map(h => String(h || '').trim().toLowerCase());
+      const nCol = headers.findIndex(h => h.includes('name'));
+      const idCol = headers.findIndex(h => h.includes('emp') || h.includes('id'));
+      const toolCol = headers.findIndex(h => h.includes('tech stack') || h.includes('tool'));
+      const ratCol = headers.findIndex(h => h.includes('rating'));
+      const usedCol = headers.findIndex(h => h.includes('used') || h.includes('work'));
+      const remCol = headers.findIndex(h => h.includes('remark') || h.includes('context'));
+
+      for (let r = sHIdx + 1; r < sRows.length; r++) {
+        const row = sRows[r];
+        if (!row) continue;
+        const name = nCol >= 0 ? String(row[nCol] || '').trim() : '';
+        const empId = idCol >= 0 ? String(row[idCol] || '').trim() : '';
+        const key = (empId || name).toLowerCase();
+        let dev = devMap.get(key);
+        if (!dev) {
+          dev = {
+            id: 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+            name: name,
+            empId: empId,
+            skills: {},
+            knowledge: {},
+            timestamp: new Date().toISOString()
+          };
+          devMap.set(key, dev);
+        }
+        const tool = toolCol >= 0 ? String(row[toolCol] || '').trim() : '';
+        if (tool) {
+          dev.skills[tool] = {
+            rating: ratCol >= 0 ? parseInt(row[ratCol]) || 0 : 0,
+            usedAtWork: usedCol >= 0 ? String(row[usedCol] || 'N/A') : 'N/A',
+            remarks: remCol >= 0 ? String(row[remCol] || '') : ''
+          };
+        }
+      }
+    }
+  }
+
+  // Sheet 3: AI Knowledge & Remarks
+  const knowSheetName = wb.SheetNames.find(s => s.toLowerCase().includes('knowledge') || s.toLowerCase().includes('domains'));
+  if (knowSheetName) {
+    const wsKnow = wb.Sheets[knowSheetName];
+    const kRows = XLSX.utils.sheet_to_json(wsKnow, { header: 1 });
+    let kHIdx = -1;
+    for (let i = 0; i < Math.min(kRows.length, 10); i++) {
+      const rStr = (kRows[i] || []).map(x => String(x).toLowerCase()).join(' | ');
+      if (rStr.includes('domain') || rStr.includes('knowledge')) {
+        kHIdx = i; break;
+      }
+    }
+    if (kHIdx >= 0) {
+      const headers = kRows[kHIdx].map(h => String(h || '').trim().toLowerCase());
+      const nCol = headers.findIndex(h => h.includes('name'));
+      const idCol = headers.findIndex(h => h.includes('emp') || h.includes('id'));
+      const domCol = headers.findIndex(h => h.includes('domain') || h.includes('concept'));
+      const ratCol = headers.findIndex(h => h.includes('rating'));
+      const remCol = headers.findIndex(h => h.includes('remark'));
+
+      for (let r = kHIdx + 1; r < kRows.length; r++) {
+        const row = kRows[r];
+        if (!row) continue;
+        const name = nCol >= 0 ? String(row[nCol] || '').trim() : '';
+        const empId = idCol >= 0 ? String(row[idCol] || '').trim() : '';
+        const key = (empId || name).toLowerCase();
+        const dev = devMap.get(key);
+        if (dev) {
+          const dom = domCol >= 0 ? String(row[domCol] || '').trim() : '';
+          if (dom) {
+            dev.knowledge[dom] = {
+              rating: ratCol >= 0 ? parseInt(row[ratCol]) || 0 : 0,
+              remarks: remCol >= 0 ? String(row[remCol] || '') : ''
+            };
+          }
+        }
+      }
+    }
+  }
+
+  // Sheet 4: Projects & Training
+  const projSheetName = wb.SheetNames.find(s => s.toLowerCase().includes('project') || s.toLowerCase().includes('training'));
+  if (projSheetName) {
+    const wsProj = wb.Sheets[projSheetName];
+    const pRows = XLSX.utils.sheet_to_json(wsProj, { header: 1 });
+    let pHIdx = -1;
+    for (let i = 0; i < Math.min(pRows.length, 10); i++) {
+      const rStr = (pRows[i] || []).map(x => String(x).toLowerCase()).join(' | ');
+      if (rStr.includes('project') || rStr.includes('training')) {
+        pHIdx = i; break;
+      }
+    }
+    if (pHIdx >= 0) {
+      const headers = pRows[pHIdx].map(h => String(h || '').trim().toLowerCase());
+      const nCol = headers.findIndex(h => h.includes('name'));
+      const idCol = headers.findIndex(h => h.includes('emp') || h.includes('id'));
+      const doneCol = headers.findIndex(h => h.includes('done') || h.includes('worked'));
+      const countCol = headers.findIndex(h => h.includes('count'));
+      const descCol = headers.findIndex(h => h.includes('desc') || h.includes('significant'));
+      const depCol = headers.findIndex(h => h.includes('deploy') || h.includes('production'));
+      const trainCol = headers.findIndex(h => h.includes('training') || h.includes('wanted'));
+      const strCol = headers.findIndex(h => h.includes('strength'));
+      const gapCol = headers.findIndex(h => h.includes('gap'));
+
+      for (let r = pHIdx + 1; r < pRows.length; r++) {
+        const row = pRows[r];
+        if (!row) continue;
+        const name = nCol >= 0 ? String(row[nCol] || '').trim() : '';
+        const empId = idCol >= 0 ? String(row[idCol] || '').trim() : '';
+        const key = (empId || name).toLowerCase();
+        const dev = devMap.get(key);
+        if (dev) {
+          if (doneCol >= 0) dev.aiProjects = String(row[doneCol] || 'no');
+          if (countCol >= 0) dev.aiProjectCount = String(row[countCol] || '0');
+          if (descCol >= 0) dev.aiProjectDesc = String(row[descCol] || '');
+          if (depCol >= 0) dev.aiDeployed = String(row[depCol] || 'no');
+          if (trainCol >= 0) dev.wantedTraining = String(row[trainCol] || '');
+          if (strCol >= 0) dev.noteStrengths = String(row[strCol] || '');
+          if (gapCol >= 0) dev.noteGaps = String(row[gapCol] || '');
+        }
+      }
+    }
+  }
+
+  return Array.from(devMap.values());
 }
 
 // State
@@ -3354,7 +3907,8 @@ function exportToWord() {
           <p><strong>Project Coordinator Observation:</strong> <em>${d.noteImpression || 'No specific notes.'}</em></p>
         </div>
       `).join('')}
-    </body>
+    <input type="file" id="excelFileInput" accept=".xlsx, .xls, .json" multiple style="display:none;" onchange="handleExcelUpload(event)">
+</body>
     </html>
   `;
 

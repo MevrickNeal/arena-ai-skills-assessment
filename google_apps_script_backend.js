@@ -1,24 +1,27 @@
 /**
- * ARENA AI SKILLS ASSESSMENT — GOOGLE APPS SCRIPT BACKEND & GOOGLE FORM GENERATOR
+ * ARENA AI SKILLS ASSESSMENT — GOOGLE APPS SCRIPT BACKEND
  * Author: Lian Mollick (Project Coordinator Jr.)
  * 
- * INSTRUCTIONS TO DEPLOY AS LIVE BACKEND (Takes 2 minutes):
- * 1. Open Google Sheets (sheets.new) and name it "Arena AI Skills Assessment - 2026"
- * 2. In top menu, click Extensions -> Apps Script
- * 3. Delete any default code, paste this entire file, and click Save (Floppy disk icon)
- * 4. Click "Deploy" (top right) -> "New deployment"
- * 5. Select type: "Web app" (click gear icon next to Select type)
- * 6. Set Description: "Arena Assessment API"
- * 7. Set "Execute as": "Me"
- * 8. Set "Who has access": "Anyone" (VERY IMPORTANT so developers can submit without login)
- * 9. Click "Deploy" -> "Authorize Access" -> Choose your Google account -> Click "Advanced" -> "Go to Arena Assessment API (unsafe)" -> Click "Allow"
- * 10. Copy the "Web app URL" (looks like: https://script.google.com/macros/s/AKfycb.../exec)
- * 11. Paste that URL into the "Cloud Sync Settings" in your Arena Coordinator Dashboard!
+ * ⚠️ QUICK FIX INSTRUCTIONS (If you see "form is not defined"):
+ * 1. Open your Apps Script editor in Google Sheets (Extensions -> Apps Script)
+ * 2. In Code.gs, press Ctrl+A (Select All) and DELETE everything
+ * 3. Paste this ENTIRE code file from line 1 to the end
+ * 4. Click Save (Floppy disk icon or Ctrl+S)
+ * 5. Click "Deploy" -> "Manage deployments" -> Click the Pencil (Edit) icon
+ * 6. Under Version, select "New version" -> Click "Deploy"
+ * 7. Done! Now both Google Sheet and Web App are 100% active and error-free!
  * 
- * BONUS - CREATE AN OFFICIAL GOOGLE FORM IN 1 CLICK:
- * In the Apps Script editor, select the function "createOfficialGoogleForm" from the dropdown and click "Run"!
- * It will automatically build an official Google Form with all questions, ratings, and sections in your Google Drive!
+ * OPTIONAL: GITHUB REPO PARALLEL BACKUP
+ * If you paste your GitHub Personal Access Token below into GITHUB_TOKEN,
+ * every submission will automatically save to Google Sheet AND commit to
+ * data/submissions.json on your GitHub repository in parallel!
  */
+
+// OPTIONAL: Paste your GitHub Personal Access Token here for server-side GitHub parallel auto-commit:
+var GITHUB_BACKUP_TOKEN = ""; // e.g. "ghp_xxxxxxxxxxxx" (leave empty if using client-side sync)
+var GITHUB_REPO_OWNER = "MevrickNeal";
+var GITHUB_REPO_NAME = "arena-ai-skills-assessment";
+var GITHUB_REPO_PATH = "data/submissions.json";
 
 // ════════════════════════════════════════════════════════════
 // 1. WEB APP API (RECEIVES LIVE SUBMISSIONS & SERVES DATA)
@@ -30,7 +33,12 @@ function doPost(e) {
   
   try {
     var sheet = getOrCreateResponsesSheet();
-    var payload = JSON.parse(e.postData.contents);
+    var payload = {};
+    if (e && e.postData && e.postData.contents) {
+      payload = JSON.parse(e.postData.contents);
+    } else if (e && e.parameter) {
+      payload = e.parameter;
+    }
     
     // Check if updating an existing record (by EmpId or ID) or inserting new
     var empId = payload.empId || '';
@@ -59,11 +67,20 @@ function doPost(e) {
     ];
     
     if (rowIndex > 0) {
-      // Update existing developer
+      // Update existing developer row
       sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
     } else {
-      // Append new developer
+      // Append new developer row
       sheet.appendRow(rowData);
+    }
+    
+    // Parallel backup to GitHub repository if token is configured
+    try {
+      if (GITHUB_BACKUP_TOKEN) {
+        parallelPushToGitHub();
+      }
+    } catch(ghErr) {
+      Logger.log("GitHub parallel push warning: " + ghErr);
     }
     
     return ContentService.createTextOutput(JSON.stringify({
@@ -137,17 +154,82 @@ function findRowByEmpId(sheet, empId, id) {
   for (var i = 1; i < data.length; i++) {
     var rowEmpId = String(data[i][2]).trim();
     if (empId && rowEmpId && rowEmpId.toLowerCase() === String(empId).trim().toLowerCase()) {
-      return i + 1;
+      return i + 1; // 1-based index in Sheet
     }
   }
   return -1;
 }
 
 // ════════════════════════════════════════════════════════════
-// 2. AUTOMATIC GOOGLE FORM GENERATOR (RUN ONCE IN APPS SCRIPT)
+// 2. PARALLEL GITHUB REPO COMMIT ENGINE (AUTO-BACKUP)
+// ════════════════════════════════════════════════════════════
+
+function parallelPushToGitHub() {
+  var token = GITHUB_BACKUP_TOKEN || PropertiesService.getScriptProperties().getProperty("GITHUB_TOKEN");
+  if (!token) return;
+  
+  var sheet = getOrCreateResponsesSheet();
+  var values = sheet.getDataRange().getValues();
+  var list = [];
+  for (var i = 1; i < values.length; i++) {
+    var rawJson = values[i][18];
+    if (rawJson) {
+      try { list.push(JSON.parse(rawJson)); } catch(e) {}
+    }
+  }
+  
+  var apiUrl = "https://api.github.com/repos/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/contents/" + GITHUB_REPO_PATH;
+  
+  // Get current SHA
+  var sha = "";
+  try {
+    var getRes = UrlFetchApp.fetch(apiUrl, {
+      method: "get",
+      headers: {
+        "Authorization": "token " + token,
+        "User-Agent": "Arena-Apps-Script",
+        "Accept": "application/vnd.github.v3+json"
+      },
+      muteHttpExceptions: true
+    });
+    if (getRes.getResponseCode() === 200) {
+      var body = JSON.parse(getRes.getContentText());
+      sha = body.sha;
+    }
+  } catch(e) {}
+  
+  var jsonContent = JSON.stringify(list, null, 2);
+  var base64Content = Utilities.base64Encode(Utilities.newBlob(jsonContent).getBytes());
+  
+  var payload = {
+    message: "chore: Parallel auto-sync " + list.length + " developer dossiers from Google Apps Script",
+    content: base64Content,
+    branch: "main"
+  };
+  if (sha) payload.sha = sha;
+  
+  UrlFetchApp.fetch(apiUrl, {
+    method: "put",
+    contentType: "application/json",
+    headers: {
+      "Authorization": "token " + token,
+      "User-Agent": "Arena-Apps-Script",
+      "Accept": "application/vnd.github.v3+json"
+    },
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// 3. OPTIONAL: AUTOMATIC GOOGLE FORM GENERATOR
 // ════════════════════════════════════════════════════════════
 
 function createOfficialGoogleForm() {
+  if (typeof FormApp === "undefined") {
+    throw new Error("FormApp is only available inside Google Workspace.");
+  }
+  
   var form = FormApp.create("Arena — Developer AI Skills & Expertise Assessment");
   form.setDescription("Official developer skills and AI readiness assessment authorized by Managing Director Sir. Please fill in your responses accurately. Responses will be reviewed by Project Coordinator Lian Mollick.");
   form.setCollectEmail(true);
