@@ -957,6 +957,50 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     .stats-grid { grid-template-columns: 1fr; }
     .navbar { flex-direction: column; align-items: flex-start; }
   }
+
+  .btn-card-del {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    line-height: 1;
+  }
+  .btn-card-del:hover {
+    background: #ef4444;
+    color: #ffffff;
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  }
+  .btn-micro {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  .btn-micro:hover {
+    border-color: var(--arena-crimson);
+    color: var(--arena-crimson);
+    background: #f8fafc;
+  }
 </style>
 </head>
 <body>
@@ -980,8 +1024,8 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
   </div>
   
   <div class="navbar-actions">
-    <div class="live-indicator">
-      <span class="live-dot"></span> 15 TARGET DEVS
+    <div class="live-indicator" id="headerLiveBadge">
+      <span class="live-dot"></span> <span id="headerTargetText">15 TARGET DEVS</span>
     </div>
     
     <!-- EXPORT BUTTONS (EXCEL, WORD, PDF) -->
@@ -1007,10 +1051,13 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     <div class="stat-card card-target">
       <div class="stat-label-wrap">
         <span class="stat-label">Target Developers</span>
-        <span class="stat-icon">🎯</span>
+        <div style="display:flex; gap:5px; align-items:center;">
+          <button class="btn-micro" onclick="changeTargetCount(-1)" title="Decrease target slots">-</button>
+          <button class="btn-micro" onclick="changeTargetCount(1)" title="Increase target slots">+</button>
+        </div>
       </div>
       <div class="stat-value" id="statTarget">15</div>
-      <div class="stat-meta">Total Roster to Interview Today</div>
+      <div class="stat-meta">Slots for interview roster (adjustable)</div>
       <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%; background:var(--arena-blue);"></div></div>
     </div>
 
@@ -1084,12 +1131,14 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
       <div class="panel-title-group">
         <div class="panel-avatar">📋</div>
         <div>
-          <h2 class="panel-heading">15 Developer Desk Roster</h2>
-          <p class="panel-subheading">Walk desk-to-desk with your laptop. Click any card to launch their interview or review completed data.</p>
+          <h2 class="panel-heading">Developer Desk Roster</h2>
+          <p class="panel-subheading">Walk desk-to-desk with your laptop. Click any card to conduct or review an interview. Add or remove developers at any time.</p>
         </div>
       </div>
-      <div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="startNewInterview()">➕ Start Next Developer</button>
+        <button class="btn btn-glass" onclick="changeTargetCount(1)" title="Add an extra slot above 15">➕ Add Slot</button>
+        <button class="btn btn-glass" onclick="changeTargetCount(-1)" title="Remove pending slot">➖ Remove Slot</button>
       </div>
     </div>
 
@@ -1579,7 +1628,10 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 
     <div class="panel-footer-nav">
       <button class="btn btn-glass" onclick="switchTab('secG')">← Edit Notes</button>
-      <div style="display:flex; gap:10px;">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn btn-export-pdf" id="btnDeleteInReview" style="display:none;" onclick="deleteCurrentAssessment()">
+          🗑️ Delete Assessment
+        </button>
         <button class="btn btn-green" style="font-size:15px; padding:12px 28px;" onclick="saveCurrentAssessment()">
           💾 Save & Update Dashboard
         </button>
@@ -1647,6 +1699,8 @@ const DOMAINS_G = [
 let allAssessments = [];
 let currentDevIndex = -1; // -1 for new
 let customTechStacks = [];
+let targetDevelopers = parseInt(localStorage.getItem('arena_target_count') || '15');
+if (isNaN(targetDevelopers) || targetDevelopers < 1) targetDevelopers = 15;
 
 // ════════════════════════════════════════════════════════════
 // INITIALIZATION
@@ -1666,6 +1720,13 @@ function loadFromStorage() {
     if (saved) {
       allAssessments = JSON.parse(saved);
     }
+    const savedTarget = localStorage.getItem('arena_target_count');
+    if (savedTarget) {
+      targetDevelopers = parseInt(savedTarget);
+    }
+    if (allAssessments.length > targetDevelopers) {
+      targetDevelopers = allAssessments.length;
+    }
   } catch (e) {
     console.error('Failed to load assessments from localStorage', e);
   }
@@ -1674,8 +1735,46 @@ function loadFromStorage() {
 function saveToStorage() {
   try {
     localStorage.setItem('arena_ai_skills_data', JSON.stringify(allAssessments));
+    localStorage.setItem('arena_target_count', targetDevelopers.toString());
   } catch (e) {
     console.error('Failed to save to localStorage', e);
+  }
+}
+
+function changeTargetCount(delta) {
+  const newTarget = targetDevelopers + delta;
+  if (newTarget < allAssessments.length) {
+    alert(`Cannot set target count below the number of completed interviews (${allAssessments.length}).\n\nTo reduce slots, delete completed assessments first.`);
+    return;
+  }
+  if (newTarget < 1) return;
+  targetDevelopers = newTarget;
+  saveToStorage();
+  updateDashboardStats();
+  renderRoster();
+}
+
+function deleteDeveloper(idx) {
+  const dev = allAssessments[idx];
+  const devTitle = dev ? (dev.name || dev.empId || `Developer #${idx + 1}`) : `Developer #${idx + 1}`;
+  if (confirm(`Are you sure you want to delete the interview record for:\n\n"${devTitle}"?\n\nThis action cannot be undone.`)) {
+    allAssessments.splice(idx, 1);
+    if (currentDevIndex === idx) {
+      currentDevIndex = -1;
+      resetFormFields();
+    } else if (currentDevIndex > idx) {
+      currentDevIndex--;
+    }
+    saveToStorage();
+    updateDashboardStats();
+    renderRoster();
+  }
+}
+
+function deleteCurrentAssessment() {
+  if (currentDevIndex >= 0 && currentDevIndex < allAssessments.length) {
+    deleteDeveloper(currentDevIndex);
+    switchTab('roster');
   }
 }
 
@@ -1837,7 +1936,14 @@ function switchTab(tabKey) {
 function startNewInterview() {
   currentDevIndex = -1;
   resetFormFields();
-  document.getElementById('interviewingBadge').textContent = `Interviewing: Developer #${allAssessments.length + 1} of 15`;
+  const nextNum = allAssessments.length + 1;
+  if (nextNum > targetDevelopers) {
+    targetDevelopers = nextNum;
+    saveToStorage();
+  }
+  document.getElementById('interviewingBadge').textContent = `Interviewing: Developer #${nextNum} of ${targetDevelopers}`;
+  const delBtn = document.getElementById('btnDeleteInReview');
+  if (delBtn) delBtn.style.display = 'none';
   switchTab('secA');
   setTimeout(() => {
     const nameInput = document.getElementById('devName');
@@ -2198,7 +2304,9 @@ function loadAssessmentForEdit(idx) {
   document.getElementById('aiPotential').value = d.aiPotential || '';
   document.getElementById('noteRemarks').value = d.noteRemarks || '';
 
-  document.getElementById('interviewingBadge').textContent = `Editing: ${d.name || 'Dev #' + (idx + 1)}`;
+  document.getElementById('interviewingBadge').textContent = `Editing: ${d.name || 'Dev #' + (idx + 1)} (${idx + 1} of ${targetDevelopers})`;
+  const delBtn = document.getElementById('btnDeleteInReview');
+  if (delBtn) delBtn.style.display = 'inline-flex';
   switchTab('secA');
 }
 
@@ -2223,16 +2331,24 @@ function setToggleBtn(fieldId, val) {
 // ════════════════════════════════════════════════════════════
 function updateDashboardStats() {
   const completed = allAssessments.length;
-  const target = 15;
+  if (completed > targetDevelopers) {
+    targetDevelopers = completed;
+  }
+  const target = targetDevelopers;
   const pending = Math.max(0, target - completed);
-  const pct = Math.round((completed / target) * 100);
+  const pct = target > 0 ? Math.round((completed / target) * 100) : 0;
 
   document.getElementById('statTarget').textContent = target;
   document.getElementById('statCompleted').textContent = completed;
   document.getElementById('statPending').textContent = pending;
-  document.getElementById('statCompletedPct').textContent = `${pct}% of 15 target`;
+  document.getElementById('statCompletedPct').textContent = `${pct}% of ${target} target`;
   document.getElementById('barCompleted').style.width = `${Math.min(100, pct)}%`;
   document.getElementById('barPending').style.width = `${Math.max(0, 100 - pct)}%`;
+
+  const headerTargetText = document.getElementById('headerTargetText');
+  if (headerTargetText) {
+    headerTargetText.textContent = `${target} TARGET DEVS`;
+  }
 
   const scores = allAssessments.map(x => parseFloat(x.overallScore)).filter(s => !isNaN(s));
   if (scores.length > 0) {
@@ -2257,7 +2373,10 @@ function renderRoster() {
     card.innerHTML = `
       <div class="dev-card-header">
         <span class="dev-card-num">#${idx + 1}</span>
-        <span class="dev-badge-status done">✓ Completed</span>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="dev-badge-status done">✓ Completed</span>
+          <button class="btn-card-del" onclick="event.stopPropagation(); deleteDeveloper(${idx})" title="Remove this developer record">✕</button>
+        </div>
       </div>
       <div>
         <div class="dev-card-name">${dev.name || 'Unnamed Developer'}</div>
@@ -2274,8 +2393,8 @@ function renderRoster() {
     grid.appendChild(card);
   });
 
-  // Render pending placeholders up to 15 (or beyond if needed)
-  const remaining = Math.max(0, 15 - allAssessments.length);
+  // Render pending placeholders up to targetDevelopers
+  const remaining = Math.max(0, targetDevelopers - allAssessments.length);
   for (let i = 1; i <= remaining; i++) {
     const devNum = allAssessments.length + i;
     const card = document.createElement('div');
