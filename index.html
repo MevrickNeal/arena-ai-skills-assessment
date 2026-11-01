@@ -1,0 +1,2645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arena — AI Skills Assessment | Project Coordinator Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Excel / PDF / Word Export Libraries (Local with CDN Fallback) -->
+<script src="lib/xlsx.full.min.js"></script>
+<script>
+if (typeof XLSX === 'undefined') {
+  document.write('<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"><\/script>');
+}
+</script>
+
+<script src="lib/jspdf.umd.min.js"></script>
+<script>
+if (typeof window.jspdf === 'undefined') {
+  document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>');
+}
+</script>
+
+<script src="lib/jspdf.plugin.autotable.min.js"></script>
+<script>
+if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.autoTable === 'undefined') {
+  document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"><\/script>');
+}
+</script>
+
+<style>
+  :root {
+    --arena-crimson: #C41E3A;
+    --arena-crimson-glow: rgba(196, 30, 58, 0.25);
+    --arena-plum: #6B2D8B;
+    --arena-dark: #0f172a;
+    --arena-slate: #1e293b;
+    --arena-blue: #2563eb;
+    --arena-blue-glow: rgba(37, 99, 235, 0.25);
+    --arena-green: #10b981;
+    --arena-green-glow: rgba(16, 185, 129, 0.25);
+    --arena-amber: #f59e0b;
+    
+    /* Glassmorphism Variables */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-card: rgba(255, 255, 255, 0.82);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-border-subtle: rgba(226, 232, 240, 0.6);
+    --glass-shadow: 0 10px 30px 0 rgba(15, 23, 42, 0.05), 0 1px 1px 0 rgba(255, 255, 255, 0.9) inset;
+    --glass-shadow-hover: 0 16px 40px 0 rgba(15, 23, 42, 0.1), 0 1px 1px 0 rgba(255, 255, 255, 1) inset;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #f1f5f9;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(196, 30, 58, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(107, 45, 139, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(37, 99, 235, 0.04) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.06) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--arena-slate);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ═══ AMBIENT GLOW ORBS ═══ */
+  .ambient-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    left: -100px;
+    background: radial-gradient(circle, rgba(196, 30, 58, 0.15) 0%, transparent 70%);
+  }
+  .orb-2 {
+    width: 500px;
+    height: 500px;
+    top: 20%;
+    right: -150px;
+    background: radial-gradient(circle, rgba(107, 45, 139, 0.12) 0%, transparent 70%);
+  }
+  .orb-3 {
+    width: 450px;
+    height: 450px;
+    bottom: -100px;
+    left: 20%;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+  }
+
+  /* ═══ HEADER BAR (GLASSMORPHIC) ═══ */
+  .navbar {
+    position: sticky;
+    top: 15px;
+    z-index: 100;
+    max-width: 1240px;
+    margin: 15px auto 25px auto;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .navbar-logo {
+    height: 46px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+  }
+  .navbar-divider {
+    width: 1px;
+    height: 32px;
+    background: #cbd5e1;
+  }
+  .navbar-brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .navbar-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--arena-dark);
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .navbar-title span.accent {
+    color: var(--arena-crimson);
+  }
+  .navbar-subtitle {
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    background: rgba(196, 30, 58, 0.1);
+    color: var(--arena-crimson);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(196, 30, 58, 0.2);
+  }
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--arena-crimson);
+    animation: pulse-dot 1.8s infinite;
+  }
+  @keyframes pulse-dot {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(196, 30, 58, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(196, 30, 58, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(196, 30, 58, 0); }
+  }
+
+  /* ═══ BUTTONS (GLASSMORPHISM & ACCENTS) ═══ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-glass {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(226, 232, 240, 0.9);
+    color: var(--arena-slate);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  }
+  .btn-glass:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    color: var(--arena-dark);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--arena-crimson) 0%, #a0152d 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px var(--arena-crimson-glow);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+  }
+
+  .btn-blue {
+    background: linear-gradient(135deg, var(--arena-blue) 0%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px var(--arena-blue-glow);
+  }
+
+  .btn-green {
+    background: linear-gradient(135deg, var(--arena-green) 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px var(--arena-green-glow);
+  }
+
+  .btn-export-excel {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  .btn-export-excel:hover {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  .btn-export-pdf {
+    background: rgba(239, 68, 68, 0.12);
+    color: #b91c1c;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+  .btn-export-pdf:hover {
+    background: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+  }
+
+  .btn-export-word {
+    background: rgba(37, 99, 235, 0.12);
+    color: #1d4ed8;
+    border: 1px solid rgba(37, 99, 235, 0.3);
+  }
+  .btn-export-word:hover {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+  }
+
+  /* ═══ MAIN LAYOUT ═══ */
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ═══ STATS GRID (GLASS CARDS) ═══ */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--glass-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #cbd5e1;
+  }
+  .stat-card.card-target::before { background: var(--arena-blue); }
+  .stat-card.card-completed::before { background: var(--arena-green); }
+  .stat-card.card-pending::before { background: var(--arena-amber); }
+  .stat-card.card-score::before { background: var(--arena-crimson); }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--glass-shadow-hover);
+  }
+
+  .stat-label-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .stat-icon {
+    font-size: 18px;
+  }
+  .stat-value {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--arena-dark);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .stat-meta {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .progress-bar-bg {
+    height: 5px;
+    background: rgba(203, 213, 225, 0.4);
+    border-radius: var(--radius-full);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ═══ SECTION TABS ═══ */
+  .tabs-bar {
+    display: flex;
+    gap: 6px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 24px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .tab-btn {
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--arena-dark);
+  }
+  .tab-btn.active {
+    background: #ffffff;
+    color: var(--arena-crimson);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .tab-badge {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(100, 116, 139, 0.15);
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tab-btn.active .tab-badge {
+    background: var(--arena-crimson);
+    color: #ffffff;
+  }
+
+  /* ═══ GLASS PANELS ═══ */
+  .panel {
+    display: none;
+    background: var(--glass-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 36px 38px;
+    box-shadow: var(--glass-shadow);
+    animation: panel-appear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes panel-appear {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  }
+  .panel-title-group {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .panel-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, rgba(196, 30, 58, 0.12), rgba(107, 45, 139, 0.12));
+    color: var(--arena-crimson);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 1px solid rgba(196, 30, 58, 0.15);
+  }
+  .panel-heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--arena-dark);
+    letter-spacing: -0.3px;
+  }
+  .panel-subheading {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 3px;
+  }
+
+  /* ═══ GLASS CALLOUT / TIPS ═══ */
+  .glass-callout {
+    background: rgba(37, 99, 235, 0.06);
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: #1e3a8a;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .glass-callout strong {
+    color: #1d4ed8;
+  }
+
+  /* ═══ FORM INPUTS & LABELS ═══ */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .form-grid.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .form-group.full {
+    grid-column: 1 / -1;
+  }
+  .form-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .form-label span.req {
+    color: var(--arena-crimson);
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 11px 15px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--arena-dark);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  }
+  .form-control:focus {
+    outline: none;
+    border-color: var(--arena-crimson);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px var(--arena-crimson-glow);
+  }
+  textarea.form-control {
+    min-height: 80px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  /* ═══ CLICKABLE CHECKBOX TILES ═══ */
+  .checkbox-tiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+    margin-top: 5px;
+  }
+  .check-tile {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+  .check-tile input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .tile-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--arena-slate);
+  }
+  .tile-indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: transparent;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .check-tile:hover .tile-content {
+    background: #ffffff;
+    border-color: #cbd5e1;
+  }
+  .check-tile input:checked + .tile-content {
+    background: rgba(196, 30, 58, 0.08);
+    border-color: var(--arena-crimson);
+    color: var(--arena-crimson);
+    font-weight: 600;
+  }
+  .check-tile input:checked + .tile-content .tile-indicator {
+    background: var(--arena-crimson);
+    border-color: var(--arena-crimson);
+    color: #ffffff;
+  }
+
+  /* ═══ YES/NO PILL TOGGLE ═══ */
+  .toggle-pills {
+    display: inline-flex;
+    background: rgba(226, 232, 240, 0.6);
+    padding: 3px;
+    border-radius: var(--radius-sm);
+    gap: 4px;
+  }
+  .toggle-pill-btn {
+    padding: 7px 18px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .toggle-pill-btn:hover {
+    color: var(--arena-dark);
+  }
+  .toggle-pill-btn.active-yes {
+    background: var(--arena-green);
+    color: #ffffff;
+    box-shadow: 0 2px 8px var(--arena-green-glow);
+  }
+  .toggle-pill-btn.active-no {
+    background: var(--arena-crimson);
+    color: #ffffff;
+    box-shadow: 0 2px 8px var(--arena-crimson-glow);
+  }
+
+  /* ═══ INTERACTIVE ASSESSMENT TABLES ═══ */
+  .skills-table-wrap {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    margin-bottom: 24px;
+  }
+  .skills-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .skills-table thead th {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 12px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    text-align: left;
+  }
+  .skills-table thead th.center {
+    text-align: center;
+  }
+  .skills-table tbody tr {
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    transition: background 0.15s ease;
+  }
+  .skills-table tbody tr:hover {
+    background: rgba(248, 250, 252, 0.9);
+  }
+  .skills-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  .skills-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  .skills-table td.skill-name {
+    font-weight: 600;
+    color: var(--arena-dark);
+    width: 28%;
+  }
+  .skills-table td.skill-score {
+    width: 240px;
+    text-align: center;
+  }
+  .skills-table td.skill-usage {
+    width: 130px;
+    text-align: center;
+  }
+  .skills-table td.skill-remarks {
+    width: 32%;
+  }
+
+  /* ═══ RATING PILLS (1 to 5) ═══ */
+  .rating-pills-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(241, 245, 249, 0.8);
+    padding: 3px 6px;
+    border-radius: var(--radius-full);
+  }
+  .rate-pill {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: #ffffff;
+    color: #64748b;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .rate-pill:hover {
+    transform: scale(1.15);
+    color: var(--arena-dark);
+    border-color: #cbd5e1;
+  }
+  .rate-pill.selected[data-val="1"] { background: #ef4444; color: #fff; box-shadow: 0 2px 8px rgba(239,68,68,0.4); }
+  .rate-pill.selected[data-val="2"] { background: #f97316; color: #fff; box-shadow: 0 2px 8px rgba(249,115,22,0.4); }
+  .rate-pill.selected[data-val="3"] { background: #eab308; color: #fff; box-shadow: 0 2px 8px rgba(234,179,8,0.4); }
+  .rate-pill.selected[data-val="4"] { background: #10b981; color: #fff; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
+  .rate-pill.selected[data-val="5"] { background: #059669; color: #fff; box-shadow: 0 2px 8px rgba(5,150,105,0.4); }
+
+  .table-remarks-input {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 12px;
+    font-family: inherit;
+    background: #ffffff;
+    transition: all 0.2s;
+  }
+  .table-remarks-input:focus {
+    outline: none;
+    border-color: var(--arena-crimson);
+    box-shadow: 0 0 0 2px var(--arena-crimson-glow);
+  }
+
+  /* ═══ ROSTER / TRACKER ITEMS ═══ */
+  .roster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+  }
+  .dev-glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--glass-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+  }
+  .dev-glass-card:hover {
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+    box-shadow: var(--glass-shadow-hover);
+  }
+  .dev-glass-card.is-done {
+    border-left: 4px solid var(--arena-green);
+    background: rgba(240, 253, 244, 0.85);
+  }
+  .dev-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .dev-card-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    background: rgba(226, 232, 240, 0.6);
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+  }
+  .dev-card-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--arena-dark);
+  }
+  .dev-card-info {
+    font-size: 12px;
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .dev-badge-status {
+    align-self: flex-start;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .dev-badge-status.done {
+    background: #dcfce7;
+    color: #15803d;
+  }
+  .dev-badge-status.pending {
+    background: #fef3c7;
+    color: #b45309;
+  }
+  .dev-card-score {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--arena-crimson);
+  }
+
+  /* ═══ FOOTER NAV BUTTONS ═══ */
+  .panel-footer-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 24px;
+    margin-top: 24px;
+    border-top: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  /* ═══ MODAL STYLES ═══ */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .modal-overlay.show {
+    display: flex;
+  }
+  .modal-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 36px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    animation: modal-pop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes modal-pop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--arena-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 16px auto;
+  }
+  .modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--arena-dark);
+    margin-bottom: 8px;
+  }
+  .modal-desc {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .modal-btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ═══ PRINT STYLES ═══ */
+  @media print {
+    .navbar, .tabs-bar, .panel-footer-nav, .ambient-orb, .btn, .glass-callout {
+      display: none !important;
+    }
+    body {
+      background: #ffffff !important;
+      color: #000000 !important;
+      padding: 0 !important;
+    }
+    .panel {
+      display: block !important;
+      box-shadow: none !important;
+      border: none !important;
+      padding: 10px 0 !important;
+      page-break-after: always;
+    }
+    .stat-card {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+    }
+  }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-grid { grid-template-columns: 1fr; }
+    .panel { padding: 24px 20px; }
+  }
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .navbar { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient background mesh glow -->
+<div class="ambient-orb orb-1"></div>
+<div class="ambient-orb orb-2"></div>
+<div class="ambient-orb orb-3"></div>
+
+<!-- ═══ GLASS NAVBAR ═══ -->
+<header class="navbar">
+  <div class="navbar-left">
+    <img src="data:image/png;base64,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oW1U3Q1uYiqIqlFaP/QpurbSuuvdeE/QgAr3v3Gxr2n5pQ7VCUwUAwlh53yhiRSAQaMn/L/drTrS7Jt5p9UaYFg3bLLnaPk080unVZL6jcpJESz9pldK6kUGwLReuGcgS0rRpYq/lTAxEzFRvZJNqhooYkq6FUJy4NpukDBoWrY5G5ZmmPYP1ajAKmCW8yStW6pKw73v5Eoiw5gSWK8Otp4HegkwC9bLXOLEHasMZufeKPF8FcLxY8+gaq7FQ4JVY2j9kn7KWEV1u90a4MEAz9tqtk9R6SYsWEs3ByQWHz09cEtp/ZZbDQ9GvnYbjan42hQSMLW4dPp4+P/gbQ7vX1o+XVtWNn3PktIpJONyntD4PkoNqCrka0SS8DW+vdA4cReITeddBszCYCR5G8ZewLU7FopnW2amPl1ScnACTpKkrH6QMsr+oR6LGykp66dV0qi/SFO3rRr+zZytiWqFXsZfbWWfiX55KtHQa/UK196+CJYPIA3UwHweg+dtozUkh4q9mOaaMjJN6bx6jMQylH7Q/qGNOREZyuM5nyWqZxgZvEPz1Bmi8qbXBDlM2kob2bK07826CuLIOIzJfF2SugwkqxjOiabhp3Ksg1WjAXXmDF1S91Mu3Eg+onAV6MugPrx0d8VMoloszdum667SsloSU3GNrr785S4X9y8vn4mu1iFj4wJf05SFwrnbDULO3cRZ2pXShdp8seGn9P75vobH0GOS9149hR3uJ3UvPshVKGel3/8V2EB1aMUG3fUl9CKgaxMNdPBzD6ni5aKlyIYiG+cs83Pw6+Roxe8zmBFNAcdkKK9FYJwCK3PFBeWHCbkKP1ewCqUI/MQiMIDddNObmyGB7IS16O+U1ZXQ7lqfZ6xRIXDjttHVepV3ox+7it9uAe/jl9ugL9pvF2Hy1a7dsf8UjyvrEpVmmPuvYH5/R8kE3wOsw66YxTrka/onHpQ42jK8znFEAIm9bdS0ejRutpTWnrUkT2sprZ/aUj7tVHp/i9hw2JJRtXVO78frlpROP+tOX31GqPNccWbNQqmhFlSEs/K1hdKs2uaKRnTVEnF+UWnTEYThOLiXNpBmZswdM9NxXQGsDYrxDkjAqMNjaDIWMXHeqqZsEAOnYQ1Sc78Yi4Gf0gO1YMrea4NTsdbmcJRe00pmH9xTOv6IntHVEjKRDl/wZBy7eR5ojyF6uov4D/zUATDf2pBpTYAR1RbqaTIDx4N9Zaw3rCkyYi/94rtJkuK9wePCojoxDO/FzTvXx1RcAzUHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBweD/wcZ9ZTAh+nM6wAAAABJRU5ErkJggg==" alt="Arena Logo" class="navbar-logo">
+    <div class="navbar-divider"></div>
+    <div class="navbar-brand-text">
+      <div class="navbar-title">
+        Arena <span class="accent">AI Skills Assessment</span>
+      </div>
+      <div class="navbar-subtitle">Project Coordinator Field Kiosk &bull; MD Reporting</div>
+    </div>
+  </div>
+  
+  <div class="navbar-actions">
+    <div class="live-indicator">
+      <span class="live-dot"></span> 15 TARGET DEVS
+    </div>
+    
+    <!-- EXPORT BUTTONS (EXCEL, WORD, PDF) -->
+    <button class="btn btn-export-excel" onclick="exportToExcel()" title="Export all interviews to formatted Excel workbook (.xlsx)">
+      📊 Excel (.xlsx)
+    </button>
+    <button class="btn btn-export-word" onclick="exportToWord()" title="Generate structured Word Document (.doc/.docx)">
+      📄 Word (.doc)
+    </button>
+    <button class="btn btn-export-pdf" onclick="exportToPDF()" title="Generate printable PDF report">
+      📑 PDF Report
+    </button>
+    <button class="btn btn-glass" onclick="backupJSON()" title="Export JSON backup of all responses">
+      💾 Backup
+    </button>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ═══ STATS CARDS ═══ -->
+  <section class="stats-grid">
+    <div class="stat-card card-target">
+      <div class="stat-label-wrap">
+        <span class="stat-label">Target Developers</span>
+        <span class="stat-icon">🎯</span>
+      </div>
+      <div class="stat-value" id="statTarget">15</div>
+      <div class="stat-meta">Total Roster to Interview Today</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%; background:var(--arena-blue);"></div></div>
+    </div>
+
+    <div class="stat-card card-completed">
+      <div class="stat-label-wrap">
+        <span class="stat-label">Completed</span>
+        <span class="stat-icon">✅</span>
+      </div>
+      <div class="stat-value" id="statCompleted">0</div>
+      <div class="stat-meta" id="statCompletedPct">0% of total target</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="barCompleted" style="width:0%; background:var(--arena-green);"></div></div>
+    </div>
+
+    <div class="stat-card card-pending">
+      <div class="stat-label-wrap">
+        <span class="stat-label">Pending</span>
+        <span class="stat-icon">⏳</span>
+      </div>
+      <div class="stat-value" id="statPending">15</div>
+      <div class="stat-meta">Remaining desk interviews</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="barPending" style="width:100%; background:var(--arena-amber);"></div></div>
+    </div>
+
+    <div class="stat-card card-score">
+      <div class="stat-label-wrap">
+        <span class="stat-label">Avg AI Score</span>
+        <span class="stat-icon">⚡</span>
+      </div>
+      <div class="stat-value" id="statAvgScore">—</div>
+      <div class="stat-meta">Overall Team AI Readiness (1-5)</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="barScore" style="width:0%; background:var(--arena-crimson);"></div></div>
+    </div>
+  </section>
+
+  <!-- ═══ NAVIGATION TABS ═══ -->
+  <nav class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('roster')" id="tabBtn_roster">
+      <span class="tab-badge">📋</span> Roster & Tracker
+    </button>
+    <button class="tab-btn" onclick="switchTab('secA')" id="tabBtn_secA">
+      <span class="tab-badge">A</span> Developer Info
+    </button>
+    <button class="tab-btn" onclick="switchTab('secB')" id="tabBtn_secB">
+      <span class="tab-badge">B</span> AI Knowledge & Remarks
+    </button>
+    <button class="tab-btn" onclick="switchTab('secC')" id="tabBtn_secC">
+      <span class="tab-badge">C</span> Tech Stacks & Remarks
+    </button>
+    <button class="tab-btn" onclick="switchTab('secD')" id="tabBtn_secD">
+      <span class="tab-badge">D</span> AI Projects
+    </button>
+    <button class="tab-btn" onclick="switchTab('secE')" id="tabBtn_secE">
+      <span class="tab-badge">E</span> Current AI Usage
+    </button>
+    <button class="tab-btn" onclick="switchTab('secF')" id="tabBtn_secF">
+      <span class="tab-badge">F</span> Training & Certs
+    </button>
+    <button class="tab-btn" onclick="switchTab('secG')" id="tabBtn_secG">
+      <span class="tab-badge">G</span> Self-Assessment & Notes
+    </button>
+    <button class="tab-btn" onclick="switchTab('review')" id="tabBtn_review">
+      <span class="tab-badge">✓</span> Review & Save
+    </button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL: ROSTER & TRACKER
+  ═══════════════════════════════════════════════ -->
+  <div class="panel active" id="panel_roster">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">📋</div>
+        <div>
+          <h2 class="panel-heading">15 Developer Desk Roster</h2>
+          <p class="panel-subheading">Walk desk-to-desk with your laptop. Click any card to launch their interview or review completed data.</p>
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="startNewInterview()">➕ Start Next Developer</button>
+      </div>
+    </div>
+
+    <div class="glass-callout">
+      <span>💡</span>
+      <div>
+        <strong>Desk-to-Desk Strategy:</strong> Ask the developer for their <strong>Employee ID</strong>, select their tech stacks and ratings together. Every tech stack has its own <strong>Remarks field</strong> where developers can add specific libraries, models, or context.
+      </div>
+    </div>
+
+    <div class="roster-grid" id="rosterGrid">
+      <!-- Generated via JS -->
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL A: DEVELOPER INFO
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_secA">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">👤</div>
+        <div>
+          <h2 class="panel-heading">Section A: Developer Profile & Assignment</h2>
+          <p class="panel-subheading">Capture core identification and current individual project assignment.</p>
+        </div>
+      </div>
+      <div id="interviewingBadge" class="live-indicator">
+        Interviewing: Developer #1
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Full Name <span class="req">*</span></label>
+        <input type="text" id="devName" class="form-control" placeholder="Developer's full name" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Employee ID <span class="req">*</span></label>
+        <input type="text" id="devEmpId" class="form-control" placeholder="e.g. EMP-1042">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Department / Team</label>
+        <input type="text" id="devDept" class="form-control" placeholder="e.g. Core Engineering, Mobile, QA, IoT">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Designation / Job Title</label>
+        <input type="text" id="devTitle" class="form-control" placeholder="e.g. Senior Software Engineer, Full Stack Dev">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Current Project Assigned <span class="req">*</span></label>
+        <input type="text" id="devProject" class="form-control" placeholder="e.g. OSRMS, Arena HRM, IoT Gateway, Logistics ERP">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Project Role</label>
+        <select id="devRole" class="form-control">
+          <option value="">-- Select Role --</option>
+          <option value="Lead Developer">Lead Developer</option>
+          <option value="Senior Developer">Senior Developer</option>
+          <option value="Sole Developer">Sole Developer (Individual)</option>
+          <option value="Full Stack Developer">Full Stack Developer</option>
+          <option value="Backend Developer">Backend Developer</option>
+          <option value="Frontend Developer">Frontend Developer</option>
+          <option value="Mobile App Developer">Mobile App Developer</option>
+          <option value="Embedded / Firmware Engineer">Embedded / Firmware Engineer</option>
+          <option value="QA / Test Automation">QA / Test Automation</option>
+          <option value="Junior Developer">Junior Developer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Years in Arena</label>
+        <input type="number" id="devYearsCompany" class="form-control" placeholder="e.g. 2" min="0" max="30" step="0.5">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Total Years of Experience</label>
+        <input type="number" id="devYearsTotal" class="form-control" placeholder="e.g. 5" min="0" max="40" step="0.5">
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Primary Programming Languages (Click to check)</label>
+        <div class="checkbox-tiles-grid" id="langTiles">
+          <!-- Common languages -->
+          <label class="check-tile"><input type="checkbox" value="Python" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>Python</div></label>
+          <label class="check-tile"><input type="checkbox" value="JavaScript" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>JavaScript</div></label>
+          <label class="check-tile"><input type="checkbox" value="TypeScript" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>TypeScript</div></label>
+          <label class="check-tile"><input type="checkbox" value="C# / .NET" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>C# / .NET</div></label>
+          <label class="check-tile"><input type="checkbox" value="Java" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>Java</div></label>
+          <label class="check-tile"><input type="checkbox" value="PHP" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>PHP</div></label>
+          <label class="check-tile"><input type="checkbox" value="Dart / Flutter" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>Dart / Flutter</div></label>
+          <label class="check-tile"><input type="checkbox" value="C / C++" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>C / C++</div></label>
+          <label class="check-tile"><input type="checkbox" value="Go (Golang)" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>Go (Golang)</div></label>
+          <label class="check-tile"><input type="checkbox" value="Rust" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>Rust</div></label>
+          <label class="check-tile"><input type="checkbox" value="Kotlin / Android" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>Kotlin / Android</div></label>
+          <label class="check-tile"><input type="checkbox" value="Swift / iOS" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>Swift / iOS</div></label>
+          <label class="check-tile"><input type="checkbox" value="SQL" class="lang-check"><div class="tile-content"><span class="tile-indicator">✓</span>SQL</div></label>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Other Languages / Tech Notes</label>
+        <input type="text" id="devOtherLangs" class="form-control" placeholder="Any additional languages, frameworks, or database engines...">
+      </div>
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('roster')">← Back to Roster</button>
+      <button class="btn btn-primary" onclick="switchTab('secB')">Next: Section B (AI Knowledge) →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL B: AI KNOWLEDGE & REMARKS
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_secB">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">🧠</div>
+        <div>
+          <h2 class="panel-heading">Section B: AI Knowledge & Awareness (with Per-Domain Remarks)</h2>
+          <p class="panel-subheading">Rate understanding (1 to 5) and add specific notes or employee remarks for each domain.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-callout">
+      <span>📌</span>
+      <div>
+        <strong>Rating Scale:</strong> 1 = No Knowledge &bull; 2 = Basic Awareness &bull; 3 = Working Knowledge &bull; 4 = Proficient &bull; 5 = Expert &bull; <em>Use the Remarks column for employee comments or specific context!</em>
+      </div>
+    </div>
+
+    <div class="skills-table-wrap">
+      <table class="skills-table">
+        <thead>
+          <tr>
+            <th>AI Concept / Domain</th>
+            <th class="center">Rating (1 to 5)</th>
+            <th>Developer's Remarks / Specific Knowledge Notes</th>
+          </tr>
+        </thead>
+        <tbody id="tableBodyB">
+          <!-- Populated via JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('secA')">← Section A</button>
+      <button class="btn btn-primary" onclick="switchTab('secC')">Next: Section C (Tech Stacks) →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL C: TECH STACKS, TOOLS & CUSTOM ADDITIONS
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_secC">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">⚙️</div>
+        <div>
+          <h2 class="panel-heading">Section C: Hands-On AI/ML Tech Stacks & Remarks</h2>
+          <p class="panel-subheading">Rate proficiency, indicate workplace usage, and add specific remarks for every single tech stack. Add custom skills as needed!</p>
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-blue" onclick="addCustomTechStackRow()">➕ Add Custom Tech Stack / Skill</button>
+      </div>
+    </div>
+
+    <div class="glass-callout">
+      <span>💡</span>
+      <div>
+        <strong>Individual Remarks Enabled:</strong> If a developer worked on a specific version, custom fine-tuning, or unique tool, write it in the <strong>Remarks</strong> column. If they know a tech stack not listed below, click <strong>"Add Custom Tech Stack"</strong>!
+      </div>
+    </div>
+
+    <div class="skills-table-wrap">
+      <table class="skills-table">
+        <thead>
+          <tr>
+            <th>Tech Stack / Tool</th>
+            <th class="center">Proficiency (1-5)</th>
+            <th class="center">Used at Work?</th>
+            <th>Employee Remarks / Specific Experience</th>
+          </tr>
+        </thead>
+        <tbody id="tableBodyC">
+          <!-- Populated via JS with Core Tools + Custom additions -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('secB')">← Section B</button>
+      <button class="btn btn-primary" onclick="switchTab('secD')">Next: Section D (Projects) →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL D: AI PROJECT EXPERIENCE
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_secD">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">🚀</div>
+        <div>
+          <h2 class="panel-heading">Section D: AI Project Experience & Deployments</h2>
+          <p class="panel-subheading">Track concrete AI/ML projects, production systems, and open-source contributions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Has worked on AI/ML projects?</label>
+        <div class="toggle-pills">
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('aiProjects','yes',this)">✅ Yes</button>
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('aiProjects','no',this)">❌ No</button>
+        </div>
+        <input type="hidden" id="aiProjects" value="">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Total Number of AI Projects</label>
+        <input type="number" id="aiProjectCount" class="form-control" placeholder="e.g. 2" min="0">
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Most Significant AI Project (Description & Tech Used)</label>
+        <textarea id="aiProjectDesc" class="form-control" placeholder="Describe what the system did, tech stack used (e.g. PyTorch, YOLO, OpenAI API, LangChain), and their specific role..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Role in That Project</label>
+        <input type="text" id="aiProjectRole" class="form-control" placeholder="e.g. Architecture Lead, Algorithm Dev, Data Prep">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Business Outcome / Impact</label>
+        <input type="text" id="aiProjectImpact" class="form-control" placeholder="e.g. 40% reduction in manual effort, automated QA">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Deployed AI Model to Production?</label>
+        <div class="toggle-pills">
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('aiDeployed','yes',this)">✅ Yes</button>
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('aiDeployed','no',this)">❌ No</button>
+        </div>
+        <input type="hidden" id="aiDeployed" value="">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Open-Source AI Contributions?</label>
+        <div class="toggle-pills">
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('aiOpenSource','yes',this)">✅ Yes</button>
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('aiOpenSource','no',this)">❌ No</button>
+        </div>
+        <input type="hidden" id="aiOpenSource" value="">
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Open Source / Portfolio Remarks (Links, repos, models)</label>
+        <input type="text" id="aiOpenSourceDetails" class="form-control" placeholder="GitHub links, HuggingFace repos, or publications...">
+      </div>
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('secC')">← Section C</button>
+      <button class="btn btn-primary" onclick="switchTab('secE')">Next: Section E (Current AI Use) →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL E: CURRENT AI USAGE
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_secE">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">💻</div>
+        <div>
+          <h2 class="panel-heading">Section E: Daily AI Tool Usage & Opportunities</h2>
+          <p class="panel-subheading">How are Arena developers using AI in their daily workflow right now?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">Currently using AI tools in daily development?</label>
+        <div class="toggle-pills">
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('usingAI','yes',this)">✅ Yes</button>
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('usingAI','no',this)">❌ No</button>
+        </div>
+        <input type="hidden" id="usingAI" value="">
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Which AI Coding & Productivity Tools? (Click all that apply)</label>
+        <div class="checkbox-tiles-grid" id="toolTiles">
+          <label class="check-tile"><input type="checkbox" value="GitHub Copilot" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>GitHub Copilot</div></label>
+          <label class="check-tile"><input type="checkbox" value="ChatGPT Plus / Team" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>ChatGPT</div></label>
+          <label class="check-tile"><input type="checkbox" value="Google Gemini / Vertex" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>Google Gemini</div></label>
+          <label class="check-tile"><input type="checkbox" value="Claude (Anthropic)" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>Claude</div></label>
+          <label class="check-tile"><input type="checkbox" value="Cursor IDE" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>Cursor IDE</div></label>
+          <label class="check-tile"><input type="checkbox" value="Windsurf" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>Windsurf</div></label>
+          <label class="check-tile"><input type="checkbox" value="v0.dev / Bolt.new" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>v0.dev / Bolt</div></label>
+          <label class="check-tile"><input type="checkbox" value="Tabnine" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>Tabnine</div></label>
+          <label class="check-tile"><input type="checkbox" value="Ollama / Local LLM" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>Ollama / Local LLM</div></label>
+          <label class="check-tile"><input type="checkbox" value="Midjourney / Stable Diffusion" class="tool-check"><div class="tile-content"><span class="tile-indicator">✓</span>Midjourney / SD</div></label>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">How has AI improved their productivity? (Specific examples)</label>
+        <textarea id="aiProductivity" class="form-control" placeholder="e.g. Writing boilerplate 2x faster, debugging complex regex/SQL, generating test cases, drafting API docs..."></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Where in their CURRENT Arena project could AI be applied?</label>
+        <textarea id="aiOpportunities" class="form-control" placeholder="e.g. Auto-generating attendance insights in HRM, smart anomaly detection in IoT logs, natural language querying for OSRMS..."></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">What company-wide AI initiatives should Arena leadership pursue?</label>
+        <textarea id="aiInitiatives" class="form-control" placeholder="e.g. Provide enterprise Copilot licenses, launch internal AI hackathons, build centralized Arena LLM gateway..."></textarea>
+      </div>
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('secD')">← Section D</button>
+      <button class="btn btn-primary" onclick="switchTab('secF')">Next: Section F (Training) →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL F: TRAINING & CERTIFICATIONS
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_secF">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">🎓</div>
+        <div>
+          <h2 class="panel-heading">Section F: Training, Certifications & Learning Needs</h2>
+          <p class="panel-subheading">Identify completed education and upskilling roadmap for MD training budgets.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Completed any AI/ML Courses or Certifications?</label>
+        <div class="toggle-pills">
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('hasCerts','yes',this)">✅ Yes</button>
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('hasCerts','no',this)">❌ No</button>
+        </div>
+        <input type="hidden" id="hasCerts" value="">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Currently enrolled in active AI learning?</label>
+        <div class="toggle-pills">
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('currentLearning','yes',this)">✅ Yes</button>
+          <button type="button" class="toggle-pill-btn" onclick="setToggle('currentLearning','no',this)">❌ No</button>
+        </div>
+        <input type="hidden" id="currentLearning" value="">
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">List Completed Certifications / Courses</label>
+        <textarea id="certsList" class="form-control" placeholder="e.g. Google Cloud ML Engineer, DeepLearning.AI GenAI with LLMs, Coursera Andrew Ng Machine Learning..."></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Specific AI Topics Developer Wants Training On</label>
+        <textarea id="wantedTraining" class="form-control" placeholder="e.g. Fine-tuning Llama 3, building RAG systems with LangChain & Pinecone, MLOps deployment on AWS/Docker..."></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Preferred Learning Formats (Click choices)</label>
+        <div class="checkbox-tiles-grid" id="formatTiles">
+          <label class="check-tile"><input type="checkbox" value="Hands-on Workshop" class="format-check"><div class="tile-content"><span class="tile-indicator">✓</span>Hands-on Workshop</div></label>
+          <label class="check-tile"><input type="checkbox" value="Online Self-Paced" class="format-check"><div class="tile-content"><span class="tile-indicator">✓</span>Online Self-Paced</div></label>
+          <label class="check-tile"><input type="checkbox" value="Company-Sponsored Cert" class="format-check"><div class="tile-content"><span class="tile-indicator">✓</span>Sponsored Cert</div></label>
+          <label class="check-tile"><input type="checkbox" value="Senior Mentorship" class="format-check"><div class="tile-content"><span class="tile-indicator">✓</span>Senior Mentorship</div></label>
+          <label class="check-tile"><input type="checkbox" value="Internal Hackathon" class="format-check"><div class="tile-content"><span class="tile-indicator">✓</span>Internal Hackathon</div></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('secE')">← Section E</button>
+      <button class="btn btn-primary" onclick="switchTab('secG')">Next: Section G (Summary & Notes) →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL G: SUMMARY & NOTES
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_secG">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar">📝</div>
+        <div>
+          <h2 class="panel-heading">Section G: Self-Assessment & Project Coordinator Evaluation</h2>
+          <p class="panel-subheading">Combine developer self-reflection with your objective coordinator assessment.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px; font-weight:700; color:var(--arena-dark); margin-bottom:12px;">Developer Self-Rating (1 to 5)</h3>
+    <div class="skills-table-wrap">
+      <table class="skills-table">
+        <thead>
+          <tr>
+            <th>Self-Assessment Category</th>
+            <th class="center">Rating (1 to 5)</th>
+            <th>Developer Self-Reflection Remarks</th>
+          </tr>
+        </thead>
+        <tbody id="tableBodyG">
+          <!-- Populated via JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size:16px; font-weight:700; color:var(--arena-dark); margin:26px 0 14px 0;">Project Coordinator Evaluation (Your Notes for MD)</h3>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">Overall Professional Impression</label>
+        <textarea id="noteImpression" class="form-control" placeholder="Executive summary of this developer's AI aptitude, technical curiosity, and reliability..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Key Strengths in AI</label>
+        <textarea id="noteStrengths" class="form-control" placeholder="Where they shine (e.g. strong Python fundamentals, quick prompt prototyping, solid math background)..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Skill Gaps Identified</label>
+        <textarea id="noteGaps" class="form-control" placeholder="What is holding them back (e.g. lack of MLOps experience, no exposure to vector databases)..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Recommended Training Priority</label>
+        <input type="text" id="noteTraining" class="form-control" placeholder="e.g. LangChain / RAG Bootcamp, AWS SageMaker Fundamentals">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Potential for AI Project Assignment</label>
+        <select id="aiPotential" class="form-control">
+          <option value="">-- Select Potential --</option>
+          <option value="High">🟢 High — Ready to build / lead AI initiatives</option>
+          <option value="Medium">🟡 Medium — Capable with guidance & upskilling</option>
+          <option value="Low">🔴 Low — Needs foundational training first</option>
+        </select>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Additional Remarks for MD Sir</label>
+        <textarea id="noteRemarks" class="form-control" placeholder="Any strategic observations, willingness to transition to AI, team fit..."></textarea>
+      </div>
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('secF')">← Section F</button>
+      <button class="btn btn-green" onclick="previewAndReview()">Next: Preview & Save Interview →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL: REVIEW & SAVE
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_review">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar" style="background:rgba(16,185,129,0.15); color:var(--arena-green);">✓</div>
+        <div>
+          <h2 class="panel-heading">Review & Save Developer Assessment</h2>
+          <p class="panel-subheading">Verify all details before saving to the local database and updating dashboard metrics.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="reviewDossier">
+      <!-- Populated via JS -->
+    </div>
+
+    <div class="panel-footer-nav">
+      <button class="btn btn-glass" onclick="switchTab('secG')">← Edit Notes</button>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-green" style="font-size:15px; padding:12px 28px;" onclick="saveCurrentAssessment()">
+          💾 Save & Update Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══ MODAL: SUCCESS CONFIRMATION ═══ -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <div class="modal-icon">✓</div>
+    <h3 class="modal-title" id="modalDevName">Assessment Saved!</h3>
+    <p class="modal-desc" id="modalDevDesc">Developer dossier has been permanently recorded in your laptop database.</p>
+    <div class="modal-btn-row">
+      <button class="btn btn-primary" onclick="closeModal(); startNewInterview();">➕ Next Developer</button>
+      <button class="btn btn-glass" onclick="closeModal(); switchTab('roster');">📋 Return to Roster</button>
+      <button class="btn btn-export-excel" onclick="exportToExcel()">📊 Export Excel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// MASTER ASSESSMENT DOMAINS & CORE TECH STACKS
+// ════════════════════════════════════════════════════════════
+const DOMAINS_B = [
+  "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)",
+  "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)",
+  "Natural Language Processing (NLP & Text Analysis)",
+  "Computer Vision & Image / Video Recognition",
+  "Generative AI & Large Language Models (LLMs, Diffusion Models)",
+  "AI Ethics, Bias, Data Privacy & Responsible AI",
+  "Industry AI Trends, Modern Frameworks & API Ecosystems"
+];
+
+const TOOLS_C_INITIAL = [
+  "Python for AI/ML (NumPy, Pandas, SciPy)",
+  "PyTorch (Model training & inference)",
+  "TensorFlow / Keras",
+  "Scikit-learn (Classical ML algorithms)",
+  "Hugging Face Transformers & Datasets",
+  "OpenAI API & GPT Integration (Function Calling)",
+  "Google Gemini & Vertex AI SDK",
+  "LangChain / LlamaIndex (AI Agents & Chains)",
+  "Prompt Engineering & Context Optimization",
+  "RAG (Retrieval-Augmented Generation)",
+  "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)",
+  "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)",
+  "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)",
+  "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)",
+  "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)",
+  "Data Engineering & Feature Extraction"
+];
+
+const DOMAINS_G = [
+  "Overall Conceptual AI Knowledge",
+  "Hands-On AI/ML Development & Coding",
+  "Real-World AI Project Delivery Experience",
+  "Readiness to Lead or Architect an Arena AI Initiative"
+];
+
+// State
+let allAssessments = [];
+let currentDevIndex = -1; // -1 for new
+let customTechStacks = [];
+
+// ════════════════════════════════════════════════════════════
+// INITIALIZATION
+// ════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadFromStorage();
+  buildSectionB();
+  buildSectionC();
+  buildSectionG();
+  updateDashboardStats();
+  renderRoster();
+});
+
+function loadFromStorage() {
+  try {
+    const saved = localStorage.getItem('arena_ai_skills_data');
+    if (saved) {
+      allAssessments = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Failed to load assessments from localStorage', e);
+  }
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem('arena_ai_skills_data', JSON.stringify(allAssessments));
+  } catch (e) {
+    console.error('Failed to save to localStorage', e);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// BUILD SECTION B (AI KNOWLEDGE) WITH PER-DOMAIN REMARKS
+// ════════════════════════════════════════════════════════════
+function buildSectionB() {
+  const tbody = document.getElementById('tableBodyB');
+  tbody.innerHTML = '';
+  DOMAINS_B.forEach((domain, idx) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="skill-name">${domain}</td>
+      <td class="skill-score">
+        <div class="rating-pills-group" data-group="b_${idx}">
+          ${[1,2,3,4,5].map(v => `<button type="button" class="rate-pill" data-val="${v}" onclick="setRatingPill('b_${idx}', ${v})">${v}</button>`).join('')}
+        </div>
+        <input type="hidden" id="rate_b_${idx}" value="">
+      </td>
+      <td class="skill-remarks">
+        <input type="text" id="rem_b_${idx}" class="table-remarks-input" placeholder="Domain remarks, concepts understood, or notes...">
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// BUILD SECTION C (TECH STACKS) WITH REMARKS & CUSTOM ROWS
+// ════════════════════════════════════════════════════════════
+function buildSectionC() {
+  const tbody = document.getElementById('tableBodyC');
+  tbody.innerHTML = '';
+  
+  // Render Core Tools
+  TOOLS_C_INITIAL.forEach((tool, idx) => {
+    renderTechStackRow(tbody, tool, `c_${idx}`, false);
+  });
+
+  // Render any user-added custom tech stacks
+  customTechStacks.forEach((tool, idx) => {
+    renderTechStackRow(tbody, tool, `custom_${idx}`, true);
+  });
+}
+
+function renderTechStackRow(tbody, toolName, prefix, isCustom) {
+  const tr = document.createElement('tr');
+  tr.id = `row_${prefix}`;
+  tr.innerHTML = `
+    <td class="skill-name">
+      ${isCustom ? `<span style="color:var(--arena-blue); font-size:11px; font-weight:700;">[CUSTOM]</span> ` : ''}
+      ${toolName}
+    </td>
+    <td class="skill-score">
+      <div class="rating-pills-group" data-group="${prefix}">
+        ${[1,2,3,4,5].map(v => `<button type="button" class="rate-pill" data-val="${v}" onclick="setRatingPill('${prefix}', ${v})">${v}</button>`).join('')}
+      </div>
+      <input type="hidden" id="rate_${prefix}" value="">
+    </td>
+    <td class="skill-usage">
+      <div class="toggle-pills">
+        <button type="button" class="toggle-pill-btn" onclick="setRowUsage('${prefix}', 'yes', this)">Y</button>
+        <button type="button" class="toggle-pill-btn" onclick="setRowUsage('${prefix}', 'no', this)">N</button>
+      </div>
+      <input type="hidden" id="use_${prefix}" value="">
+    </td>
+    <td class="skill-remarks">
+      <input type="text" id="rem_${prefix}" class="table-remarks-input" placeholder="Remarks: specific libraries, versions, models used...">
+    </td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function addCustomTechStackRow() {
+  const customName = prompt('Enter the name of the Tech Stack or Skill to add:');
+  if (!customName || !customName.trim()) return;
+  const cleanName = customName.trim();
+  customTechStacks.push(cleanName);
+  const tbody = document.getElementById('tableBodyC');
+  renderTechStackRow(tbody, cleanName, `custom_${customTechStacks.length - 1}`, true);
+}
+
+// ════════════════════════════════════════════════════════════
+// BUILD SECTION G (SELF-ASSESSMENT) WITH REMARKS
+// ════════════════════════════════════════════════════════════
+function buildSectionG() {
+  const tbody = document.getElementById('tableBodyG');
+  tbody.innerHTML = '';
+  DOMAINS_G.forEach((item, idx) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="skill-name">${item}</td>
+      <td class="skill-score">
+        <div class="rating-pills-group" data-group="g_${idx}">
+          ${[1,2,3,4,5].map(v => `<button type="button" class="rate-pill" data-val="${v}" onclick="setRatingPill('g_${idx}', ${v})">${v}</button>`).join('')}
+        </div>
+        <input type="hidden" id="rate_g_${idx}" value="">
+      </td>
+      <td class="skill-remarks">
+        <input type="text" id="rem_g_${idx}" class="table-remarks-input" placeholder="Developer self-assessment comments...">
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// RATING PILLS & TOGGLES
+// ════════════════════════════════════════════════════════════
+function setRatingPill(group, val) {
+  const input = document.getElementById(`rate_${group}`);
+  if (input) input.value = val;
+  const container = document.querySelector(`.rating-pills-group[data-group="${group}"]`);
+  if (container) {
+    container.querySelectorAll('.rate-pill').forEach(btn => {
+      btn.classList.remove('selected');
+      if (parseInt(btn.getAttribute('data-val')) === val) {
+        btn.classList.add('selected');
+      }
+    });
+  }
+}
+
+function setRowUsage(prefix, val, btn) {
+  const input = document.getElementById(`use_${prefix}`);
+  if (input) input.value = val;
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.toggle-pill-btn').forEach(b => b.classList.remove('active-yes', 'active-no'));
+  if (val === 'yes') btn.classList.add('active-yes');
+  if (val === 'no') btn.classList.add('active-no');
+}
+
+function setToggle(fieldId, val, btn) {
+  const input = document.getElementById(fieldId);
+  if (input) input.value = val;
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.toggle-pill-btn').forEach(b => b.classList.remove('active-yes', 'active-no'));
+  if (val === 'yes') btn.classList.add('active-yes');
+  if (val === 'no') btn.classList.add('active-no');
+}
+
+// ════════════════════════════════════════════════════════════
+// TABS SWITCHING
+// ════════════════════════════════════════════════════════════
+function switchTab(tabKey) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+  const panel = document.getElementById(`panel_${tabKey}`);
+  const btn = document.getElementById(`tabBtn_${tabKey}`);
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════════════════════
+// START NEW INTERVIEW / CLEAR FORM
+// ════════════════════════════════════════════════════════════
+function startNewInterview() {
+  currentDevIndex = -1;
+  resetFormFields();
+  document.getElementById('interviewingBadge').textContent = `Interviewing: Developer #${allAssessments.length + 1} of 15`;
+  switchTab('secA');
+  setTimeout(() => {
+    const nameInput = document.getElementById('devName');
+    if (nameInput) nameInput.focus();
+  }, 150);
+}
+
+function resetFormFields() {
+  // Reset text/number inputs
+  document.querySelectorAll('.panel input[type="text"], .panel input[type="number"], .panel textarea').forEach(el => el.value = '');
+  document.querySelectorAll('.panel select').forEach(el => el.selectedIndex = 0);
+  document.querySelectorAll('.panel input[type="hidden"]').forEach(el => el.value = '');
+  document.querySelectorAll('.panel input[type="checkbox"]').forEach(el => el.checked = false);
+  document.querySelectorAll('.rate-pill').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.toggle-pill-btn').forEach(el => el.classList.remove('active-yes', 'active-no'));
+  customTechStacks = [];
+  buildSectionC();
+}
+
+// ════════════════════════════════════════════════════════════
+// DATA HARVESTING FROM FORM
+// ════════════════════════════════════════════════════════════
+function collectFormData() {
+  const data = {
+    id: currentDevIndex >= 0 ? allAssessments[currentDevIndex].id : Date.now(),
+    name: document.getElementById('devName').value.trim(),
+    empId: document.getElementById('devEmpId').value.trim(),
+    department: document.getElementById('devDept').value.trim(),
+    title: document.getElementById('devTitle').value.trim(),
+    project: document.getElementById('devProject').value.trim(),
+    role: document.getElementById('devRole').value,
+    yearsCompany: document.getElementById('devYearsCompany').value,
+    yearsTotal: document.getElementById('devYearsTotal').value,
+    languages: [...document.querySelectorAll('.lang-check:checked')].map(cb => cb.value),
+    otherLangs: document.getElementById('devOtherLangs').value.trim(),
+
+    // Section B (Knowledge + Remarks)
+    knowledge: {},
+
+    // Section C (Skills + Work Usage + Remarks + Custom)
+    skills: {},
+    customSkills: [...customTechStacks],
+
+    // Section D (Projects)
+    aiProjects: document.getElementById('aiProjects').value,
+    aiProjectCount: document.getElementById('aiProjectCount').value,
+    aiProjectDesc: document.getElementById('aiProjectDesc').value.trim(),
+    aiProjectRole: document.getElementById('aiProjectRole').value.trim(),
+    aiProjectImpact: document.getElementById('aiProjectImpact').value.trim(),
+    aiDeployed: document.getElementById('aiDeployed').value,
+    aiOpenSource: document.getElementById('aiOpenSource').value,
+    aiOpenSourceDetails: document.getElementById('aiOpenSourceDetails').value.trim(),
+
+    // Section E (Current AI Use)
+    usingAI: document.getElementById('usingAI').value,
+    aiTools: [...document.querySelectorAll('.tool-check:checked')].map(cb => cb.value),
+    aiProductivity: document.getElementById('aiProductivity').value.trim(),
+    aiOpportunities: document.getElementById('aiOpportunities').value.trim(),
+    aiInitiatives: document.getElementById('aiInitiatives').value.trim(),
+
+    // Section F (Training)
+    hasCerts: document.getElementById('hasCerts').value,
+    currentLearning: document.getElementById('currentLearning').value,
+    certsList: document.getElementById('certsList').value.trim(),
+    wantedTraining: document.getElementById('wantedTraining').value.trim(),
+    learningFormats: [...document.querySelectorAll('.format-check:checked')].map(cb => cb.value),
+
+    // Section G (Self Assessment + Remarks + Notes)
+    selfAssessment: {},
+    noteImpression: document.getElementById('noteImpression').value.trim(),
+    noteStrengths: document.getElementById('noteStrengths').value.trim(),
+    noteGaps: document.getElementById('noteGaps').value.trim(),
+    noteTraining: document.getElementById('noteTraining').value.trim(),
+    aiPotential: document.getElementById('aiPotential').value,
+    noteRemarks: document.getElementById('noteRemarks').value.trim(),
+    timestamp: new Date().toISOString()
+  };
+
+  // Harvest B
+  DOMAINS_B.forEach((domain, idx) => {
+    const rateVal = document.getElementById(`rate_b_${idx}`)?.value;
+    const remVal = document.getElementById(`rem_b_${idx}`)?.value;
+    data.knowledge[domain] = {
+      rating: rateVal ? parseInt(rateVal) : null,
+      remarks: remVal ? remVal.trim() : ''
+    };
+  });
+
+  // Harvest C Core Tools
+  TOOLS_C_INITIAL.forEach((tool, idx) => {
+    const rateVal = document.getElementById(`rate_c_${idx}`)?.value;
+    const useVal = document.getElementById(`use_c_${idx}`)?.value;
+    const remVal = document.getElementById(`rem_c_${idx}`)?.value;
+    data.skills[tool] = {
+      rating: rateVal ? parseInt(rateVal) : null,
+      usedAtWork: useVal || '',
+      remarks: remVal ? remVal.trim() : '',
+      isCustom: false
+    };
+  });
+
+  // Harvest C Custom Tools
+  customTechStacks.forEach((tool, idx) => {
+    const rateVal = document.getElementById(`rate_custom_${idx}`)?.value;
+    const useVal = document.getElementById(`use_custom_${idx}`)?.value;
+    const remVal = document.getElementById(`rem_custom_${idx}`)?.value;
+    data.skills[tool] = {
+      rating: rateVal ? parseInt(rateVal) : null,
+      usedAtWork: useVal || '',
+      remarks: remVal ? remVal.trim() : '',
+      isCustom: true
+    };
+  });
+
+  // Harvest G
+  DOMAINS_G.forEach((item, idx) => {
+    const rateVal = document.getElementById(`rate_g_${idx}`)?.value;
+    const remVal = document.getElementById(`rem_g_${idx}`)?.value;
+    data.selfAssessment[item] = {
+      rating: rateVal ? parseInt(rateVal) : null,
+      remarks: remVal ? remVal.trim() : ''
+    };
+  });
+
+  // Calculate Average Scores
+  const bScores = Object.values(data.knowledge).map(x => x.rating).filter(v => v !== null);
+  const cScores = Object.values(data.skills).map(x => x.rating).filter(v => v !== null);
+  const gScores = Object.values(data.selfAssessment).map(x => x.rating).filter(v => v !== null);
+
+  data.avgKnowledge = bScores.length ? (bScores.reduce((a,b)=>a+b,0)/bScores.length).toFixed(1) : '—';
+  data.avgSkills = cScores.length ? (cScores.reduce((a,b)=>a+b,0)/cScores.length).toFixed(1) : '—';
+  data.avgSelfAssess = gScores.length ? (gScores.reduce((a,b)=>a+b,0)/gScores.length).toFixed(1) : '—';
+
+  const allScores = [...bScores, ...cScores, ...gScores];
+  data.overallScore = allScores.length ? (allScores.reduce((a,b)=>a+b,0)/allScores.length).toFixed(1) : '—';
+
+  return data;
+}
+
+// ════════════════════════════════════════════════════════════
+// PREVIEW & REVIEW DOSSIER
+// ════════════════════════════════════════════════════════════
+function previewAndReview() {
+  const d = collectFormData();
+  const div = document.getElementById('reviewDossier');
+
+  function getBadgeColor(val) {
+    const v = parseFloat(val);
+    if (isNaN(v)) return '#64748b';
+    if (v >= 4.0) return '#10b981';
+    if (v >= 3.0) return '#2563eb';
+    if (v >= 2.0) return '#f59e0b';
+    return '#ef4444';
+  }
+
+  div.innerHTML = `
+    <div style="background:rgba(255,255,255,0.9); border:1px solid #e2e8f0; border-radius:14px; padding:24px; margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #f1f5f9; padding-bottom:16px; margin-bottom:18px;">
+        <div>
+          <h3 style="font-size:20px; font-weight:800; color:#0f172a;">${d.name || '(Unnamed Developer)'}</h3>
+          <p style="font-size:13px; color:#64748b;">${d.empId || 'No ID'} &bull; ${d.title || 'Developer'} &bull; ${d.department || 'Engineering'}</p>
+          <p style="font-size:13px; color:#2563eb; font-weight:600; margin-top:3px;">Assigned Project: ${d.project || 'Unassigned'} (${d.role || 'Individual'})</p>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:32px; font-weight:800; color:${getBadgeColor(d.overallScore)};">${d.overallScore} <span style="font-size:16px; color:#94a3b8;">/ 5</span></div>
+          <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Overall AI Readiness</div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:18px;">
+        <div style="background:#f8fafc; padding:12px; border-radius:10px;">
+          <div style="font-size:11px; color:#64748b; font-weight:700;">AI KNOWLEDGE SCORE</div>
+          <div style="font-size:18px; font-weight:800; color:#0f172a;">${d.avgKnowledge} / 5</div>
+        </div>
+        <div style="background:#f8fafc; padding:12px; border-radius:10px;">
+          <div style="font-size:11px; color:#64748b; font-weight:700;">TECH STACK PROFICIENCY</div>
+          <div style="font-size:18px; font-weight:800; color:#0f172a;">${d.avgSkills} / 5</div>
+        </div>
+        <div style="background:#f8fafc; padding:12px; border-radius:10px;">
+          <div style="font-size:11px; color:#64748b; font-weight:700;">AI PROJECT ASSIGNMENT POTENTIAL</div>
+          <div style="font-size:15px; font-weight:800; color:${d.aiPotential==='High'?'#10b981':d.aiPotential==='Medium'?'#f59e0b':'#ef4444'};">${d.aiPotential || 'Not Rated'}</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <h4 style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Languages & Tech Stacks</h4>
+        <div style="font-size:13px; color:#1e293b;">${(d.languages || []).join(', ') || 'None selected'} ${d.otherLangs ? `&bull; Other: ${d.otherLangs}` : ''}</div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <h4 style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Daily AI Tool Usage</h4>
+        <div style="font-size:13px; color:#1e293b;">${d.usingAI === 'yes' ? `✅ Active: ${(d.aiTools || []).join(', ') || 'None selected'}` : '❌ Not currently using AI tools'}</div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <h4 style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;">AI Project Experience</h4>
+        <div style="font-size:13px; color:#1e293b;">${d.aiProjects === 'yes' ? `✅ ${d.aiProjectCount || '1'} Project(s): ${d.aiProjectDesc || 'No details provided'}` : '❌ No previous AI project experience'}</div>
+      </div>
+
+      <div>
+        <h4 style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Project Coordinator Notes for MD</h4>
+        <div style="font-size:13px; color:#1e293b; background:#f1f5f9; padding:12px; border-radius:8px; line-height:1.5;">${d.noteImpression || 'No overall impression recorded yet.'}</div>
+      </div>
+    </div>
+  `;
+
+  switchTab('review');
+}
+
+// ════════════════════════════════════════════════════════════
+// SAVE CURRENT ASSESSMENT
+// ════════════════════════════════════════════════════════════
+function saveCurrentAssessment() {
+  const data = collectFormData();
+  if (!data.name && !data.empId) {
+    alert('⚠️ Please enter at least the Developer Name or Employee ID before saving.');
+    switchTab('secA');
+    return;
+  }
+
+  if (currentDevIndex >= 0) {
+    allAssessments[currentDevIndex] = data;
+  } else {
+    allAssessments.push(data);
+  }
+
+  saveToStorage();
+  updateDashboardStats();
+  renderRoster();
+
+  // Show Success Modal
+  document.getElementById('modalDevName').textContent = `Assessment Saved for ${data.name || data.empId}!`;
+  document.getElementById('modalDevDesc').textContent = `Dossier #${allAssessments.length} of 15 completed. Overall score: ${data.overallScore} / 5. Local database updated.`;
+  document.getElementById('successModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('successModal').classList.remove('show');
+}
+
+// ════════════════════════════════════════════════════════════
+// LOAD EXISTING ASSESSMENT INTO FORM FOR EDITING / VIEW
+// ════════════════════════════════════════════════════════════
+function loadAssessmentForEdit(idx) {
+  currentDevIndex = idx;
+  const d = allAssessments[idx];
+  resetFormFields();
+
+  // Section A
+  document.getElementById('devName').value = d.name || '';
+  document.getElementById('devEmpId').value = d.empId || '';
+  document.getElementById('devDept').value = d.department || '';
+  document.getElementById('devTitle').value = d.title || '';
+  document.getElementById('devProject').value = d.project || '';
+  document.getElementById('devRole').value = d.role || '';
+  document.getElementById('devYearsCompany').value = d.yearsCompany || '';
+  document.getElementById('devYearsTotal').value = d.yearsTotal || '';
+  document.getElementById('devOtherLangs').value = d.otherLangs || '';
+
+  (d.languages || []).forEach(lang => {
+    document.querySelectorAll('.lang-check').forEach(cb => {
+      if (cb.value === lang) cb.checked = true;
+    });
+  });
+
+  // Section B
+  DOMAINS_B.forEach((domain, i) => {
+    const item = d.knowledge?.[domain];
+    if (item && item.rating) setRatingPill(`b_${i}`, item.rating);
+    if (item && item.remarks) {
+      const remInput = document.getElementById(`rem_b_${i}`);
+      if (remInput) remInput.value = item.remarks;
+    }
+  });
+
+  // Section C Custom Tech Stacks restoration
+  customTechStacks = d.customSkills ? [...d.customSkills] : [];
+  buildSectionC();
+
+  // Section C Core & Custom scores
+  TOOLS_C_INITIAL.forEach((tool, i) => {
+    const item = d.skills?.[tool];
+    if (item && item.rating) setRatingPill(`c_${i}`, item.rating);
+    if (item && item.usedAtWork) {
+      const row = document.getElementById(`row_c_${i}`);
+      if (row) {
+        const btn = row.querySelector(`.toggle-pill-btn:nth-child(${item.usedAtWork === 'yes' ? 1 : 2})`);
+        if (btn) setRowUsage(`c_${i}`, item.usedAtWork, btn);
+      }
+    }
+    if (item && item.remarks) {
+      const remInput = document.getElementById(`rem_c_${i}`);
+      if (remInput) remInput.value = item.remarks;
+    }
+  });
+
+  customTechStacks.forEach((tool, i) => {
+    const item = d.skills?.[tool];
+    if (item && item.rating) setRatingPill(`custom_${i}`, item.rating);
+    if (item && item.usedAtWork) {
+      const row = document.getElementById(`row_custom_${i}`);
+      if (row) {
+        const btn = row.querySelector(`.toggle-pill-btn:nth-child(${item.usedAtWork === 'yes' ? 1 : 2})`);
+        if (btn) setRowUsage(`custom_${i}`, item.usedAtWork, btn);
+      }
+    }
+    if (item && item.remarks) {
+      const remInput = document.getElementById(`rem_custom_${i}`);
+      if (remInput) remInput.value = item.remarks;
+    }
+  });
+
+  // Section D
+  if (d.aiProjects) setToggleBtn('aiProjects', d.aiProjects);
+  document.getElementById('aiProjectCount').value = d.aiProjectCount || '';
+  document.getElementById('aiProjectDesc').value = d.aiProjectDesc || '';
+  document.getElementById('aiProjectRole').value = d.aiProjectRole || '';
+  document.getElementById('aiProjectImpact').value = d.aiProjectImpact || '';
+  if (d.aiDeployed) setToggleBtn('aiDeployed', d.aiDeployed);
+  if (d.aiOpenSource) setToggleBtn('aiOpenSource', d.aiOpenSource);
+  document.getElementById('aiOpenSourceDetails').value = d.aiOpenSourceDetails || '';
+
+  // Section E
+  if (d.usingAI) setToggleBtn('usingAI', d.usingAI);
+  (d.aiTools || []).forEach(tool => {
+    document.querySelectorAll('.tool-check').forEach(cb => {
+      if (cb.value === tool) cb.checked = true;
+    });
+  });
+  document.getElementById('aiProductivity').value = d.aiProductivity || '';
+  document.getElementById('aiOpportunities').value = d.aiOpportunities || '';
+  document.getElementById('aiInitiatives').value = d.aiInitiatives || '';
+
+  // Section F
+  if (d.hasCerts) setToggleBtn('hasCerts', d.hasCerts);
+  if (d.currentLearning) setToggleBtn('currentLearning', d.currentLearning);
+  document.getElementById('certsList').value = d.certsList || '';
+  document.getElementById('wantedTraining').value = d.wantedTraining || '';
+  (d.learningFormats || []).forEach(fmt => {
+    document.querySelectorAll('.format-check').forEach(cb => {
+      if (cb.value === fmt) cb.checked = true;
+    });
+  });
+
+  // Section G
+  DOMAINS_G.forEach((item, i) => {
+    const gItem = d.selfAssessment?.[item];
+    if (gItem && gItem.rating) setRatingPill(`g_${i}`, gItem.rating);
+    if (gItem && gItem.remarks) {
+      const rem = document.getElementById(`rem_g_${i}`);
+      if (rem) rem.value = gItem.remarks;
+    }
+  });
+  document.getElementById('noteImpression').value = d.noteImpression || '';
+  document.getElementById('noteStrengths').value = d.noteStrengths || '';
+  document.getElementById('noteGaps').value = d.noteGaps || '';
+  document.getElementById('noteTraining').value = d.noteTraining || '';
+  document.getElementById('aiPotential').value = d.aiPotential || '';
+  document.getElementById('noteRemarks').value = d.noteRemarks || '';
+
+  document.getElementById('interviewingBadge').textContent = `Editing: ${d.name || 'Dev #' + (idx + 1)}`;
+  switchTab('secA');
+}
+
+function setToggleBtn(fieldId, val) {
+  const input = document.getElementById(fieldId);
+  if (input) {
+    input.value = val;
+    const parent = input.previousElementSibling;
+    if (parent) {
+      parent.querySelectorAll('.toggle-pill-btn').forEach(b => {
+        b.classList.remove('active-yes', 'active-no');
+        const text = b.textContent.toLowerCase();
+        if (val === 'yes' && (text.includes('yes') || text.includes('y'))) b.classList.add('active-yes');
+        if (val === 'no' && (text.includes('no') || text.includes('n'))) b.classList.add('active-no');
+      });
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// DASHBOARD METRICS & ROSTER RENDERING
+// ════════════════════════════════════════════════════════════
+function updateDashboardStats() {
+  const completed = allAssessments.length;
+  const target = 15;
+  const pending = Math.max(0, target - completed);
+  const pct = Math.round((completed / target) * 100);
+
+  document.getElementById('statTarget').textContent = target;
+  document.getElementById('statCompleted').textContent = completed;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statCompletedPct').textContent = `${pct}% of 15 target`;
+  document.getElementById('barCompleted').style.width = `${Math.min(100, pct)}%`;
+  document.getElementById('barPending').style.width = `${Math.max(0, 100 - pct)}%`;
+
+  const scores = allAssessments.map(x => parseFloat(x.overallScore)).filter(s => !isNaN(s));
+  if (scores.length > 0) {
+    const avg = (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1);
+    document.getElementById('statAvgScore').textContent = avg;
+    document.getElementById('barScore').style.width = `${(parseFloat(avg) / 5) * 100}%`;
+  } else {
+    document.getElementById('statAvgScore').textContent = '—';
+    document.getElementById('barScore').style.width = '0%';
+  }
+}
+
+function renderRoster() {
+  const grid = document.getElementById('rosterGrid');
+  grid.innerHTML = '';
+
+  // Render completed assessments
+  allAssessments.forEach((dev, idx) => {
+    const card = document.createElement('div');
+    card.className = 'dev-glass-card is-done';
+    card.onclick = () => loadAssessmentForEdit(idx);
+    card.innerHTML = `
+      <div class="dev-card-header">
+        <span class="dev-card-num">#${idx + 1}</span>
+        <span class="dev-badge-status done">✓ Completed</span>
+      </div>
+      <div>
+        <div class="dev-card-name">${dev.name || 'Unnamed Developer'}</div>
+        <div class="dev-card-info">
+          <span>${dev.empId || 'No ID'} &bull; ${dev.title || 'Developer'}</span>
+          <span style="color:#2563eb; font-weight:600;">Project: ${dev.project || 'Unassigned'}</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(226,232,240,0.8); padding-top:8px;">
+        <span style="font-size:11px; font-weight:700; color:#64748b;">AI SCORE:</span>
+        <span class="dev-card-score">${dev.overallScore} / 5</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Render pending placeholders up to 15 (or beyond if needed)
+  const remaining = Math.max(0, 15 - allAssessments.length);
+  for (let i = 1; i <= remaining; i++) {
+    const devNum = allAssessments.length + i;
+    const card = document.createElement('div');
+    card.className = 'dev-glass-card';
+    card.onclick = () => {
+      startNewInterview();
+    };
+    card.innerHTML = `
+      <div class="dev-card-header">
+        <span class="dev-card-num">#${devNum}</span>
+        <span class="dev-badge-status pending">Pending Desk Visit</span>
+      </div>
+      <div>
+        <div class="dev-card-name" style="color:#94a3b8;">Developer #${devNum}</div>
+        <div class="dev-card-info">
+          <span>Click to start desk interview</span>
+          <span style="color:#94a3b8;">Individual assignment</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(226,232,240,0.8); padding-top:8px;">
+        <span style="font-size:11px; font-weight:700; color:#94a3b8;">STATUS:</span>
+        <span style="font-size:13px; font-weight:600; color:var(--arena-amber);">Click to Begin &rarr;</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// EXPORT OPTION 1: PROFESSIONAL EXCEL WORKBOOK (.xlsx)
+// ════════════════════════════════════════════════════════════
+function exportToExcel() {
+  if (allAssessments.length === 0) {
+    alert('Please complete at least one developer assessment before exporting.');
+    return;
+  }
+
+  if (typeof XLSX === 'undefined') {
+    alert('Excel library is still loading. Please try again in a moment.');
+    return;
+  }
+
+  const wb = XLSX.utils.book_new();
+
+  // ── Sheet 1: Master Roster & Summary
+  const rosterData = [
+    ['ARENA — DEVELOPER AI SKILLS & EXPERTISE ASSESSMENT'],
+    ['Report Submitted To: Managing Director | Assessment Date: 1st November 2026'],
+    ['Total Developers Assessed:', allAssessments.length],
+    [],
+    ['#', 'Name', 'Employee ID', 'Department', 'Designation', 'Assigned Project', 'Project Role', 'Years Arena', 'Total Exp (Yrs)', 'Languages', 'AI Knowledge Score', 'Tech Skills Score', 'Overall AI Score', 'AI Potential', 'Using AI Tools Today', 'Active AI Tools', 'Coordinator Notes']
+  ];
+
+  allAssessments.forEach((d, idx) => {
+    rosterData.push([
+      idx + 1,
+      d.name,
+      d.empId,
+      d.department,
+      d.title,
+      d.project,
+      d.role,
+      d.yearsCompany,
+      d.yearsTotal,
+      (d.languages || []).join(', '),
+      d.avgKnowledge,
+      d.avgSkills,
+      d.overallScore,
+      d.aiPotential,
+      d.usingAI,
+      (d.aiTools || []).join(', '),
+      d.noteImpression
+    ]);
+  });
+
+  const wsRoster = XLSX.utils.aoa_to_sheet(rosterData);
+  XLSX.utils.book_append_sheet(wb, wsRoster, 'Summary Roster');
+
+  // ── Sheet 2: Tech Stacks & Remarks (The explicit user requirement)
+  const skillsData = [
+    ['DEVELOPER AI TECH STACKS, PROFICIENCY & INDIVIDUAL REMARKS'],
+    [],
+    ['Developer Name', 'Employee ID', 'Project', 'Tech Stack / Tool', 'Rating (1-5)', 'Used Professionally (Y/N)', 'Developer Remarks / Context']
+  ];
+
+  allAssessments.forEach(d => {
+    if (d.skills) {
+      Object.entries(d.skills).forEach(([tool, details]) => {
+        skillsData.push([
+          d.name,
+          d.empId,
+          d.project,
+          tool,
+          details.rating || 'N/A',
+          details.usedAtWork || 'N/A',
+          details.remarks || ''
+        ]);
+      });
+    }
+  });
+
+  const wsSkills = XLSX.utils.aoa_to_sheet(skillsData);
+  XLSX.utils.book_append_sheet(wb, wsSkills, 'Tech Stacks & Remarks');
+
+  // ── Sheet 3: AI Knowledge Domains & Remarks
+  const knowData = [
+    ['AI KNOWLEDGE DOMAINS & REMARKS'],
+    [],
+    ['Developer Name', 'Employee ID', 'Project', 'AI Domain', 'Rating (1-5)', 'Remarks']
+  ];
+
+  allAssessments.forEach(d => {
+    if (d.knowledge) {
+      Object.entries(d.knowledge).forEach(([domain, details]) => {
+        knowData.push([
+          d.name,
+          d.empId,
+          d.project,
+          domain,
+          details.rating || 'N/A',
+          details.remarks || ''
+        ]);
+      });
+    }
+  });
+
+  const wsKnow = XLSX.utils.aoa_to_sheet(knowData);
+  XLSX.utils.book_append_sheet(wb, wsKnow, 'AI Knowledge & Remarks');
+
+  // ── Sheet 4: Projects & Training Needs
+  const projData = [
+    ['AI PROJECTS & TRAINING ROADMAP'],
+    [],
+    ['Developer Name', 'Employee ID', 'Project', 'AI Projects Done', 'Count', 'Significant AI Project Desc', 'Production Deploy', 'Wanted AI Training', 'Preferred Formats', 'Strengths', 'Identified Skill Gaps']
+  ];
+
+  allAssessments.forEach(d => {
+    projData.push([
+      d.name,
+      d.empId,
+      d.project,
+      d.aiProjects,
+      d.aiProjectCount,
+      d.aiProjectDesc,
+      d.aiDeployed,
+      d.wantedTraining,
+      (d.learningFormats || []).join(', '),
+      d.noteStrengths,
+      d.noteGaps
+    ]);
+  });
+
+  const wsProj = XLSX.utils.aoa_to_sheet(projData);
+  XLSX.utils.book_append_sheet(wb, wsProj, 'Projects & Training');
+
+  // Download File
+  const filename = `Arena_AI_Skills_Assessment_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(wb, filename);
+}
+
+// ════════════════════════════════════════════════════════════
+// EXPORT OPTION 2: STRUCTURED WORD DOCUMENT (.doc / .docx)
+// ════════════════════════════════════════════════════════════
+function exportToWord() {
+  if (allAssessments.length === 0) {
+    alert('Please complete at least one developer assessment before exporting.');
+    return;
+  }
+
+  let htmlDoc = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    <head>
+      <meta charset='utf-8'>
+      <title>Arena AI Skills Assessment Report</title>
+      <style>
+        body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #1e293b; }
+        h1 { font-size: 24pt; color: #C41E3A; margin-bottom: 4px; text-align: center; }
+        h2 { font-size: 16pt; color: #0f172a; border-bottom: 2px solid #C41E3A; padding-bottom: 4px; margin-top: 24px; }
+        h3 { font-size: 13pt; color: #1e3a8a; margin-top: 16px; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; }
+        th, td { border: 1px solid #cbd5e1; padding: 7px 10px; text-align: left; }
+        th { background-color: #0f172a; color: #ffffff; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        .header-box { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 16px; margin-bottom: 24px; border-radius: 8px; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 9pt; }
+        .page-break { page-break-after: always; }
+      </style>
+    </head>
+    <body>
+      <div style="text-align:center; margin-bottom:20px;">
+        <img src="data:image/png;base64,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oW1U3Q1uYiqIqlFaP/QpurbSuuvdeE/QgAr3v3Gxr2n5pQ7VCUwUAwlh53yhiRSAQaMn/L/drTrS7Jt5p9UaYFg3bLLnaPk080unVZL6jcpJESz9pldK6kUGwLReuGcgS0rRpYq/lTAxEzFRvZJNqhooYkq6FUJy4NpukDBoWrY5G5ZmmPYP1ajAKmCW8yStW6pKw73v5Eoiw5gSWK8Otp4HegkwC9bLXOLEHasMZufeKPF8FcLxY8+gaq7FQ4JVY2j9kn7KWEV1u90a4MEAz9tqtk9R6SYsWEs3ByQWHz09cEtp/ZZbDQ9GvnYbjan42hQSMLW4dPp4+P/gbQ7vX1o+XVtWNn3PktIpJONyntD4PkoNqCrka0SS8DW+vdA4cReITeddBszCYCR5G8ZewLU7FopnW2amPl1ScnACTpKkrH6QMsr+oR6LGykp66dV0qi/SFO3rRr+zZytiWqFXsZfbWWfiX55KtHQa/UK196+CJYPIA3UwHweg+dtozUkh4q9mOaaMjJN6bx6jMQylH7Q/qGNOREZyuM5nyWqZxgZvEPz1Bmi8qbXBDlM2kob2bK07826CuLIOIzJfF2SugwkqxjOiabhp3Ksg1WjAXXmDF1S91Mu3Eg+onAV6MugPrx0d8VMoloszdum667SsloSU3GNrr785S4X9y8vn4mu1iFj4wJf05SFwrnbDULO3cRZ2pXShdp8seGn9P75vobH0GOS9149hR3uJ3UvPshVKGel3/8V2EB1aMUG3fUl9CKgaxMNdPBzD6ni5aKlyIYiG+cs83Pw6+Roxe8zmBFNAcdkKK9FYJwCK3PFBeWHCbkKP1ewCqUI/MQiMIDddNObmyGB7IS16O+U1ZXQ7lqfZ6xRIXDjttHVepV3ox+7it9uAe/jl9ugL9pvF2Hy1a7dsf8UjyvrEpVmmPuvYH5/R8kE3wOsw66YxTrka/onHpQ42jK8znFEAIm9bdS0ejRutpTWnrUkT2sprZ/aUj7tVHp/i9hw2JJRtXVO78frlpROP+tOX31GqPNccWbNQqmhFlSEs/K1hdKs2uaKRnTVEnF+UWnTEYThOLiXNpBmZswdM9NxXQGsDYrxDkjAqMNjaDIWMXHeqqZsEAOnYQ1Sc78Yi4Gf0gO1YMrea4NTsdbmcJRe00pmH9xTOv6IntHVEjKRDl/wZBy7eR5ojyF6uov4D/zUATDf2pBpTYAR1RbqaTIDx4N9Zaw3rCkyYi/94rtJkuK9wePCojoxDO/FzTvXx1RcAzUHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBweD/wcZ9ZTAh+nM6wAAAABJRU5ErkJggg==" width="160" alt="Arena Logo"><br>
+        <h1>ARENA &bull; DEVELOPER AI SKILLS & EXPERTISE REPORT</h1>
+        <p style="font-size:12pt; color:#64748b; margin-top:4px;">Submitted to the Managing Director &bull; Date: 1st November 2026</p>
+      </div>
+
+      <div class="header-box">
+        <strong>Report Prepared By:</strong> Project Coordinator Jr.<br>
+        <strong>Target Group:</strong> 15 Individual Project Developers<br>
+        <strong>Total Assessed:</strong> ${allAssessments.length} Developers<br>
+        <strong>Average Team AI Readiness:</strong> ${document.getElementById('statAvgScore').textContent} / 5.0
+      </div>
+
+      <h2>1. Executive Summary & Developer Roster</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Developer Name</th>
+            <th>Emp ID</th>
+            <th>Designation</th>
+            <th>Assigned Project</th>
+            <th>Role</th>
+            <th>AI Score</th>
+            <th>AI Potential</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${allAssessments.map((d, i) => `
+            <tr>
+              <td>${i+1}</td>
+              <td><strong>${d.name || 'Unnamed'}</strong></td>
+              <td>${d.empId || '—'}</td>
+              <td>${d.title || '—'}</td>
+              <td>${d.project || '—'}</td>
+              <td>${d.role || 'Individual'}</td>
+              <td style="font-weight:bold; color:#C41E3A;">${d.overallScore} / 5</td>
+              <td>${d.aiPotential || '—'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <div class="page-break"></div>
+
+      <h2>2. Individual Developer Dossiers & Tech Stack Remarks</h2>
+      ${allAssessments.map((d, i) => `
+        <div style="border: 1px solid #cbd5e1; padding: 14px; margin-bottom: 20px; background:#fafafa;">
+          <h3 style="margin-top:0; color:#C41E3A;">Developer #${i+1}: ${d.name || 'Unnamed'} (${d.empId || 'No ID'})</h3>
+          <p><strong>Designation:</strong> ${d.title || '—'} | <strong>Department:</strong> ${d.department || '—'} | <strong>Assigned Project:</strong> ${d.project || '—'}</p>
+          <p><strong>Experience:</strong> Arena: ${d.yearsCompany || '—'} yrs | Total: ${d.yearsTotal || '—'} yrs | <strong>Languages:</strong> ${(d.languages || []).join(', ')}</p>
+          <p><strong>AI Readiness Score:</strong> ${d.overallScore} / 5 | <strong>AI Potential:</strong> ${d.aiPotential || '—'}</p>
+
+          <h4 style="margin:10px 0 5px 0;">Technical Skills & Remarks:</h4>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:35%;">Tech Stack / Tool</th>
+                <th style="width:15%;">Rating (1-5)</th>
+                <th style="width:15%;">Used at Work</th>
+                <th style="width:35%;">Employee Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Object.entries(d.skills || {}).map(([tool, info]) => `
+                <tr>
+                  <td>${tool}</td>
+                  <td style="text-align:center;">${info.rating || '—'}</td>
+                  <td style="text-align:center;">${info.usedAtWork || '—'}</td>
+                  <td>${info.remarks || '—'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <p><strong>AI Projects Completed:</strong> ${d.aiProjects === 'yes' ? d.aiProjectDesc || 'Yes' : 'None'}</p>
+          <p><strong>Daily AI Tools:</strong> ${(d.aiTools || []).join(', ') || 'None'}</p>
+          <p><strong>Training Requested:</strong> ${d.wantedTraining || 'None'}</p>
+          <p><strong>Project Coordinator Observation:</strong> <em>${d.noteImpression || 'No specific notes.'}</em></p>
+        </div>
+      `).join('')}
+    </body>
+    </html>
+  `;
+
+  const blob = new Blob(['\ufeff' + htmlDoc], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Arena_AI_Skills_Assessment_Report_${new Date().toISOString().slice(0,10)}.doc`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ════════════════════════════════════════════════════════════
+// EXPORT OPTION 3: PROFESSIONAL PDF REPORT (.pdf)
+// ════════════════════════════════════════════════════════════
+function exportToPDF() {
+  if (allAssessments.length === 0) {
+    alert('Please complete at least one developer assessment before exporting.');
+    return;
+  }
+
+  // If jsPDF is available, generate client-side PDF; fallback to window.print()
+  if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF !== 'undefined') {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'pt', 'a4');
+
+      // Title & Header
+      doc.setFillColor(15, 23, 42);
+      doc.rect(0, 0, 595, 75, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('ARENA — DEVELOPER AI SKILLS ASSESSMENT', 40, 36);
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Project Coordinator Executive Report &bull; Managing Director Submission', 40, 54);
+
+      // Metadata summary
+      doc.setTextColor(30, 41, 59);
+      doc.setFontSize(11);
+      doc.text(`Date: 1st November 2026 | Total Assessed: ${allAssessments.length} Developers | Average AI Score: ${document.getElementById('statAvgScore').textContent} / 5`, 40, 105);
+
+      // Table 1: Roster Overview
+      const tableRows = allAssessments.map((d, idx) => [
+        idx + 1,
+        d.name || 'Unnamed',
+        d.empId || '—',
+        d.project || '—',
+        d.role || 'Individual',
+        `${d.overallScore} / 5`,
+        d.aiPotential || '—'
+      ]);
+
+      if (typeof doc.autoTable === 'function') {
+        doc.autoTable({
+          startY: 120,
+          head: [['#', 'Developer Name', 'Emp ID', 'Assigned Project', 'Role', 'AI Score', 'AI Potential']],
+          body: tableRows,
+          theme: 'striped',
+          headStyles: { fillColor: [196, 30, 58] },
+          styles: { fontSize: 9, cellPadding: 5 }
+        });
+
+        // Save PDF
+        doc.save(`Arena_AI_Skills_Assessment_${new Date().toISOString().slice(0,10)}.pdf`);
+        return;
+      }
+    } catch (e) {
+      console.warn('jsPDF autoTable encountered an error, falling back to print dialog', e);
+    }
+  }
+
+  // Fallback: Trigger print dialog (users can Save as PDF with exact CSS formatting)
+  window.print();
+}
+
+// ════════════════════════════════════════════════════════════
+// BACKUP & RESTORE JSON
+// ════════════════════════════════════════════════════════════
+function backupJSON() {
+  const jsonStr = JSON.stringify(allAssessments, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Arena_AI_Assessment_Backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
