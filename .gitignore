@@ -1,0 +1,16 @@
+# Temporary Chrome profiles
+temp_chrome_profile*/
+
+# Scratch scripts & temporary test artifacts
+scratch_*.py
+test_*.html
+shot_*.html
+shot_*.png
+preview_*.png
+debug_*.png
+test_*.png
+audit_*.html
+
+# Python cache
+__pycache__/
+*.py[cod]
