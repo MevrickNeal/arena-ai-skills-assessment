@@ -1319,6 +1319,9 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     <button class="tab-btn active" onclick="switchTab('roster')" id="tabBtn_roster">
       <span class="tab-badge">📋</span> Roster & Tracker
     </button>
+    <button class="tab-btn coordinator-only" onclick="switchTab('rawdata')" id="tabBtn_rawdata">
+      <span class="tab-badge">📊</span> Raw Data Sheet
+    </button>
     <button class="tab-btn" onclick="switchTab('secA')" id="tabBtn_secA">
       <span class="tab-badge">A</span> Developer Info
     </button>
@@ -1373,6 +1376,63 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 
     <div class="roster-grid" id="rosterGrid">
       <!-- Generated via JS -->
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL: RAW DATA SHEET (SPREADSHEET VIEW)
+  ═══════════════════════════════════════════════ -->
+  <div class="panel" id="panel_rawdata">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-avatar" style="background:rgba(16,185,129,0.15); color:var(--arena-green);">📊</div>
+        <div>
+          <h2 class="panel-heading">Raw Data Sheet (Spreadsheet View)</h2>
+          <p class="panel-subheading">View, filter, and inspect all developer submissions in a unified raw tabular sheet format.</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-export-excel" onclick="exportToExcel()">📊 Download as Excel (.xlsx)</button>
+        <button class="btn btn-glass" onclick="renderRawDataTable()">🔄 Refresh Sheet</button>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+      <div style="flex:1; min-width:240px;">
+        <input type="text" id="rawSearchInput" class="form-control" placeholder="🔍 Search by Developer Name, Employee ID, or Project..." oninput="filterRawDataTable()">
+      </div>
+      <div style="font-size:12px; font-weight:700; color:#64748b;" id="rawRowCountBadge">
+        Showing 0 Submissions
+      </div>
+    </div>
+
+    <!-- Scrollable Spreadsheet Table -->
+    <div style="overflow-x:auto; background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; max-height:650px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+      <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left; min-width:1100px;" id="rawDataTable">
+        <thead>
+          <tr style="background:#0f172a; color:#ffffff; position:sticky; top:0; z-index:10;">
+            <th style="padding:10px 12px; border:1px solid #334155;">#</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Developer Name</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Emp ID</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Department</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Assigned Project</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Role</th>
+            <th style="padding:10px 12px; border:1px solid #334155; text-align:center;">Overall AI Score</th>
+            <th style="padding:10px 12px; border:1px solid #334155; text-align:center;">AI Knowledge</th>
+            <th style="padding:10px 12px; border:1px solid #334155; text-align:center;">Tech Skills</th>
+            <th style="padding:10px 12px; border:1px solid #334155; text-align:center;">AI Potential</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Daily AI Tools</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">AI Projects Done</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Training Requested</th>
+            <th style="padding:10px 12px; border:1px solid #334155;">Coordinator Notes</th>
+            <th style="padding:10px 12px; border:1px solid #334155; text-align:center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rawDataTableBody">
+          <!-- Populated via JS -->
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -2481,6 +2541,7 @@ function switchTab(tabKey) {
   const btn = document.getElementById(`tabBtn_${tabKey}`);
   if (panel) panel.classList.add('active');
   if (btn) btn.classList.add('active');
+  if (tabKey === 'rawdata') renderRawDataTable();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -2924,7 +2985,72 @@ function updateDashboardStats() {
   }
 }
 
+
+// ════════════════════════════════════════════════════════════
+// RAW DATA SHEET (SPREADSHEET TAB)
+// ════════════════════════════════════════════════════════════
+function renderRawDataTable() {
+  const tbody = document.getElementById('rawDataTableBody');
+  const countBadge = document.getElementById('rawRowCountBadge');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  if (countBadge) countBadge.textContent = `Showing ${allAssessments.length} Developer Submissions`;
+
+  if (allAssessments.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="15" style="text-align:center; padding:30px; color:#94a3b8;">No submissions recorded yet. Have developers submit their forms via the QR code or Developer Portal!</td></tr>`;
+    return;
+  }
+
+  allAssessments.forEach((d, idx) => {
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid #e2e8f0';
+    tr.style.background = (idx % 2 === 0) ? '#ffffff' : '#f8fafc';
+    tr.innerHTML = `
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; font-weight:700;">${idx + 1}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; font-weight:700; color:#0f172a;">${d.name || 'Unnamed'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; font-family:monospace; color:#2563eb;">${d.empId || '—'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0;">${d.department || '—'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; font-weight:600; color:#0f172a;">${d.project || '—'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0;">${d.role || 'Individual'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; text-align:center; font-weight:800; color:#C41E3A;">${d.overallScore} / 5</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; text-align:center;">${d.avgKnowledge}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; text-align:center;">${d.avgSkills}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; text-align:center; font-weight:700; color:${d.aiPotential==='High'?'#10b981':d.aiPotential==='Medium'?'#f59e0b':'#ef4444'}">${d.aiPotential || '—'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0;">${(d.aiTools || []).join(', ') || '—'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0;">${d.aiProjects === 'yes' ? '✅ ' + (d.aiProjectCount || '1') + ' Proj' : '❌ None'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0;">${d.wantedTraining || '—'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${d.noteImpression || ''}">${d.noteImpression || '—'}</td>
+      <td style="padding:8px 12px; border:1px solid #e2e8f0; text-align:center;">
+        <button class="btn-micro" onclick="loadAssessmentForEdit(${idx})" title="Edit / View Dossier">✏️</button>
+        <button class="btn-micro" style="color:#ef4444;" onclick="deleteDeveloper(${idx})" title="Delete">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterRawDataTable() {
+  const query = (document.getElementById('rawSearchInput').value || '').toLowerCase().trim();
+  const rows = document.querySelectorAll('#rawDataTableBody tr');
+  let visibleCount = 0;
+
+  rows.forEach(tr => {
+    const text = tr.textContent.toLowerCase();
+    if (!query || text.includes(query)) {
+      tr.style.display = '';
+      visibleCount++;
+    } else {
+      tr.style.display = 'none';
+    }
+  });
+
+  const countBadge = document.getElementById('rawRowCountBadge');
+  if (countBadge) countBadge.textContent = `Showing ${visibleCount} of ${allAssessments.length} Submissions`;
+}
+
 function renderRoster() {
+  renderRawDataTable();
   const grid = document.getElementById('rosterGrid');
   grid.innerHTML = '';
 
