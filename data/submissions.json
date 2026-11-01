@@ -1,1 +1,313 @@
-[]
+[
+  {
+    "id": "dev_2759329513179743300",
+    "name": "A.K.M Mainul Hasan",
+    "empId": "Arena0032",
+    "department": "Technical",
+    "title": "Software Engineer",
+    "project": "OSRMS, ARENA HRMS,B2B e-commerce",
+    "role": "Full Stack Developer",
+    "yearsCompany": "",
+    "yearsTotal": "",
+    "languages": [
+      "JavaScript",
+      "TypeScript",
+      "C# / .NET",
+      "SQL"
+    ],
+    "avgKnowledge": "4.0",
+    "avgSkills": "3.8",
+    "overallScore": "3.7",
+    "aiPotential": "Medium",
+    "usingAI": "yes",
+    "aiTools": [
+      "GitHub Copilot",
+      "ChatGPT Plus / Team",
+      "Google Gemini / Vertex",
+      "Claude (Anthropic)",
+      "Cursor IDE",
+      "Ollama / Local LLM"
+    ],
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": 5,
+        "remarks": ""
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": 5,
+        "remarks": ""
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": 5,
+        "remarks": ""
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "TensorFlow / Keras": {
+        "rating": 2,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": 5,
+        "usedAtWork": "yes",
+        "remarks": ""
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": 5,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": 4,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": ""
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": 5,
+        "usedAtWork": "yes",
+        "remarks": ""
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "no",
+    "aiProjectCount": "0",
+    "aiProjectDesc": "",
+    "aiDeployed": "no",
+    "wantedTraining": "1. Advanced Retrieval-Augmented Generation (RAG) & Hybrid Search Pipelines\n2. AI Agents, Multi-Step Orchestration & Function Calling\n3. Production AI Model Serving & Low-Latency Inference\n4. Enterprise AI Governance, Security & Guardrails",
+    "learningFormats": [
+      "Hands-on Workshop",
+      "Online Self-Paced",
+      "Company-Sponsored Cert",
+      "Senior Mentorship",
+      "Internal Hackathon"
+    ],
+    "noteStrengths": "",
+    "noteGaps": "",
+    "noteImpression": "",
+    "timestamp": "2026-11-01T12:00:00Z"
+  },
+  {
+    "id": "dev_8106481877769681447",
+    "name": "Anamul Haque Shanto",
+    "empId": "60",
+    "department": "Technical",
+    "title": "Front end developer",
+    "project": "Sales saas",
+    "role": "Frontend Developer",
+    "yearsCompany": "2",
+    "yearsTotal": "5",
+    "languages": [
+      "Python",
+      "JavaScript",
+      "TypeScript"
+    ],
+    "avgKnowledge": "2.7",
+    "avgSkills": "2.9",
+    "overallScore": "2.9",
+    "aiPotential": "Medium",
+    "usingAI": "yes",
+    "aiTools": [
+      "GitHub Copilot",
+      "Google Gemini / Vertex",
+      "Claude (Anthropic)",
+      "Cursor IDE"
+    ],
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": 2,
+        "remarks": ""
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 0,
+        "remarks": ""
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": 4,
+        "remarks": ""
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": 3,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": 3,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "TensorFlow / Keras": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": 2,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": 2,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": 3,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": 4,
+        "usedAtWork": "N/A",
+        "remarks": "Docsbot"
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": 3,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": 0,
+        "usedAtWork": "N/A",
+        "remarks": ""
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "yes",
+    "aiProjectCount": "1",
+    "aiProjectDesc": "Machine Learning-based Fake News Detection system that identifies whether a given news article or headline is real or fake. The system uses Natural Language Processing (NLP) techniques to analyze textual content and classify news based on its linguistic patterns and features.\nMachine Learning Algorithms Used:\n1. Logistic Regression \u2013 Classifies news as real or fake based on extracted text features.\n2. Naive Bayes (MultinomialNB) \u2013 Uses probability-based classification for text data.\n3. Passive Aggressive Classifier \u2013 Efficiently classifies large text datasets.\n4. Support Vector Machine (SVM) \u2013 Separates fake and real news using classification boundaries.\nTechnologies Used:\n- Programming Language: Python\n- Machine Learning: Scikit-learn\n- NLP: NLTK\n- Feature Extraction: TF-IDF Vectorizer\n- Data Processing: Pandas, NumPy\n- Visualization: Matplotlib, Colab\n- Frontend : HTML, CSS, Bootstrap, Jquery\n- Backend : Flask",
+    "aiDeployed": "yes",
+    "wantedTraining": "Ai based power BI masterclass",
+    "learningFormats": [
+      "Hands-on Workshop"
+    ],
+    "noteStrengths": "",
+    "noteGaps": "",
+    "noteImpression": "",
+    "timestamp": "2026-11-01T12:00:00Z"
+  }
+]
