@@ -2125,6 +2125,7 @@ const DOMAINS_G = [
 // ════════════════════════════════════════════════════════════
 let currentRole = localStorage.getItem('arena_current_role') || 'coordinator'; // 'coordinator' or 'developer'
 let coordinatorPin = localStorage.getItem('arena_coord_pin') || '2026';
+const FREE_CLOUD_DB_URL = 'https://extendsclass.com/api/json-storage/bin/eeebede';
 let cloudSyncUrl = localStorage.getItem('arena_cloud_sync_url') || 'https://script.google.com/macros/s/AKfycb2VgGIZnNF0douqJHZrkQUl7VxiNqrkbaPTjADPdKRddoeEKMNepDI2g0MwszmOCoL9g/exec';
 // Auto-migrate from deprecated URL if stored locally
 if (cloudSyncUrl === 'https://script.google.com/macros/s/AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw/exec') {
@@ -2336,64 +2337,85 @@ function testCloudConnection() {
     });
 }
 
-function syncFromCloud(showNotification) {
-  if (!cloudSyncUrl) {
-    if (showNotification) openCloudModal();
-    return;
-  }
+async function syncFromCloud(showNotification) {
+  let anySuccess = false;
+  let totalFound = 0;
 
-  fetch(cloudSyncUrl)
-    .then(res => {
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json();
-    })
-    .then(result => {
-      if (result && Array.isArray(result.data)) {
-        // Merge cloud data with local data by id or empId
-        const cloudItems = result.data;
-        let addedCount = 0;
-
+  // 1. Fetch from Free Cloud Database (Primary Shared Store)
+  try {
+    const res = await fetch(FREE_CLOUD_DB_URL + '?nocache=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const cloudItems = await res.json();
+      if (Array.isArray(cloudItems) && cloudItems.length > 0) {
+        totalFound += cloudItems.length;
+        anySuccess = true;
         cloudItems.forEach(cloudDev => {
+          if (!cloudDev || (!cloudDev.name && !cloudDev.empId)) return;
           const existingIdx = allAssessments.findIndex(localDev =>
             (localDev.empId && cloudDev.empId && localDev.empId.toLowerCase() === cloudDev.empId.toLowerCase()) ||
+            (localDev.name && cloudDev.name && localDev.name.toLowerCase() === cloudDev.name.toLowerCase()) ||
             (localDev.id && cloudDev.id && localDev.id === cloudDev.id)
           );
-
           if (existingIdx >= 0) {
             allAssessments[existingIdx] = cloudDev;
           } else {
             allAssessments.push(cloudDev);
-            addedCount++;
           }
         });
-
-        if (allAssessments.length > targetDevelopers) {
-          targetDevelopers = allAssessments.length;
-          localStorage.setItem('arena_target_count', targetDevelopers);
-        }
-
-        saveToStorage();
-        updateDashboardStats();
-        renderRoster();
-        if (typeof renderRawDataTable === 'function') renderRawDataTable();
-
-        if (showNotification) {
-          alert(`☁️ Cloud Sync Complete!\nTotal Active Submissions: ${allAssessments.length} developers.\nSynced with your Google Sheet.`);
-        }
-      } else {
-        retractFromGitHub(false);
       }
-    })
-    .catch(err => {
-      console.warn('Google Cloud sync unreachable, falling back to GitHub backup store:', err);
-      retractFromGitHub(false);
-      if (showNotification) {
-        alert('⚠️ Google Apps Script could not be reached.\nAutomatically checked and retracted latest submissions from GitHub repo backup!');
+    }
+  } catch(e) {
+    console.warn('Free cloud DB fetch note:', e);
+  }
+
+  // 2. Fetch from Google Apps Script if URL provided
+  if (cloudSyncUrl && !cloudSyncUrl.includes('AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw')) {
+    try {
+      const gsRes = await fetch(cloudSyncUrl);
+      if (gsRes.ok) {
+        const gsData = await gsRes.json();
+        if (gsData && Array.isArray(gsData.data) && gsData.data.length > 0) {
+          anySuccess = true;
+          totalFound += gsData.data.length;
+          gsData.data.forEach(cloudDev => {
+            if (!cloudDev || (!cloudDev.name && !cloudDev.empId)) return;
+            const existingIdx = allAssessments.findIndex(localDev =>
+              (localDev.empId && cloudDev.empId && localDev.empId.toLowerCase() === cloudDev.empId.toLowerCase()) ||
+              (localDev.name && cloudDev.name && localDev.name.toLowerCase() === cloudDev.name.toLowerCase()) ||
+              (localDev.id && cloudDev.id && localDev.id === cloudDev.id)
+            );
+            if (existingIdx >= 0) {
+              allAssessments[existingIdx] = cloudDev;
+            } else {
+              allAssessments.push(cloudDev);
+            }
+          });
+        }
       }
-    });
+    } catch(err) {
+      console.warn('Google Sheet fetch note:', err);
+    }
+  }
+
+  if (allAssessments.length > targetDevelopers) {
+    targetDevelopers = allAssessments.length;
+    localStorage.setItem('arena_target_count', targetDevelopers);
+  }
+
+  saveToStorage();
+  updateDashboardStats();
+  renderRoster();
+  if (typeof renderRawDataTable === 'function') renderRawDataTable();
+
+  if (showNotification) {
+    if (anySuccess) {
+      alert(`☁️ Cloud Sync Successful!\n\nSynchronized with Cloud Database.\nTotal Active Submissions: ${allAssessments.length} developers.\nAll dossiers and statistics are updated.`);
+    } else {
+      alert(`☁️ Cloud Sync Check:\n\nChecked cloud database. Found ${allAssessments.length} local dossier(s). When developers submit, their data streams live into your dashboard!`);
+    }
+  }
 }
 
-// Retract submissions directly from GitHub repository (data/submissions.json)
 function retractFromGitHub(showNotification) {
   const ghUrl = 'https://raw.githubusercontent.com/MevrickNeal/arena-ai-skills-assessment/main/data/submissions.json?nocache=' + Date.now();
 
@@ -2520,22 +2542,63 @@ async function pushToGitHubRepo(showNotification) {
   }
 }
 
-// Push a single submission to Google Sheet Apps Script & Parallel GitHub
-function pushSubmissionToCloud(data) {
-  if (cloudSyncUrl) {
-    fetch(cloudSyncUrl, {
-      method: 'POST',
-      mode: 'no-cors', // Google Apps Script Web App redirects
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).then(() => {
-      console.log('Submission pushed to Google Sheet successfully');
-    }).catch(err => {
-      console.warn('Could not push to Google Sheet:', err);
-    });
+// Push a submission to Free Cloud Database & Google Sheet
+async function pushSubmissionToCloud(data) {
+  // 1. Push to Free Cloud Database (Primary Reliable Shared Store)
+  try {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        let currentItems = [];
+        const getRes = await fetch(FREE_CLOUD_DB_URL + '?nocache=' + Date.now(), { cache: 'no-store' });
+        if (getRes.ok) {
+          const json = await getRes.json();
+          if (Array.isArray(json)) currentItems = json;
+        }
+
+        const existingIdx = currentItems.findIndex(item =>
+          (item.empId && data.empId && item.empId.toLowerCase() === data.empId.toLowerCase()) ||
+          (item.name && data.name && item.name.toLowerCase() === data.name.toLowerCase()) ||
+          (item.id && data.id && item.id === data.id)
+        );
+
+        if (existingIdx >= 0) {
+          currentItems[existingIdx] = data;
+        } else {
+          currentItems.push(data);
+        }
+
+        const putRes = await fetch(FREE_CLOUD_DB_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentItems)
+        });
+
+        if (putRes.ok) {
+          console.log('Successfully saved to Free Cloud Database!');
+          break;
+        }
+      } catch (e) {
+        console.warn(`Cloud DB attempt ${attempt + 1} failed:`, e);
+        await new Promise(r => setTimeout(r, 400 + Math.random() * 500));
+      }
+    }
+  } catch (err) {
+    console.error('Cloud DB push error:', err);
   }
 
-  // Auto parallel push to GitHub if token configured
+  // 2. Push to Google Sheet Web App (if configured)
+  if (cloudSyncUrl && !cloudSyncUrl.includes('AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw')) {
+    try {
+      fetch(cloudSyncUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(e => console.warn('Google Sheet push error:', e));
+    } catch(e) {}
+  }
+
+  // 3. Auto push to GitHub repo if token configured
   if (localStorage.getItem('arena_auto_gh_backup') === 'true' && localStorage.getItem('arena_github_pat')) {
     pushToGitHubRepo(false);
   }
@@ -2552,6 +2615,43 @@ function triggerExcelUpload() {
 function handleExcelUpload(event) {
   const files = event.target.files;
   if (!files || files.length === 0) return;
+
+  // Check if JSON file uploaded
+  for (let file of files) {
+    if (file.name.endsWith('.json')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          const devList = Array.isArray(parsed) ? parsed : [parsed];
+          devList.forEach(dev => {
+            if (!dev || (!dev.name && !dev.empId)) return;
+            const existingIdx = allAssessments.findIndex(localDev =>
+              (localDev.empId && dev.empId && localDev.empId.toLowerCase() === dev.empId.toLowerCase()) ||
+              (localDev.name && dev.name && localDev.name.toLowerCase() === dev.name.toLowerCase()) ||
+              (localDev.id && dev.id && localDev.id === dev.id)
+            );
+            if (existingIdx >= 0) {
+              allAssessments[existingIdx] = Object.assign({}, allAssessments[existingIdx], dev);
+            } else {
+              allAssessments.push(dev);
+            }
+          });
+          saveToStorage();
+          updateDashboardStats();
+          renderRoster();
+          if (typeof renderRawDataTable === 'function') renderRawDataTable();
+          pushSubmissionToCloud(devList[0]);
+          alert(`✅ Successfully imported ${devList.length} dossier(s) from "${file.name}"!`);
+        } catch(err) {
+          alert('Could not parse JSON file: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+      return;
+    }
+  }
 
   if (typeof XLSX === 'undefined') {
     alert('SheetJS (XLSX) library is still initializing. Please try again in 5 seconds.');
@@ -2878,7 +2978,9 @@ document.addEventListener('DOMContentLoaded', () => {
   updateDashboardStats();
   renderRoster();
   applyRoleUI();
-  if (cloudSyncUrl) syncFromCloud(false);
+  // Auto-fetch from Free Cloud Database on load and every 10 seconds
+  syncFromCloud(false);
+  setInterval(() => syncFromCloud(false), 10000);
 });
 
 function loadFromStorage() {
@@ -3324,6 +3426,17 @@ function previewAndReview() {
 // ════════════════════════════════════════════════════════════
 // SAVE CURRENT ASSESSMENT
 // ════════════════════════════════════════════════════════════
+function downloadSingleAssessmentJson() {
+  const data = collectFormData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Arena_AI_Assessment_${(data.name || data.empId || 'Developer').replace(/[^a-zA-Z0-9]/g, '_')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function saveCurrentAssessment() {
   const data = collectFormData();
   if (!data.name && !data.empId) {
@@ -3345,7 +3458,7 @@ function saveCurrentAssessment() {
 
   if (currentRole === 'developer') {
     document.getElementById('modalDevName').textContent = `Assessment Submitted!`;
-    document.getElementById('modalDevDesc').innerHTML = `Thank you, <strong>${data.name || 'Developer'}</strong>!<br><br>Your AI Skills Profile (Emp ID: ${data.empId || 'N/A'}) has been submitted directly to <strong>Project Coordinator Lian Mollick</strong>.`;
+    document.getElementById('modalDevDesc').innerHTML = `Thank you, <strong>${data.name || 'Developer'}</strong>!<br><br>Your AI Skills Profile (Emp ID: ${data.empId || 'N/A'}) has been saved directly to <strong>Arena Central Cloud Database</strong> for Project Coordinator Lian Mollick.<br><br><button class="btn btn-export-excel" style="width:100%; justify-content:center; margin-top:8px;" onclick="downloadSingleAssessmentJson()">📥 Download My Assessment Copy (.json)</button>`;
     const nextBtn = document.querySelector('#successModal .btn-primary');
     if (nextBtn) nextBtn.textContent = 'Submit Another Profile';
   } else {
