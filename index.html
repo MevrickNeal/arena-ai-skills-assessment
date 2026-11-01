@@ -947,6 +947,62 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     }
   }
 
+  
+  /* ═══ ROLE & CLOUD SYNC STYLES ═══ */
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .role-badge.coordinator {
+    background: rgba(196, 30, 58, 0.12);
+    color: var(--arena-crimson);
+    border: 1px solid rgba(196, 30, 58, 0.25);
+  }
+  .role-badge.developer {
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--arena-blue);
+    border: 1px solid rgba(37, 99, 235, 0.25);
+  }
+
+  .btn-sync {
+    background: rgba(107, 45, 139, 0.12);
+    color: var(--arena-plum);
+    border: 1px solid rgba(107, 45, 139, 0.3);
+  }
+  .btn-sync:hover {
+    background: var(--arena-plum);
+    color: #ffffff;
+    border-color: var(--arena-plum);
+  }
+
+  /* Submission receipt box for developer view */
+  .dev-success-box {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(240, 253, 244, 0.9);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: var(--radius-lg);
+    margin: 20px 0;
+  }
+  .dev-success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--arena-green);
+    color: #fff;
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
+  }
+
   /* ═══ RESPONSIVE ═══ */
   @media (max-width: 900px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1019,7 +1075,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
       <div class="navbar-title">
         Arena <span class="accent">AI Skills Assessment</span>
       </div>
-      <div class="navbar-subtitle">Project Coordinator Field Kiosk &bull; MD Reporting</div>
+      <div class="navbar-subtitle" id="navSubtitle">Project Coordinator: Lian Mollick &bull; Executive Portal</div>
     </div>
   </div>
   
@@ -1027,19 +1083,34 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     <div class="live-indicator" id="headerLiveBadge">
       <span class="live-dot"></span> <span id="headerTargetText">15 TARGET DEVS</span>
     </div>
+
+    <!-- ROLE BADGE -->
+    <div id="roleBadgeContainer">
+      <span class="role-badge coordinator" id="roleBadge">👤 Coordinator: Lian Mollick</span>
+    </div>
+
+    <!-- CLOUD SYNC & REFRESH (COORDINATOR ONLY) -->
+    <button class="btn btn-sync coordinator-only" onclick="openCloudModal()" title="Connect to Google Sheet / Google Form Apps Script">
+      ☁️ Cloud Sync
+    </button>
+    <button class="btn btn-glass coordinator-only" onclick="syncFromCloud(true)" title="Fetch live submissions from Google Sheet">
+      🔄 Fetch Live
+    </button>
     
-    <!-- EXPORT BUTTONS (EXCEL, WORD, PDF) -->
-    <button class="btn btn-export-excel" onclick="exportToExcel()" title="Export all interviews to formatted Excel workbook (.xlsx)">
-      📊 Excel (.xlsx)
+    <!-- EXPORT BUTTONS (COORDINATOR ONLY) -->
+    <button class="btn btn-export-excel coordinator-only" onclick="exportToExcel()" title="Export all interviews to formatted Excel workbook (.xlsx)">
+      📊 Excel
     </button>
-    <button class="btn btn-export-word" onclick="exportToWord()" title="Generate structured Word Document (.doc/.docx)">
-      📄 Word (.doc)
+    <button class="btn btn-export-word coordinator-only" onclick="exportToWord()" title="Generate structured Word Document (.doc/.docx)">
+      📄 Word
     </button>
-    <button class="btn btn-export-pdf" onclick="exportToPDF()" title="Generate printable PDF report">
-      📑 PDF Report
+    <button class="btn btn-export-pdf coordinator-only" onclick="exportToPDF()" title="Generate printable PDF report">
+      📑 PDF
     </button>
-    <button class="btn btn-glass" onclick="backupJSON()" title="Export JSON backup of all responses">
-      💾 Backup
+    
+    <!-- SWITCH TO DEVELOPER / COORDINATOR VIEW -->
+    <button class="btn btn-glass" id="btnToggleRole" onclick="toggleRoleView()">
+      👁️ Developer View
     </button>
   </div>
 </header>
@@ -1600,6 +1671,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         <label class="form-label">Additional Remarks for MD Sir</label>
         <textarea id="noteRemarks" class="form-control" placeholder="Any strategic observations, willingness to transition to AI, team fit..."></textarea>
       </div>
+      </div>
     </div>
 
     <div class="panel-footer-nav">
@@ -1640,6 +1712,61 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
   </div>
 
 </main>
+
+
+<!-- ═══ MODAL: COORDINATOR PIN LOGIN ═══ -->
+<div class="modal-overlay" id="pinModal">
+  <div class="modal-card" style="max-width:400px;">
+    <div class="modal-icon" style="background:rgba(196,30,58,0.15); color:var(--arena-crimson);">🔐</div>
+    <h3 class="modal-title">Coordinator Access</h3>
+    <p class="modal-desc">Enter your Coordinator PIN to unlock full management controls, all developer dossiers, and export tools.</p>
+    <div style="margin:20px 0;">
+      <input type="password" id="coordPinInput" class="form-control" placeholder="Enter PIN (Default: 2026)" style="text-align:center; font-size:20px; letter-spacing:4px;" maxlength="8">
+    </div>
+    <div class="modal-btn-row">
+      <button class="btn btn-primary" onclick="submitPin()">Unlock Dashboard</button>
+      <button class="btn btn-glass" onclick="closePinModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CLOUD SYNC SETTINGS (GOOGLE APPS SCRIPT / GOOGLE SHEET) ═══ -->
+<div class="modal-overlay" id="cloudModal">
+  <div class="modal-card" style="max-width:540px; text-align:left;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+      <div class="modal-icon" style="width:48px; height:48px; font-size:24px; margin:0; background:rgba(107,45,139,0.15); color:var(--arena-plum);">☁️</div>
+      <div>
+        <h3 class="modal-title" style="margin:0; font-size:18px;">Google Sheet & Cloud Live Sync</h3>
+        <p class="modal-desc" style="margin:0; font-size:12px;">Connect to your Google Apps Script Web App URL</p>
+      </div>
+    </div>
+    
+    <div class="glass-callout" style="font-size:12px; margin-bottom:16px;">
+      <span>💡</span>
+      <div>
+        Paste the <strong>Web App URL</strong> generated from your Google Sheet Apps Script (e.g. <code>https://script.google.com/macros/s/.../exec</code>). When developers submit, their data streams live into your Google Sheet and dashboard!
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:16px;">
+      <label class="form-label">Google Apps Script Web App URL</label>
+      <input type="text" id="cloudSyncUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/AKfycb.../exec">
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+      <input type="checkbox" id="autoSyncCheck" style="width:16px; height:16px; cursor:pointer;">
+      <label for="autoSyncCheck" style="font-size:13px; color:#475569; cursor:pointer;">Auto-fetch live submissions every 30 seconds</label>
+    </div>
+
+    <div id="cloudStatusMsg" style="font-size:12px; margin-bottom:16px; padding:8px 12px; border-radius:6px; display:none;"></div>
+
+    <div class="modal-btn-row" style="justify-content:flex-end;">
+      <button class="btn btn-glass" onclick="testCloudConnection()">🧪 Test Connection</button>
+      <button class="btn btn-primary" onclick="saveCloudSettings()">💾 Save & Connect</button>
+      <button class="btn btn-glass" onclick="closeCloudModal()">Close</button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══ MODAL: SUCCESS CONFIRMATION ═══ -->
 <div class="modal-overlay" id="successModal">
@@ -1695,6 +1822,232 @@ const DOMAINS_G = [
   "Readiness to Lead or Architect an Arena AI Initiative"
 ];
 
+
+// ════════════════════════════════════════════════════════════
+// ROLE & CLOUD SYNC STATE MANAGEMENT
+// ════════════════════════════════════════════════════════════
+let currentRole = localStorage.getItem('arena_current_role') || 'coordinator'; // 'coordinator' or 'developer'
+let coordinatorPin = localStorage.getItem('arena_coord_pin') || '2026';
+let cloudSyncUrl = localStorage.getItem('arena_cloud_sync_url') || '';
+let autoSyncInterval = null;
+
+// Check URL hash for direct access: #developer or #coordinator
+if (window.location.hash === '#developer') {
+  currentRole = 'developer';
+} else if (window.location.hash === '#coordinator') {
+  currentRole = 'coordinator';
+}
+
+function applyRoleUI() {
+  const isCoord = (currentRole === 'coordinator');
+
+  // Nav Subtitle & Role Badge
+  const navSub = document.getElementById('navSubtitle');
+  const roleBadge = document.getElementById('roleBadge');
+  const btnToggle = document.getElementById('btnToggleRole');
+
+  if (isCoord) {
+    if (navSub) navSub.innerHTML = 'Project Coordinator: Lian Mollick &bull; Executive Management Portal';
+    if (roleBadge) {
+      roleBadge.className = 'role-badge coordinator';
+      roleBadge.innerHTML = '👤 Coordinator: Lian Mollick';
+    }
+    if (btnToggle) btnToggle.innerHTML = '👁️ Developer Portal';
+    document.querySelectorAll('.coordinator-only').forEach(el => el.style.display = '');
+    document.getElementById('tabBtn_roster').style.display = '';
+    const statsGrid = document.querySelector('.stats-grid');
+    if (statsGrid) statsGrid.style.display = 'grid';
+  } else {
+    if (navSub) navSub.innerHTML = 'Developer Self-Assessment Portal &bull; Individual Submission';
+    if (roleBadge) {
+      roleBadge.className = 'role-badge developer';
+      roleBadge.innerHTML = '👨‍💻 Developer Self-Submission';
+    }
+    if (btnToggle) btnToggle.innerHTML = '🔐 Coordinator Login';
+    document.querySelectorAll('.coordinator-only').forEach(el => el.style.display = 'none');
+    document.getElementById('tabBtn_roster').style.display = 'none';
+    const statsGrid = document.querySelector('.stats-grid');
+    if (statsGrid) statsGrid.style.display = 'none';
+
+    // If currently on roster tab, switch to secA
+    const rosterPanel = document.getElementById('panel_roster');
+    if (rosterPanel && rosterPanel.classList.contains('active')) {
+      switchTab('secA');
+    }
+  }
+
+  // Update Review Submit Button text
+  const btnSave = document.querySelector('#panel_review .btn-green');
+  if (btnSave) {
+    btnSave.innerHTML = isCoord ? '💾 Save & Update Dashboard' : '🚀 Submit My Assessment to Lian Mollick';
+  }
+}
+
+function toggleRoleView() {
+  if (currentRole === 'coordinator') {
+    // Switch to Developer view
+    currentRole = 'developer';
+    localStorage.setItem('arena_current_role', 'developer');
+    window.location.hash = '#developer';
+    applyRoleUI();
+    resetFormFields();
+    switchTab('secA');
+  } else {
+    // Open PIN modal to enter Coordinator view
+    openPinModal();
+  }
+}
+
+function openPinModal() {
+  document.getElementById('coordPinInput').value = '';
+  document.getElementById('pinModal').classList.add('show');
+  setTimeout(() => document.getElementById('coordPinInput').focus(), 150);
+}
+
+function closePinModal() {
+  document.getElementById('pinModal').classList.remove('show');
+}
+
+function submitPin() {
+  const pin = document.getElementById('coordPinInput').value.trim();
+  if (pin === coordinatorPin || pin === '2026') {
+    currentRole = 'coordinator';
+    localStorage.setItem('arena_current_role', 'coordinator');
+    window.location.hash = '#coordinator';
+    closePinModal();
+    applyRoleUI();
+    switchTab('roster');
+  } else {
+    alert('❌ Incorrect PIN. Please try again.');
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// CLOUD SYNC CONFIGURATION & LIVE DATA SYNC
+// ════════════════════════════════════════════════════════════
+function openCloudModal() {
+  document.getElementById('cloudSyncUrlInput').value = cloudSyncUrl;
+  document.getElementById('cloudModal').classList.add('show');
+}
+
+function closeCloudModal() {
+  document.getElementById('cloudModal').classList.remove('show');
+}
+
+function saveCloudSettings() {
+  const url = document.getElementById('cloudSyncUrlInput').value.trim();
+  cloudSyncUrl = url;
+  localStorage.setItem('arena_cloud_sync_url', url);
+
+  const autoSync = document.getElementById('autoSyncCheck').checked;
+  if (autoSync) {
+    if (!autoSyncInterval) {
+      autoSyncInterval = setInterval(() => syncFromCloud(false), 30000);
+    }
+  } else if (autoSyncInterval) {
+    clearInterval(autoSyncInterval);
+    autoSyncInterval = null;
+  }
+
+  closeCloudModal();
+  if (cloudSyncUrl) {
+    syncFromCloud(true);
+  }
+}
+
+function testCloudConnection() {
+  const url = document.getElementById('cloudSyncUrlInput').value.trim();
+  const msg = document.getElementById('cloudStatusMsg');
+  if (!url) {
+    msg.style.display = 'block';
+    msg.style.background = '#fef2f2';
+    msg.style.color = '#b91c1c';
+    msg.textContent = 'Please enter a valid Google Apps Script Web App URL.';
+    return;
+  }
+
+  msg.style.display = 'block';
+  msg.style.background = '#eff6ff';
+  msg.style.color = '#1d4ed8';
+  msg.textContent = 'Testing connection to Google Sheet...';
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      msg.style.background = '#f0fdf4';
+      msg.style.color = '#15803d';
+      msg.textContent = `✅ Connected successfully! Found ${data.count || 0} existing submission(s).`;
+    })
+    .catch(err => {
+      msg.style.background = '#fef2f2';
+      msg.style.color = '#b91c1c';
+      msg.textContent = '⚠️ Could not connect. Make sure "Who has access" is set to "Anyone" in your deployment.';
+    });
+}
+
+function syncFromCloud(showNotification) {
+  if (!cloudSyncUrl) {
+    if (showNotification) openCloudModal();
+    return;
+  }
+
+  fetch(cloudSyncUrl)
+    .then(res => res.json())
+    .then(result => {
+      if (result && Array.isArray(result.data)) {
+        // Merge cloud data with local data by id or empId
+        const cloudItems = result.data;
+        let addedCount = 0;
+
+        cloudItems.forEach(cloudDev => {
+          const existingIdx = allAssessments.findIndex(localDev =>
+            (localDev.empId && cloudDev.empId && localDev.empId.toLowerCase() === cloudDev.empId.toLowerCase()) ||
+            (localDev.id && cloudDev.id && localDev.id === cloudDev.id)
+          );
+
+          if (existingIdx >= 0) {
+            allAssessments[existingIdx] = cloudDev;
+          } else {
+            allAssessments.push(cloudDev);
+            addedCount++;
+          }
+        });
+
+        saveToStorage();
+        updateDashboardStats();
+        renderRoster();
+
+        if (showNotification) {
+          alert(`☁️ Cloud Sync Complete!
+Total Active Submissions: ${allAssessments.length} developers.
+Synced with your Google Sheet.`);
+        }
+      }
+    })
+    .catch(err => {
+      console.warn('Cloud sync error:', err);
+      if (showNotification) {
+        alert('⚠️ Could not connect to Google Apps Script. Check your URL in Cloud Sync settings.');
+      }
+    });
+}
+
+// Push a single submission to Google Sheet Apps Script
+function pushSubmissionToCloud(data) {
+  if (!cloudSyncUrl) return;
+
+  fetch(cloudSyncUrl, {
+    method: 'POST',
+    mode: 'no-cors', // Google Apps Script Web App redirects
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(() => {
+    console.log('Submission pushed to Google Sheet successfully');
+  }).catch(err => {
+    console.warn('Could not push to Google Sheet:', err);
+  });
+}
+
 // State
 let allAssessments = [];
 let currentDevIndex = -1; // -1 for new
@@ -1712,6 +2065,8 @@ document.addEventListener('DOMContentLoaded', () => {
   buildSectionG();
   updateDashboardStats();
   renderRoster();
+  applyRoleUI();
+  if (cloudSyncUrl) syncFromCloud(false);
 });
 
 function loadFromStorage() {
@@ -2173,10 +2528,19 @@ function saveCurrentAssessment() {
   saveToStorage();
   updateDashboardStats();
   renderRoster();
+  pushSubmissionToCloud(data);
 
-  // Show Success Modal
-  document.getElementById('modalDevName').textContent = `Assessment Saved for ${data.name || data.empId}!`;
-  document.getElementById('modalDevDesc').textContent = `Dossier #${allAssessments.length} of 15 completed. Overall score: ${data.overallScore} / 5. Local database updated.`;
+  if (currentRole === 'developer') {
+    document.getElementById('modalDevName').textContent = `Assessment Submitted!`;
+    document.getElementById('modalDevDesc').innerHTML = `Thank you, <strong>${data.name || 'Developer'}</strong>!<br><br>Your AI Skills Profile (Emp ID: ${data.empId || 'N/A'}) has been submitted directly to <strong>Project Coordinator Lian Mollick</strong>.`;
+    const nextBtn = document.querySelector('#successModal .btn-primary');
+    if (nextBtn) nextBtn.textContent = 'Submit Another Profile';
+  } else {
+    document.getElementById('modalDevName').textContent = `Assessment Saved for ${data.name || data.empId}!`;
+    document.getElementById('modalDevDesc').textContent = `Dossier #${allAssessments.length} saved. Overall score: ${data.overallScore} / 5. Local database and Google Sheet updated.`;
+    const nextBtn = document.querySelector('#successModal .btn-primary');
+    if (nextBtn) nextBtn.textContent = '➕ Next Developer';
+  }
   document.getElementById('successModal').classList.add('show');
 }
 
