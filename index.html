@@ -1003,6 +1003,152 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     margin: 0 auto 16px auto;
   }
 
+  
+  /* ═══ PHONE RESPONSIVENESS (MOBILE OPTIMIZED) ═══ */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 12px;
+    }
+    .navbar {
+      padding: 12px 14px;
+      margin: 8px auto 14px auto;
+      border-radius: var(--radius-md);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .navbar-left {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .navbar-actions {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-start;
+    }
+    .navbar-actions .btn {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+    .live-indicator {
+      display: none; /* Hide compact badge on mobile */
+    }
+    .panel {
+      padding: 20px 14px;
+      border-radius: var(--radius-md);
+    }
+    .panel-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .form-grid {
+      grid-template-columns: 1fr !important;
+      gap: 14px;
+    }
+    .checkbox-tiles-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 8px;
+    }
+
+    /* Transform HTML Table into Touch Cards on Phones */
+    .skills-table-wrap {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      margin-bottom: 16px;
+    }
+    .skills-table,
+    .skills-table thead,
+    .skills-table tbody,
+    .skills-table th,
+    .skills-table td,
+    .skills-table tr {
+      display: block;
+    }
+    .skills-table thead {
+      display: none; /* Hide default tabular header on mobile */
+    }
+    .skills-table tbody tr {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .skills-table td {
+      padding: 6px 0 !important;
+      width: 100% !important;
+      text-align: left !important;
+    }
+    .skills-table td.skill-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--arena-dark);
+      padding-bottom: 8px !important;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .skills-table td.skill-score {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .skills-table td.skill-score::before {
+      content: 'Score:';
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+    .skills-table td.skill-usage {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .skills-table td.skill-usage::before {
+      content: 'Used at Work:';
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+    .skills-table td.skill-remarks {
+      margin-top: 4px;
+    }
+    .rate-pill {
+      width: 36px !important;
+      height: 36px !important;
+      font-size: 14px !important;
+    }
+    .rating-pills-group {
+      gap: 5px;
+      padding: 2px 4px;
+    }
+    .table-remarks-input {
+      font-size: 13px;
+      padding: 8px 10px;
+    }
+    .panel-footer-nav {
+      flex-direction: column-reverse;
+      gap: 10px;
+    }
+    .panel-footer-nav .btn {
+      width: 100%;
+    }
+  }
+
   /* ═══ RESPONSIVE ═══ */
   @media (max-width: 900px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1083,6 +1229,11 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     <div class="live-indicator" id="headerLiveBadge">
       <span class="live-dot"></span> <span id="headerTargetText">15 TARGET DEVS</span>
     </div>
+
+        <!-- DESK QR CODE (COORDINATOR ONLY) -->
+    <button class="btn btn-primary coordinator-only" onclick="openQrModal()" title="Show Desk QR Code for employees to scan">
+      📱 Desk QR
+    </button>
 
     <!-- ROLE BADGE -->
     <div id="roleBadgeContainer">
@@ -1714,6 +1865,33 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 </main>
 
 
+
+<!-- ═══ MODAL: DESK-TO-DESK QR CODE ═══ -->
+<div class="modal-overlay" id="qrModal">
+  <div class="modal-card" style="max-width:440px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <span class="role-badge developer">📱 Desk-to-Desk QR Scanner</span>
+      <button class="btn-micro" onclick="closeQrModal()" style="font-size:16px;">✕</button>
+    </div>
+    <h3 class="modal-title" style="font-size:20px;">Scan to Complete Profile</h3>
+    <p class="modal-desc" style="margin-bottom:14px; font-size:13px;">Have developers point their phone camera at this QR code to open their individual self-assessment form on their phone.</p>
+    
+    <div style="background:#ffffff; border:3px solid #0f172a; border-radius:18px; padding:14px; display:inline-block; margin-bottom:14px; box-shadow:0 8px 20px rgba(0,0,0,0.06);">
+      <img src="data:image/png;base64,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" alt="QR Code" style="width:220px; height:220px; display:block;">
+    </div>
+
+    <div style="font-size:11px; color:#64748b; background:#f1f5f9; padding:8px 10px; border-radius:8px; margin-bottom:16px; word-break:break-all;">
+      https://mevrickneal.github.io/arena-ai-skills-assessment/#developer
+    </div>
+
+    <div class="modal-btn-row">
+      <button class="btn btn-primary" onclick="copyPortalLink()">📋 Copy Link</button>
+      <a href="Desk_QR_Flyer.html" target="_blank" class="btn btn-glass">🖨️ Open Desk Flyer</a>
+      <button class="btn btn-glass" onclick="closeQrModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ MODAL: COORDINATOR PIN LOGIN ═══ -->
 <div class="modal-overlay" id="pinModal">
   <div class="modal-card" style="max-width:400px;">
@@ -1896,6 +2074,27 @@ function toggleRoleView() {
     // Open PIN modal to enter Coordinator view
     openPinModal();
   }
+}
+
+
+// ════════════════════════════════════════════════════════════
+// QR CODE & LINK SHARING
+// ════════════════════════════════════════════════════════════
+function openQrModal() {
+  document.getElementById('qrModal').classList.add('show');
+}
+
+function closeQrModal() {
+  document.getElementById('qrModal').classList.remove('show');
+}
+
+function copyPortalLink() {
+  const url = 'https://mevrickneal.github.io/arena-ai-skills-assessment/#developer';
+  navigator.clipboard.writeText(url).then(() => {
+    alert('✅ Link copied to clipboard!\n\n' + url);
+  }).catch(() => {
+    prompt('Copy this link:', url);
+  });
 }
 
 function openPinModal() {

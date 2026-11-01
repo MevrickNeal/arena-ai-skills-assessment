@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arena AI Skills Assessment — Scan QR to Complete</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .flyer-card {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 48px 40px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.08);
+  }
+  .logo {
+    height: 52px;
+    margin-bottom: 24px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    background: rgba(196, 30, 58, 0.1);
+    color: #C41E3A;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  h1 span {
+    color: #C41E3A;
+  }
+  p.subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+  .qr-frame {
+    background: #ffffff;
+    border: 3px solid #0f172a;
+    border-radius: 20px;
+    padding: 18px;
+    display: inline-block;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .qr-img {
+    width: 240px;
+    height: 240px;
+    display: block;
+  }
+  .instructions {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  .instructions ol {
+    margin-left: 20px;
+  }
+  .link-text {
+    font-size: 11px;
+    color: #64748b;
+    word-break: break-all;
+  }
+  .print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0f172a;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-family: inherit;
+  }
+  .print-btn:hover {
+    background: #1e293b;
+  }
+  @media print {
+    body { background: #ffffff; padding:0; }
+    .flyer-card { border: none; box-shadow: none; padding: 20px; }
+    .print-btn { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flyer-card">
+  <img src="arena_logo.png" alt="Arena Logo" class="logo">
+  
+  <div>
+    <span class="badge">Official AI Skills Assessment</span>
+  </div>
+
+  <h1>Scan to Complete Your <span>AI Profile</span></h1>
+  <p class="subtitle">Authorized by Managing Director Sir &bull; Reviewed by Project Coordinator Lian Mollick</p>
+
+  <div class="qr-frame">
+    <img src="arena_qr_code.png" alt="Scan QR Code" class="qr-img">
+  </div>
+
+  <div class="instructions">
+    <ol>
+      <li>Open your phone's <strong>Camera app</strong></li>
+      <li>Point it at the QR code above and tap the link</li>
+      <li>Enter your <strong>Employee ID</strong>, current project, and skill ratings</li>
+      <li>Tap <strong>"Submit My Assessment"</strong> (takes ~5 minutes)</li>
+    </ol>
+  </div>
+
+  <div class="link-text">
+    Direct Link: https://mevrickneal.github.io/arena-ai-skills-assessment/#developer
+  </div>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Print This Desk Flyer</button>
+</div>
+
+</body>
+</html>
