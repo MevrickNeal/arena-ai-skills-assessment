@@ -1988,7 +1988,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 
     <div class="form-group" style="margin-bottom:16px;">
       <label class="form-label">Google Apps Script Web App URL</label>
-      <input type="text" id="cloudSyncUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/AKfycb.../exec">
+      <input type="text" id="cloudSyncUrlInput" class="form-control" value="https://script.google.com/macros/s/AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw/exec">
     </div>
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
@@ -2066,7 +2066,7 @@ const DOMAINS_G = [
 // ════════════════════════════════════════════════════════════
 let currentRole = localStorage.getItem('arena_current_role') || 'coordinator'; // 'coordinator' or 'developer'
 let coordinatorPin = localStorage.getItem('arena_coord_pin') || '2026';
-let cloudSyncUrl = localStorage.getItem('arena_cloud_sync_url') || '';
+let cloudSyncUrl = localStorage.getItem('arena_cloud_sync_url') || 'https://script.google.com/macros/s/AKfycbzJSc-jIM4g7rPF2qA2R7x4-njyknU7KEE-P3vmPSsF2Z18eq0C2AKo3LSK1yEnlmj1jw/exec';
 let autoSyncInterval = null;
 
 // Check URL hash for direct access: #developer or #coordinator
