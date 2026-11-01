@@ -9,7 +9,12 @@ shot_*.png
 preview_*.png
 debug_*.png
 test_*.png
+verify_*.png
 audit_*.html
+apply_*.py
+build_*.py
+temp_*.html
+*_base64.txt
 
 # Python cache
 __pycache__/

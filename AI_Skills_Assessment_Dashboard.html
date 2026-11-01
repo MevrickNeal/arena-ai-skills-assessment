@@ -676,48 +676,167 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     font-size: 13px;
   }
 
-  /* ═══ SKEUOMORPHIC TACTILE TOGGLE PILLS (YES / NO) ═══ */
+    /* ═══ SKEUOMORPHIC TACTILE TOGGLE PILLS (YES / NO / Y / N) ═══ */
   .toggle-pills {
-    display: inline-flex;
-    border: 1px solid rgba(203, 213, 225, 0.9);
-    border-radius: 9px;
-    background: rgba(241, 245, 249, 0.85);
-    padding: 3px;
-    gap: 3px;
-    box-shadow: var(--skeuo-inset-track);
-    width: fit-content;
+    display: inline-flex !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 9px !important;
+    background: #f1f5f9 !important;
+    padding: 3px !important;
+    gap: 4px !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08) !important;
+    width: fit-content !important;
+    vertical-align: middle !important;
   }
 
   .toggle-pill-btn {
-    border: 1px solid transparent;
-    background: transparent;
-    padding: 6px 18px;
-    border-radius: 7px;
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-    user-select: none;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    padding: 6px 16px !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    cursor: pointer !important;
+    transition: all 0.16s ease !important;
+    user-select: none !important;
+    outline: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
   }
 
   .toggle-pill-btn:hover {
-    color: var(--text-main);
-    background: rgba(255, 255, 255, 0.6);
+    color: #0f172a !important;
+    background: rgba(255, 255, 255, 0.85) !important;
   }
 
-  .toggle-pill-btn.active.yes {
-    background: linear-gradient(180deg, #10b981 0%, #059669 100%) !important;
+  /* Vibrant Green for YES / Y */
+  .toggle-pill-btn.active.yes,
+  .toggle-pill-btn.active-yes,
+  .toggle-pill-btn.yes.active {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     color: #ffffff !important;
     border-color: #047857 !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 3px 8px rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35) !important;
+    font-weight: 800 !important;
   }
 
-  .toggle-pill-btn.active.no {
-    background: linear-gradient(180deg, #64748b 0%, #475569 100%) !important;
+  /* Vibrant Red for NO / N */
+  .toggle-pill-btn.active.no,
+  .toggle-pill-btn.active-no,
+  .toggle-pill-btn.no.active {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
     color: #ffffff !important;
-    border-color: #334155 !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 3px 8px rgba(71, 85, 105, 0.25) !important;
+    border-color: #b91c1c !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35) !important;
+    font-weight: 800 !important;
+  }
+
+  /* High-Contrast Inputs, Textareas & Table Remarks */
+  .form-control, .form-input, .form-textarea, .form-select {
+    width: 100% !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    font-size: 13.5px !important;
+    font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif !important;
+    color: #0f172a !important;
+    background: #ffffff !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+    transition: all 0.16s ease !important;
+    box-sizing: border-box !important;
+  }
+
+  .form-control:focus, .form-input:focus, .form-textarea:focus, .form-select:focus, .table-remarks-input:focus {
+    outline: none !important;
+    border-color: #C41E3A !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.15) !important;
+  }
+
+  .table-remarks-input {
+    width: 100% !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 7px !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif !important;
+    color: #0f172a !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+    transition: all 0.16s ease !important;
+  }
+
+  /* Rating Pills (1 to 5) */
+  .rating-pills-group {
+    display: inline-flex !important;
+    gap: 4px !important;
+    vertical-align: middle !important;
+  }
+
+  .rate-pill {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 6px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.15s ease !important;
+    user-select: none !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  .rate-pill:hover {
+    border-color: #94a3b8 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .rate-pill.selected {
+    background: linear-gradient(135deg, #C41E3A 0%, #991b1b 100%) !important;
+    color: #ffffff !important;
+    border-color: #7f1d1d !important;
+    box-shadow: 0 2px 6px rgba(196, 30, 58, 0.35) !important;
+    font-weight: 800 !important;
+    transform: translateY(-1px) !important;
+  }
+
+  /* Selection Pills (Overall Gain & AI Tools) */
+  .selection-pill {
+    padding: 8px 16px !important;
+    border-radius: 9999px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    user-select: none !important;
+  }
+
+  .selection-pill:hover {
+    border-color: #94a3b8 !important;
+    background: #f8fafc !important;
+  }
+
+  .selection-pill.selected {
+    background: linear-gradient(135deg, #C41E3A 0%, #991b1b 100%) !important;
+    color: #ffffff !important;
+    border-color: #7f1d1d !important;
+    box-shadow: 0 2px 8px rgba(196, 30, 58, 0.25) !important;
   }
 
   /* ═══ SKEUOMORPHIC CHECKBOX TILES ═══ */
@@ -2563,7 +2682,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
           <h2 class="landing-card-title">Coordinator (Co-op)</h2>
           <span class="landing-card-badge coop">Password Required</span>
         </div>
-        <p class="landing-card-desc">Lian Mollick &bull; Executive team dossiers, developer review/editing, interactive analytics & cloud sync.</p>
+        <p class="landing-card-desc">Admin &bull; Executive team dossiers, developer review/editing, interactive analytics & cloud sync.</p>
         
         <form onsubmit="event.preventDefault(); submitStartCoordinatorLogin();" style="text-align:left;">
           <div class="landing-input-group">
@@ -2647,7 +2766,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         <div style="font-size:15px; font-weight:800; color:var(--arena-navy); letter-spacing:-0.02em; display:flex; align-items:center; gap:8px;">
           Arena <span class="badge-arena">AI Assessment</span>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); font-weight:500;" id="navSubtitle">Executive Management Portal &bull; Lian Mollick</div>
+        <div style="font-size:12px; color:var(--text-muted); font-weight:500;" id="navSubtitle">Executive Management Portal &bull; Admin</div>
       </div>
     </div>
     
@@ -2707,9 +2826,9 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 
       <!-- 6. USER PROFILE & ROLE SWITCHER CHIP -->
       <div class="user-profile-chip" id="roleBadgeContainer" style="display:flex; align-items:center; gap:8px;">
-        <div class="user-avatar-circle" onclick="openStartLanding()" style="cursor:pointer;" title="Click to view sign in info">LM</div>
+        <div class="user-avatar-circle" onclick="openStartLanding()" style="cursor:pointer;" title="Click to view sign in info">AD</div>
         <div class="user-info-col" onclick="openStartLanding()" style="cursor:pointer;" title="Click to view sign in info">
-          <span class="user-info-name">Lian Mollick</span>
+          <span class="user-info-name">Admin</span>
           <span class="user-info-role" id="roleBadge">Coordinator</span>
         </div>
         <button class="btn-nav-auth logout coordinator-only" id="btnNavLogout" onclick="logoutCoordinator()" title="Sign out of Coordinator Mode">
@@ -3373,15 +3492,15 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
       <div class="panel-title-group">
         <div class="panel-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="12" x="3" y="4" rx="2"/><line x1="2" x2="22" y1="20" y2="20"/></svg></div>
         <div>
-          <h2 class="panel-heading">Section E: Daily AI Tool Usage & Opportunities</h2>
-          <p class="panel-subheading">How are Arena developers using AI in their daily workflow right now?</p>
+          <h2 class="panel-heading">Section E: Daily AI Workflow & Engineering Efficiency Matrix</h2>
+          <p class="panel-subheading">How are Arena developers using AI to accelerate daily tasks, coding, debugging, QA, testing, and feature engineering?</p>
         </div>
       </div>
     </div>
 
     <div class="form-grid">
       <div class="form-group full">
-        <label class="form-label">Currently using AI tools in daily development?</label>
+        <label class="form-label">Currently using AI tools in daily development workflow?</label>
         <div class="toggle-pills">
           <button type="button" class="toggle-pill-btn" onclick="setToggle('usingAI','yes',this)">Yes</button>
           <button type="button" class="toggle-pill-btn" onclick="setToggle('usingAI','no',this)">No</button>
@@ -3403,21 +3522,185 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
           <label class="pill-btn"><input type="checkbox" value="Ollama / Local LLM" class="tool-check"><span class="pill-text">Ollama / Local LLM</span></label>
           <label class="pill-btn"><input type="checkbox" value="Midjourney / Stable Diffusion" class="tool-check"><span class="pill-text">Midjourney / Stable Diffusion</span></label>
         </div>
+        <input type="hidden" id="aiTools" value="">
+      </div>
+
+      <!-- ═══ DETAILED ENGINEERING EFFICIENCY MATRIX ACROSS DISCIPLINES ═══ -->
+      <div class="form-group full" style="margin-top: 10px;">
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 22px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px; flex-wrap:wrap; gap:8px;">
+            <div>
+              <span style="font-size: 11px; font-weight: 800; color: #C41E3A; text-transform: uppercase; letter-spacing: 0.06em;">Efficiency & Productivity Telemetry</span>
+              <h3 style="font-family: var(--font-gothic-black), sans-serif; font-size: 18px; color: #0f172a; margin: 4px 0 3px 0;">AI Acceleration Across Core Engineering Disciplines</h3>
+              <p style="font-size: 12.5px; color: #64748b; margin: 0;">Rate your AI usage efficiency (1 to 5) and describe concrete examples and workflows for each discipline.</p>
+            </div>
+            <span style="background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; font-size:11.5px; font-weight:700; padding:4px 12px; border-radius:9999px;">Engineering Disciplines</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap: 14px; margin-top: 16px;">
+            
+            <!-- 1. DAILY TASKS & DOCUMENTATION -->
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:15px; box-shadow:0 1px 3px rgba(15,23,42,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:#0f172a;">1. Daily Tasks & Documentation Automation</div>
+                  <div style="font-size:12px; color:#64748b;">Meeting summaries, PR write-ups, architecture specs, sprint backlog refinement, technical emails</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:11px; font-weight:700; color:#64748b;">Efficiency (1-5):</span>
+                  <div class="rating-pills-group" data-group="eff_daily">
+                    <button type="button" class="rate-pill" data-val="1" onclick="setRatingPill('eff_daily', 1)">1</button>
+                    <button type="button" class="rate-pill" data-val="2" onclick="setRatingPill('eff_daily', 2)">2</button>
+                    <button type="button" class="rate-pill" data-val="3" onclick="setRatingPill('eff_daily', 3)">3</button>
+                    <button type="button" class="rate-pill" data-val="4" onclick="setRatingPill('eff_daily', 4)">4</button>
+                    <button type="button" class="rate-pill" data-val="5" onclick="setRatingPill('eff_daily', 5)">5</button>
+                  </div>
+                  <input type="hidden" id="rate_eff_daily" value="">
+                </div>
+              </div>
+              <input type="text" id="aiEffDailyTasks" class="form-control" placeholder="Specific examples: e.g. Generating pull request changelogs with Copilot, drafting API specs from schemas...">
+            </div>
+
+            <!-- 2. CODING & REFACTORING -->
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:15px; box-shadow:0 1px 3px rgba(15,23,42,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:#0f172a;">2. Coding, Implementation & Refactoring</div>
+                  <div style="font-size:12px; color:#64748b;">Boilerplate generation, algorithmic functions, complex regex, SQL queries, legacy code refactoring</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:11px; font-weight:700; color:#64748b;">Efficiency (1-5):</span>
+                  <div class="rating-pills-group" data-group="eff_coding">
+                    <button type="button" class="rate-pill" data-val="1" onclick="setRatingPill('eff_coding', 1)">1</button>
+                    <button type="button" class="rate-pill" data-val="2" onclick="setRatingPill('eff_coding', 2)">2</button>
+                    <button type="button" class="rate-pill" data-val="3" onclick="setRatingPill('eff_coding', 3)">3</button>
+                    <button type="button" class="rate-pill" data-val="4" onclick="setRatingPill('eff_coding', 4)">4</button>
+                    <button type="button" class="rate-pill" data-val="5" onclick="setRatingPill('eff_coding', 5)">5</button>
+                  </div>
+                  <input type="hidden" id="rate_eff_coding" value="">
+                </div>
+              </div>
+              <input type="text" id="aiEffCoding" class="form-control" placeholder="Specific examples: e.g. Generating repetitive CRUD repository patterns, converting complex nested callbacks to async/await...">
+            </div>
+
+            <!-- 3. DEBUGGING & TROUBLESHOOTING -->
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:15px; box-shadow:0 1px 3px rgba(15,23,42,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:#0f172a;">3. Debugging & Troubleshooting</div>
+                  <div style="font-size:12px; color:#64748b;">Error stack trace analysis, diagnosing memory leaks, tracking asynchronous race conditions</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:11px; font-weight:700; color:#64748b;">Efficiency (1-5):</span>
+                  <div class="rating-pills-group" data-group="eff_debug">
+                    <button type="button" class="rate-pill" data-val="1" onclick="setRatingPill('eff_debug', 1)">1</button>
+                    <button type="button" class="rate-pill" data-val="2" onclick="setRatingPill('eff_debug', 2)">2</button>
+                    <button type="button" class="rate-pill" data-val="3" onclick="setRatingPill('eff_debug', 3)">3</button>
+                    <button type="button" class="rate-pill" data-val="4" onclick="setRatingPill('eff_debug', 4)">4</button>
+                    <button type="button" class="rate-pill" data-val="5" onclick="setRatingPill('eff_debug', 5)">5</button>
+                  </div>
+                  <input type="hidden" id="rate_eff_debug" value="">
+                </div>
+              </div>
+              <input type="text" id="aiEffDebugging" class="form-control" placeholder="Specific examples: e.g. Pasting stack traces into Claude/ChatGPT to locate obscure null pointers and edge-case exceptions...">
+            </div>
+
+            <!-- 4. TESTING & QUALITY ASSURANCE (QA) -->
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:15px; box-shadow:0 1px 3px rgba(15,23,42,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:#0f172a;">4. Testing & Quality Assurance (Q/A)</div>
+                  <div style="font-size:12px; color:#64748b;">Writing automated unit tests, generating synthetic mock payloads, edge-case vulnerability tests</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:11px; font-weight:700; color:#64748b;">Efficiency (1-5):</span>
+                  <div class="rating-pills-group" data-group="eff_testing">
+                    <button type="button" class="rate-pill" data-val="1" onclick="setRatingPill('eff_testing', 1)">1</button>
+                    <button type="button" class="rate-pill" data-val="2" onclick="setRatingPill('eff_testing', 2)">2</button>
+                    <button type="button" class="rate-pill" data-val="3" onclick="setRatingPill('eff_testing', 3)">3</button>
+                    <button type="button" class="rate-pill" data-val="4" onclick="setRatingPill('eff_testing', 4)">4</button>
+                    <button type="button" class="rate-pill" data-val="5" onclick="setRatingPill('eff_testing', 5)">5</button>
+                  </div>
+                  <input type="hidden" id="rate_eff_testing" value="">
+                </div>
+              </div>
+              <input type="text" id="aiEffTestingQA" class="form-control" placeholder="Specific examples: e.g. Generating Jest unit test suites with boundary condition assertions and mock API responses...">
+            </div>
+
+            <!-- 5. FEATURE ENGINEERING & DATA PIPELINES -->
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:15px; box-shadow:0 1px 3px rgba(15,23,42,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:#0f172a;">5. Feature Engineering & Data Preparation</div>
+                  <div style="font-size:12px; color:#64748b;">Data wrangling scripts, transforming feature vectors, normalizing schemas, mock datasets</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:11px; font-weight:700; color:#64748b;">Efficiency (1-5):</span>
+                  <div class="rating-pills-group" data-group="eff_feature">
+                    <button type="button" class="rate-pill" data-val="1" onclick="setRatingPill('eff_feature', 1)">1</button>
+                    <button type="button" class="rate-pill" data-val="2" onclick="setRatingPill('eff_feature', 2)">2</button>
+                    <button type="button" class="rate-pill" data-val="3" onclick="setRatingPill('eff_feature', 3)">3</button>
+                    <button type="button" class="rate-pill" data-val="4" onclick="setRatingPill('eff_feature', 4)">4</button>
+                    <button type="button" class="rate-pill" data-val="5" onclick="setRatingPill('eff_feature', 5)">5</button>
+                  </div>
+                  <input type="hidden" id="rate_eff_feature" value="">
+                </div>
+              </div>
+              <input type="text" id="aiEffFeatureEng" class="form-control" placeholder="Specific examples: e.g. Writing Python pandas scripts for outlier removal, encoding categorical features for models...">
+            </div>
+
+            <!-- 6. CODE REVIEW & SECURITY AUDITING -->
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:15px; box-shadow:0 1px 3px rgba(15,23,42,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:#0f172a;">6. Code Review, Security & Performance</div>
+                  <div style="font-size:12px; color:#64748b;">Pre-commit review, identifying security flaws (OWASP, SQLi), finding N+1 query bottlenecks</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:11px; font-weight:700; color:#64748b;">Efficiency (1-5):</span>
+                  <div class="rating-pills-group" data-group="eff_review">
+                    <button type="button" class="rate-pill" data-val="1" onclick="setRatingPill('eff_review', 1)">1</button>
+                    <button type="button" class="rate-pill" data-val="2" onclick="setRatingPill('eff_review', 2)">2</button>
+                    <button type="button" class="rate-pill" data-val="3" onclick="setRatingPill('eff_review', 3)">3</button>
+                    <button type="button" class="rate-pill" data-val="4" onclick="setRatingPill('eff_review', 4)">4</button>
+                    <button type="button" class="rate-pill" data-val="5" onclick="setRatingPill('eff_review', 5)">5</button>
+                  </div>
+                  <input type="hidden" id="rate_eff_review" value="">
+                </div>
+              </div>
+              <input type="text" id="aiEffCodeReview" class="form-control" placeholder="Specific examples: e.g. Automated PR security sanity check, reducing memory footprint, query optimization...">
+            </div>
+
+          </div>
+
+          <!-- OVERALL ESTIMATED SPEEDUP / BOOST -->
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+            <label class="form-label" style="font-weight:700; margin-bottom:6px;">Overall Estimated Daily Productivity Gain from AI:</label>
+            <div class="pill-group" id="boostPills" style="margin-top:6px; display:flex; flex-wrap:wrap; gap:8px;">
+              <button type="button" class="selection-pill" onclick="setBoostPill(this, '10% - 25% Boost')">⚡ 10% - 25% Faster</button>
+              <button type="button" class="selection-pill" onclick="setBoostPill(this, '26% - 50% Boost')">🚀 26% - 50% Faster</button>
+              <button type="button" class="selection-pill" onclick="setBoostPill(this, '51% - 75% Boost')">🔥 51% - 75% Faster</button>
+              <button type="button" class="selection-pill" onclick="setBoostPill(this, '> 75% (2x+ Boost)')">✨ > 75% (2x+ Speedup)</button>
+            </div>
+            <input type="hidden" id="aiOverallBoost" value="">
+          </div>
+
+        </div>
       </div>
 
       <div class="form-group full">
-        <label class="form-label">How has AI improved their productivity? (Specific examples)</label>
-        <textarea id="aiProductivity" class="form-control" placeholder="e.g. Writing boilerplate 2x faster, debugging complex regex/SQL, generating test cases, drafting API docs..."></textarea>
+        <label class="form-label">General AI Productivity Impact & Workflow Observations</label>
+        <textarea id="aiProductivity" class="form-control" rows="3" placeholder="Describe the overall impact AI has had on your team's velocity, confidence, and engineering quality..."></textarea>
       </div>
 
       <div class="form-group full">
-        <label class="form-label">Where in their CURRENT Arena project could AI be applied?</label>
-        <textarea id="aiOpportunities" class="form-control" placeholder="e.g. Auto-generating attendance insights in HRM, smart anomaly detection in IoT logs, natural language querying for OSRMS..."></textarea>
+        <label class="form-label">Where in your CURRENT Arena project could AI be applied?</label>
+        <textarea id="aiOpportunities" class="form-control" rows="3" placeholder="e.g. Auto-generating attendance insights in HRM, smart anomaly detection in IoT logs, natural language querying for OSRMS..."></textarea>
       </div>
 
       <div class="form-group full">
         <label class="form-label">What company-wide AI initiatives should Arena leadership pursue?</label>
-        <textarea id="aiInitiatives" class="form-control" placeholder="e.g. Provide enterprise Copilot licenses, launch internal AI hackathons, build centralized Arena LLM gateway..."></textarea>
+        <textarea id="aiInitiatives" class="form-control" rows="3" placeholder="e.g. Provide enterprise Copilot licenses, launch internal AI hackathons, build centralized Arena LLM gateway..."></textarea>
       </div>
     </div>
 
@@ -3642,7 +3925,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
           <span class="login-input-icon">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </span>
-          <input type="email" id="loginEmailInput" class="login-field-control" value="lianmollick@gmail.com" placeholder="lianmollick@gmail.com">
+          <input type="email" id="loginEmailInput" class="login-field-control" value="" placeholder="admin@arenaphonebd.com">
         </div>
       </div>
 
@@ -3933,7 +4216,7 @@ function submitStartCoordinatorLogin() {
   const pwd = (pwdInput ? pwdInput.value : '').trim();
 
   // Validate coordinator password: PIN 2026 or coordinatorPin or matching email
-  if (pwd === '2026' || pwd === coordinatorPin || (email.includes('lian') && pwd.length >= 4)) {
+  if (pwd === '2026' || pwd === coordinatorPin || (email.includes('admin') && pwd.length >= 4)) {
     currentRole = 'coordinator';
     localStorage.setItem('arena_current_role', 'coordinator');
     window.location.hash = '#coordinator';
@@ -3942,7 +4225,7 @@ function submitStartCoordinatorLogin() {
       feedback.style.display = 'block';
       feedback.style.background = '#dcfce7';
       feedback.style.color = '#15803d';
-      feedback.innerHTML = '✓ Signed in successfully as Lian Mollick (Project Coordinator)!';
+      feedback.innerHTML = '✓ Signed in successfully as Admin (Project Coordinator)!';
     }
     
     setTimeout(() => {
@@ -3989,8 +4272,8 @@ function submitCoordinatorLogin() {
   const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
   const pwd = (pwdInput ? pwdInput.value : '').trim();
 
-  // Accept Lian Mollick's email & PIN 2026 or coordinator PIN
-  if (pwd === '2026' || pwd === coordinatorPin || (email.includes('lian') && pwd.length >= 4)) {
+  // Accept Admin email & PIN 2026 or coordinator PIN
+  if (pwd === '2026' || pwd === coordinatorPin || (email.includes('admin') && pwd.length >= 4)) {
     currentRole = 'coordinator';
     localStorage.setItem('arena_current_role', 'coordinator');
     window.location.hash = '#coordinator';
@@ -3999,7 +4282,7 @@ function submitCoordinatorLogin() {
       feedback.style.display = 'block';
       feedback.style.background = '#dcfce7';
       feedback.style.color = '#15803d';
-      feedback.innerHTML = '✓ Signed in successfully as Lian Mollick!';
+      feedback.innerHTML = '✓ Signed in successfully as Admin (Project Coordinator)!';
     }
     
     setTimeout(() => {
@@ -4040,14 +4323,14 @@ function applyRoleUI() {
   const activeBanner = document.getElementById('activeDossierBanner');
 
   if (isCoord) {
-    if (navSub) navSub.innerHTML = 'Executive Management Portal &bull; Lian Mollick';
+    if (navSub) navSub.innerHTML = 'Executive Management Portal &bull; Admin';
     if (roleBadge) {
       roleBadge.textContent = 'Coordinator';
       roleBadge.style.background = 'rgba(196, 30, 58, 0.1)';
       roleBadge.style.color = '#C41E3A';
     }
-    if (userAvatar) userAvatar.textContent = 'LM';
-    if (userName) userName.textContent = 'Lian Mollick (Coordinator)';
+    if (userAvatar) userAvatar.textContent = 'AD';
+    if (userName) userName.textContent = 'Admin (Coordinator)';
     if (btnLogout) {
       btnLogout.style.display = 'inline-flex';
       btnLogout.innerHTML = 'Log Out';
@@ -5230,23 +5513,34 @@ function setRowUsage(prefix, val, btn) {
   const input = document.getElementById(`use_${prefix}`);
   if (input) input.value = val;
   const parent = btn.parentElement;
-  parent.querySelectorAll('.toggle-pill-btn').forEach(b => b.classList.remove('active-yes', 'active-no'));
-  if (val === 'yes') btn.classList.add('active-yes');
-  if (val === 'no') btn.classList.add('active-no');
+  if (parent) {
+    parent.querySelectorAll('.toggle-pill-btn').forEach(b => {
+      b.classList.remove('active', 'active-yes', 'active-no', 'yes', 'no');
+    });
+    if (val === 'yes') {
+      btn.classList.add('active', 'yes', 'active-yes');
+    } else if (val === 'no') {
+      btn.classList.add('active', 'no', 'active-no');
+    }
+  }
 }
 
 function setToggle(fieldId, val, btn) {
   const input = document.getElementById(fieldId);
   if (input) input.value = val;
   const parent = btn.parentElement;
-  parent.querySelectorAll('.toggle-pill-btn').forEach(b => b.classList.remove('active-yes', 'active-no'));
-  if (val === 'yes') btn.classList.add('active-yes');
-  if (val === 'no') btn.classList.add('active-no');
+  if (parent) {
+    parent.querySelectorAll('.toggle-pill-btn').forEach(b => {
+      b.classList.remove('active', 'active-yes', 'active-no', 'yes', 'no');
+    });
+    if (val === 'yes') {
+      btn.classList.add('active', 'yes', 'active-yes');
+    } else if (val === 'no') {
+      btn.classList.add('active', 'no', 'active-no');
+    }
+  }
 }
 
-// ════════════════════════════════════════════════════════════
-// TABS SWITCHING
-// ════════════════════════════════════════════════════════════
 function switchTab(tabKey) {
   // STRICT PRIVACY GUARD: Developer can never access coordinator tabs
   const coordTabs = ['roster', 'rawdata', 'skillStats', 'empStats', 'stackStats'];
@@ -5304,15 +5598,40 @@ function resetFormFields() {
   document.querySelectorAll('.panel input[type="hidden"]').forEach(el => el.value = '');
   document.querySelectorAll('.panel input[type="checkbox"]').forEach(el => el.checked = false);
   document.querySelectorAll('.rate-pill').forEach(el => el.classList.remove('selected'));
-  document.querySelectorAll('.toggle-pill-btn').forEach(el => el.classList.remove('active-yes', 'active-no'));
+  document.querySelectorAll('.toggle-pill-btn').forEach(el => el.classList.remove('active', 'active-yes', 'active-no', 'yes', 'no'));
+  document.querySelectorAll('.pill-chip, .multi-tile, .selection-pill').forEach(el => el.classList.remove('selected'));
   customTechStacks = [];
   buildSectionC();
 }
 
-// ════════════════════════════════════════════════════════════
-// DATA HARVESTING FROM FORM
-// ════════════════════════════════════════════════════════════
 function collectFormData() {
+  // Harvest languages: support both pill chips and hidden input
+  let langs = [];
+  const langHidden = document.getElementById('languages');
+  if (langHidden && langHidden.value) {
+    langs = langHidden.value.split(',').map(s => s.trim()).filter(Boolean);
+  } else {
+    langs = [...document.querySelectorAll('.lang-check:checked')].map(cb => cb.value);
+  }
+
+  // Harvest AI tools: support both pill chips and hidden input
+  let tools = [];
+  const toolHidden = document.getElementById('aiTools');
+  if (toolHidden && toolHidden.value) {
+    tools = toolHidden.value.split(',').map(s => s.trim()).filter(Boolean);
+  } else {
+    tools = [...document.querySelectorAll('.tool-check:checked')].map(cb => cb.value);
+  }
+
+  // Harvest Learning Formats: support both pill chips and hidden input
+  let formats = [];
+  const formatHidden = document.getElementById('learningFormat');
+  if (formatHidden && formatHidden.value) {
+    formats = formatHidden.value.split(',').map(s => s.trim()).filter(Boolean);
+  } else {
+    formats = [...document.querySelectorAll('.format-check:checked')].map(cb => cb.value);
+  }
+
   const data = {
     id: currentDevIndex >= 0 ? allAssessments[currentDevIndex].id : Date.now(),
     name: document.getElementById('devName').value.trim(),
@@ -5323,7 +5642,7 @@ function collectFormData() {
     role: document.getElementById('devRole').value,
     yearsCompany: document.getElementById('devYearsCompany').value,
     yearsTotal: document.getElementById('devYearsTotal').value,
-    languages: [...document.querySelectorAll('.lang-check:checked')].map(cb => cb.value),
+    languages: langs,
     otherLangs: document.getElementById('devOtherLangs').value.trim(),
 
     // Section B (Knowledge + Remarks)
@@ -5343,19 +5662,34 @@ function collectFormData() {
     aiOpenSource: document.getElementById('aiOpenSource').value,
     aiOpenSourceDetails: document.getElementById('aiOpenSourceDetails').value.trim(),
 
-    // Section E (Current AI Use)
+    // Section E (Current AI Use & Engineering Efficiency Matrix)
     usingAI: document.getElementById('usingAI').value,
-    aiTools: [...document.querySelectorAll('.tool-check:checked')].map(cb => cb.value),
+    aiTools: tools,
     aiProductivity: document.getElementById('aiProductivity').value.trim(),
     aiOpportunities: document.getElementById('aiOpportunities').value.trim(),
     aiInitiatives: document.getElementById('aiInitiatives').value.trim(),
+
+    // Engineering Efficiency Matrix across Disciplines
+    aiEffDailyTasks: document.getElementById('aiEffDailyTasks')?.value.trim() || '',
+    aiRateDailyTasks: document.getElementById('rate_eff_daily')?.value || '',
+    aiEffCoding: document.getElementById('aiEffCoding')?.value.trim() || '',
+    aiRateCoding: document.getElementById('rate_eff_coding')?.value || '',
+    aiEffDebugging: document.getElementById('aiEffDebugging')?.value.trim() || '',
+    aiRateDebugging: document.getElementById('rate_eff_debug')?.value || '',
+    aiEffTestingQA: document.getElementById('aiEffTestingQA')?.value.trim() || '',
+    aiRateTestingQA: document.getElementById('rate_eff_testing')?.value || '',
+    aiEffFeatureEng: document.getElementById('aiEffFeatureEng')?.value.trim() || '',
+    aiRateFeatureEng: document.getElementById('rate_eff_feature')?.value || '',
+    aiEffCodeReview: document.getElementById('aiEffCodeReview')?.value.trim() || '',
+    aiRateCodeReview: document.getElementById('rate_eff_review')?.value || '',
+    aiOverallBoost: document.getElementById('aiOverallBoost')?.value || '',
 
     // Section F (Training)
     hasCerts: document.getElementById('hasCerts').value,
     currentLearning: document.getElementById('currentLearning').value,
     certsList: document.getElementById('certsList').value.trim(),
     wantedTraining: document.getElementById('wantedTraining').value.trim(),
-    learningFormats: [...document.querySelectorAll('.format-check:checked')].map(cb => cb.value),
+    learningFormats: formats,
 
     // Section G (Self Assessment + Remarks + Notes)
     selfAssessment: {},
@@ -5429,9 +5763,6 @@ function collectFormData() {
   return data;
 }
 
-// ════════════════════════════════════════════════════════════
-// PREVIEW & REVIEW DOSSIER
-// ════════════════════════════════════════════════════════════
 function previewAndReview() {
   const d = collectFormData();
   const div = document.getElementById('reviewDossier');
@@ -5480,8 +5811,17 @@ function previewAndReview() {
       </div>
 
       <div style="margin-bottom:14px;">
-        <h4 style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Daily AI Tool Usage</h4>
-        <div style="font-size:13px; color:#1e293b;">${d.usingAI === 'yes' ? `✅ Active: ${(d.aiTools || []).join(', ') || 'None selected'}` : 'Not currently using AI tools'}</div>
+        <h4 style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Daily AI Tool Usage & Engineering Efficiency</h4>
+        <div style="font-size:13px; color:#1e293b; line-height:1.5;">
+          ${d.usingAI === 'yes' ? `✅ Active: ${(d.aiTools || []).join(', ') || 'None selected'}` : 'Not currently using AI tools'}
+          ${d.aiOverallBoost ? `<br><strong>Estimated Efficiency Gain:</strong> <span style="color:#C41E3A; font-weight:700;">${d.aiOverallBoost}</span>` : ''}
+          ${d.aiEffDailyTasks ? `<br>&bull; <strong>Daily Tasks:</strong> [${d.aiRateDailyTasks || '-'}/5] ${d.aiEffDailyTasks}` : ''}
+          ${d.aiEffCoding ? `<br>&bull; <strong>Coding & Refactoring:</strong> [${d.aiRateCoding || '-'}/5] ${d.aiEffCoding}` : ''}
+          ${d.aiEffDebugging ? `<br>&bull; <strong>Debugging:</strong> [${d.aiRateDebugging || '-'}/5] ${d.aiEffDebugging}` : ''}
+          ${d.aiEffTestingQA ? `<br>&bull; <strong>Testing & QA:</strong> [${d.aiRateTestingQA || '-'}/5] ${d.aiEffTestingQA}` : ''}
+          ${d.aiEffFeatureEng ? `<br>&bull; <strong>Feature Engineering:</strong> [${d.aiRateFeatureEng || '-'}/5] ${d.aiEffFeatureEng}` : ''}
+          ${d.aiEffCodeReview ? `<br>&bull; <strong>Code Review & Security:</strong> [${d.aiRateCodeReview || '-'}/5] ${d.aiEffCodeReview}` : ''}
+        </div>
       </div>
 
       <div style="margin-bottom:14px;">
@@ -5534,7 +5874,7 @@ function saveCurrentAssessment() {
 
   if (currentRole === 'developer') {
     document.getElementById('modalDevName').textContent = `Assessment Submitted!`;
-    document.getElementById('modalDevDesc').innerHTML = `Thank you, <strong>${data.name || 'Developer'}</strong>!<br><br>Your AI Skills Profile (Emp ID: ${data.empId || 'N/A'}) has been saved directly to <strong>Arena Central Cloud Database</strong> for Project Coordinator Lian Mollick.<br><br><button class="btn btn-export-excel" style="width:100%; justify-content:center; margin-top:8px;" onclick="downloadSingleAssessmentJson()">Download Assessment Copy (.json)</button>`;
+    document.getElementById('modalDevDesc').innerHTML = `Thank you, <strong>${data.name || 'Developer'}</strong>!<br><br>Your AI Skills Profile (Emp ID: ${data.empId || 'N/A'}) has been saved directly to <strong>Arena Central Cloud Database</strong> for Project Coordinator (Admin).<br><br><button class="btn btn-export-excel" style="width:100%; justify-content:center; margin-top:8px;" onclick="downloadSingleAssessmentJson()">Download Assessment Copy (.json)</button>`;
     const nextBtn = document.querySelector('#successModal .btn-primary');
     if (nextBtn) nextBtn.textContent = 'Submit Another Profile';
   } else {
@@ -5571,9 +5911,14 @@ function loadAssessmentForEdit(idx) {
 
   (d.languages || []).forEach(lang => {
     document.querySelectorAll('.lang-check').forEach(cb => {
-      if (cb.value === lang) cb.checked = true;
+      if (cb.value === lang) {
+        cb.checked = true;
+        cb.closest('.pill-btn')?.classList.add('selected');
+      }
     });
   });
+  const langHidden = document.getElementById('languages');
+  if (langHidden) langHidden.value = (d.languages || []).join(', ');
 
   // Section B
   DOMAINS_B.forEach((domain, i) => {
@@ -5636,9 +5981,36 @@ function loadAssessmentForEdit(idx) {
   if (d.usingAI) setToggleBtn('usingAI', d.usingAI);
   (d.aiTools || []).forEach(tool => {
     document.querySelectorAll('.tool-check').forEach(cb => {
-      if (cb.value === tool) cb.checked = true;
+      if (cb.value === tool) {
+        cb.checked = true;
+        cb.closest('.pill-btn')?.classList.add('selected');
+      }
     });
   });
+  const toolHidden = document.getElementById('aiTools');
+  if (toolHidden) toolHidden.value = (d.aiTools || []).join(', ');
+
+  // Restore Section E Engineering Efficiency Matrix
+  if (document.getElementById('aiEffDailyTasks')) document.getElementById('aiEffDailyTasks').value = d.aiEffDailyTasks || '';
+  if (d.aiRateDailyTasks) setRatingPill('eff_daily', parseInt(d.aiRateDailyTasks));
+  if (document.getElementById('aiEffCoding')) document.getElementById('aiEffCoding').value = d.aiEffCoding || '';
+  if (d.aiRateCoding) setRatingPill('eff_coding', parseInt(d.aiRateCoding));
+  if (document.getElementById('aiEffDebugging')) document.getElementById('aiEffDebugging').value = d.aiEffDebugging || '';
+  if (d.aiRateDebugging) setRatingPill('eff_debug', parseInt(d.aiRateDebugging));
+  if (document.getElementById('aiEffTestingQA')) document.getElementById('aiEffTestingQA').value = d.aiEffTestingQA || '';
+  if (d.aiRateTestingQA) setRatingPill('eff_testing', parseInt(d.aiRateTestingQA));
+  if (document.getElementById('aiEffFeatureEng')) document.getElementById('aiEffFeatureEng').value = d.aiEffFeatureEng || '';
+  if (d.aiRateFeatureEng) setRatingPill('eff_feature', parseInt(d.aiRateFeatureEng));
+  if (document.getElementById('aiEffCodeReview')) document.getElementById('aiEffCodeReview').value = d.aiEffCodeReview || '';
+  if (d.aiRateCodeReview) setRatingPill('eff_review', parseInt(d.aiRateCodeReview));
+  if (d.aiOverallBoost) {
+    const boostInput = document.getElementById('aiOverallBoost');
+    if (boostInput) boostInput.value = d.aiOverallBoost;
+    document.querySelectorAll('#boostPills .selection-pill').forEach(b => {
+      b.classList.toggle('selected', b.textContent.includes(d.aiOverallBoost) || b.textContent.trim() === d.aiOverallBoost);
+    });
+  }
+
   document.getElementById('aiProductivity').value = d.aiProductivity || '';
   document.getElementById('aiOpportunities').value = d.aiOpportunities || '';
   document.getElementById('aiInitiatives').value = d.aiInitiatives || '';
@@ -5650,9 +6022,14 @@ function loadAssessmentForEdit(idx) {
   document.getElementById('wantedTraining').value = d.wantedTraining || '';
   (d.learningFormats || []).forEach(fmt => {
     document.querySelectorAll('.format-check').forEach(cb => {
-      if (cb.value === fmt) cb.checked = true;
+      if (cb.value === fmt) {
+        cb.checked = true;
+        cb.closest('.pill-btn')?.classList.add('selected');
+      }
     });
   });
+  const fmtHidden = document.getElementById('learningFormat');
+  if (fmtHidden) fmtHidden.value = (d.learningFormats || []).join(', ');
 
   // Section G
   DOMAINS_G.forEach((item, i) => {
@@ -5674,7 +6051,7 @@ function loadAssessmentForEdit(idx) {
   const delBtn = document.getElementById('btnDeleteInReview');
   if (delBtn) delBtn.style.display = 'inline-flex';
   
-  // Update Active Dossier Banner for Lian Mollick
+  // Update Active Dossier Banner for Admin
   const banner = document.getElementById('activeDossierBanner');
   if (banner) {
     document.getElementById('bannerDevAvatar').textContent = getDeveloperInitials(d.name || 'Dev');
@@ -5690,21 +6067,33 @@ function setToggleBtn(fieldId, val) {
   const input = document.getElementById(fieldId);
   if (input) {
     input.value = val;
-    const parent = input.previousElementSibling;
-    if (parent) {
-      parent.querySelectorAll('.toggle-pill-btn').forEach(b => {
-        b.classList.remove('active-yes', 'active-no');
-        const text = b.textContent.toLowerCase();
-        if (val === 'yes' && (text.includes('yes') || text.includes('y'))) b.classList.add('active-yes');
-        if (val === 'no' && (text.includes('no') || text.includes('n'))) b.classList.add('active-no');
+    const container = input.previousElementSibling?.classList.contains('toggle-pills')
+      ? input.previousElementSibling
+      : input.parentElement?.querySelector('.toggle-pills');
+    if (container) {
+      container.querySelectorAll('.toggle-pill-btn').forEach(b => {
+        b.classList.remove('active', 'active-yes', 'active-no', 'yes', 'no');
+        const text = b.textContent.trim().toLowerCase();
+        if (val === 'yes' && (text === 'yes' || text === 'y')) {
+          b.classList.add('active', 'yes', 'active-yes');
+        } else if (val === 'no' && (text === 'no' || text === 'n')) {
+          b.classList.add('active', 'no', 'active-no');
+        }
       });
     }
   }
 }
 
-// ════════════════════════════════════════════════════════════
-// DASHBOARD METRICS & ROSTER RENDERING
-// ════════════════════════════════════════════════════════════
+function setBoostPill(btn, val) {
+  const container = btn.parentElement;
+  if (container) {
+    container.querySelectorAll('.selection-pill').forEach(b => b.classList.remove('selected'));
+  }
+  btn.classList.add('selected');
+  const input = document.getElementById('aiOverallBoost');
+  if (input) input.value = val;
+}
+
 function updateDashboardStats() {
   const completed = allAssessments.length;
   if (completed > targetDevelopers) {
