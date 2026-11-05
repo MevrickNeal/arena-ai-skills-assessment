@@ -302,7 +302,7 @@
     "customSkills": [],
     "aiProjects": "yes",
     "aiProjectCount": "1",
-    "aiProjectDesc": "Machine Learning-based Fake News Detection system that identifies whether a given news article or headline is real or fake. The system uses Natural Language Processing (NLP) techniques to analyze textual content and classify news based on its linguistic patterns and features.\nMachine Learning Algorithms Used:\n1. Logistic Regression \u2013 Classifies news as real or fake based on extracted text features.\n2. Naive Bayes (MultinomialNB) \u2013 Uses probability-based classification for text data.\n3. Passive Aggressive Classifier \u2013 Efficiently classifies large text datasets.\n4. Support Vector Machine (SVM) \u2013 Separates fake and real news using classification boundaries.\nTechnologies Used:\n- Programming Language: Python\n- Machine Learning: Scikit-learn\n- NLP: NLTK\n- Feature Extraction: TF-IDF Vectorizer\n- Data Processing: Pandas, NumPy\n- Visualization: Matplotlib, Colab\n- Frontend : HTML, CSS, Bootstrap, Jquery\n- Backend : Flask",
+    "aiProjectDesc": "Machine Learning-based Fake News Detection system that identifies whether a given news article or headline is real or fake. The system uses Natural Language Processing (NLP) techniques to analyze textual content and classify news based on its linguistic patterns and features.\nMachine Learning Algorithms Used:\n1. Logistic Regression – Classifies news as real or fake based on extracted text features.\n2. Naive Bayes (MultinomialNB) – Uses probability-based classification for text data.\n3. Passive Aggressive Classifier – Efficiently classifies large text datasets.\n4. Support Vector Machine (SVM) – Separates fake and real news using classification boundaries.\nTechnologies Used:\n- Programming Language: Python\n- Machine Learning: Scikit-learn\n- NLP: NLTK\n- Feature Extraction: TF-IDF Vectorizer\n- Data Processing: Pandas, NumPy\n- Visualization: Matplotlib, Colab\n- Frontend : HTML, CSS, Bootstrap, Jquery\n- Backend : Flask",
     "aiDeployed": "yes",
     "wantedTraining": "Ai based power BI masterclass",
     "learningFormats": [
@@ -733,5 +733,238 @@
     "overallScore": "1.1",
     "completenessPct": 26,
     "answeredCount": 7
+  },
+  {
+    "id": 1793881997503,
+    "name": "Azizul Haque Srejan",
+    "empId": "29",
+    "department": "Technical",
+    "title": "Software Engineer",
+    "project": "AEX Shipping, Accounting, Lunch Management, Canteen Management,",
+    "role": "Senior Developer",
+    "yearsCompany": "2.2",
+    "yearsTotal": "6",
+    "languages": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "PHP",
+      "Go (Golang)",
+      "SQL"
+    ],
+    "otherLangs": "",
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": 2,
+        "remarks": ""
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": 1,
+        "remarks": ""
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "TensorFlow / Keras": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": 1,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": 3,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": 3,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": 1,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": 2,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": 2,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "no",
+    "aiProjectCount": "1",
+    "aiProjectDesc": "",
+    "aiProjectRole": "",
+    "aiProjectImpact": "",
+    "aiDeployed": "",
+    "aiOpenSource": "",
+    "aiOpenSourceDetails": "",
+    "usingAI": "yes",
+    "aiTools": [
+      "Google Antigravity",
+      "GitHub Copilot",
+      "ChatGPT Plus / Team",
+      "Google Gemini / Vertex",
+      "Claude (Anthropic)",
+      "Cursor IDE",
+      "MiniMax",
+      "Ollama / Local LLM",
+      "Midjourney / Stable Diffusion"
+    ],
+    "aiProductivity": "",
+    "aiOpportunities": "",
+    "aiInitiatives": "",
+    "aiEffDailyTasks": "",
+    "aiRateDailyTasks": "1",
+    "aiEffCoding": "",
+    "aiRateCoding": "1",
+    "aiEffDebugging": "",
+    "aiRateDebugging": "1",
+    "aiEffTestingQA": "",
+    "aiRateTestingQA": "1",
+    "aiEffFeatureEng": "",
+    "aiRateFeatureEng": "1",
+    "aiEffCodeReview": "",
+    "aiRateCodeReview": "1",
+    "aiOverallBoost": "> 75% (2x+ Boost)",
+    "hasCerts": "no",
+    "currentLearning": "yes",
+    "certsList": "",
+    "wantedTraining": "",
+    "learningFormats": [
+      "Hands-on Workshop",
+      "Online Self-Paced",
+      "Company-Sponsored Cert",
+      "Senior Mentorship"
+    ],
+    "selfAssessment": {
+      "Overall Conceptual AI Knowledge": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Hands-On AI/ML Development & Coding": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Real-World AI Project Delivery Experience": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Readiness to Lead or Architect an Arena AI Initiative": {
+        "rating": 1,
+        "remarks": ""
+      }
+    },
+    "noteImpression": "",
+    "noteStrengths": "",
+    "noteGaps": "",
+    "noteTraining": "",
+    "aiPotential": "",
+    "noteRemarks": "",
+    "timestamp": "2026-11-05T12:33:17.503Z",
+    "answeredCount": 24,
+    "totalBenchmarkCount": 27,
+    "completenessPct": 89,
+    "rawOverallScore": "2.7",
+    "calibratedOverallScore": "2.5",
+    "overallScore": "2.5",
+    "isIncomplete": false,
+    "avgKnowledge": "3.1",
+    "rawAvgKnowledge": "3.1",
+    "avgSkills": "2.5",
+    "rawAvgSkills": "2.8",
+    "avgSelfAssess": "1.5",
+    "rawAvgSelfAssess": "1.5"
   }
 ]
