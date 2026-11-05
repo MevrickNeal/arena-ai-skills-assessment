@@ -17,7 +17,7 @@
     ],
     "avgKnowledge": "4.0",
     "avgSkills": "3.8",
-    "overallScore": "3.7",
+    "overallScore": "3.4",
     "aiPotential": "Medium",
     "usingAI": "yes",
     "aiTools": [
@@ -156,7 +156,10 @@
     "noteStrengths": "",
     "noteGaps": "",
     "noteImpression": "",
-    "timestamp": "2026-11-01T12:00:00Z"
+    "timestamp": "2026-11-01T12:00:00Z",
+    "completenessPct": 85,
+    "answeredCount": 23,
+    "avgSelfAssess": "1.0"
   },
   {
     "id": "dev_8106481877769681447",
@@ -173,9 +176,9 @@
       "JavaScript",
       "TypeScript"
     ],
-    "avgKnowledge": "2.7",
-    "avgSkills": "2.9",
-    "overallScore": "2.9",
+    "avgKnowledge": "2.3",
+    "avgSkills": "1.2",
+    "overallScore": "1.5",
     "aiPotential": "Medium",
     "usingAI": "yes",
     "aiTools": [
@@ -299,7 +302,7 @@
     "customSkills": [],
     "aiProjects": "yes",
     "aiProjectCount": "1",
-    "aiProjectDesc": "Machine Learning-based Fake News Detection system that identifies whether a given news article or headline is real or fake. The system uses Natural Language Processing (NLP) techniques to analyze textual content and classify news based on its linguistic patterns and features.\nMachine Learning Algorithms Used:\n1. Logistic Regression – Classifies news as real or fake based on extracted text features.\n2. Naive Bayes (MultinomialNB) – Uses probability-based classification for text data.\n3. Passive Aggressive Classifier – Efficiently classifies large text datasets.\n4. Support Vector Machine (SVM) – Separates fake and real news using classification boundaries.\nTechnologies Used:\n- Programming Language: Python\n- Machine Learning: Scikit-learn\n- NLP: NLTK\n- Feature Extraction: TF-IDF Vectorizer\n- Data Processing: Pandas, NumPy\n- Visualization: Matplotlib, Colab\n- Frontend : HTML, CSS, Bootstrap, Jquery\n- Backend : Flask",
+    "aiProjectDesc": "Machine Learning-based Fake News Detection system that identifies whether a given news article or headline is real or fake. The system uses Natural Language Processing (NLP) techniques to analyze textual content and classify news based on its linguistic patterns and features.\nMachine Learning Algorithms Used:\n1. Logistic Regression \u2013 Classifies news as real or fake based on extracted text features.\n2. Naive Bayes (MultinomialNB) \u2013 Uses probability-based classification for text data.\n3. Passive Aggressive Classifier \u2013 Efficiently classifies large text datasets.\n4. Support Vector Machine (SVM) \u2013 Separates fake and real news using classification boundaries.\nTechnologies Used:\n- Programming Language: Python\n- Machine Learning: Scikit-learn\n- NLP: NLTK\n- Feature Extraction: TF-IDF Vectorizer\n- Data Processing: Pandas, NumPy\n- Visualization: Matplotlib, Colab\n- Frontend : HTML, CSS, Bootstrap, Jquery\n- Backend : Flask",
     "aiDeployed": "yes",
     "wantedTraining": "Ai based power BI masterclass",
     "learningFormats": [
@@ -308,7 +311,10 @@
     "noteStrengths": "",
     "noteGaps": "",
     "noteImpression": "",
-    "timestamp": "2026-11-01T12:00:00Z"
+    "timestamp": "2026-11-01T12:00:00Z",
+    "completenessPct": 85,
+    "answeredCount": 23,
+    "avgSelfAssess": "1.0"
   },
   {
     "id": 1793534438613,
@@ -520,7 +526,9 @@
     "avgKnowledge": "3.3",
     "avgSkills": "2.8",
     "avgSelfAssess": "2.8",
-    "overallScore": "2.9"
+    "overallScore": "2.9",
+    "completenessPct": 100,
+    "answeredCount": 27
   },
   {
     "id": 1793862631723,
@@ -720,8 +728,10 @@
     "noteRemarks": "",
     "timestamp": "2026-11-05T07:16:37.752Z",
     "avgKnowledge": "1.4",
-    "avgSkills": "—",
-    "avgSelfAssess": "—",
-    "overallScore": "1.4"
+    "avgSkills": "1.0",
+    "avgSelfAssess": "1.0",
+    "overallScore": "1.1",
+    "completenessPct": 26,
+    "answeredCount": 7
   }
 ]
