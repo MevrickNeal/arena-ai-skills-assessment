@@ -536,15 +536,15 @@
     "otherLangs": "",
     "knowledge": {
       "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
-        "rating": null,
+        "rating": 1,
         "remarks": ""
       },
       "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
-        "rating": null,
+        "rating": 1,
         "remarks": ""
       },
       "Natural Language Processing (NLP & Text Analysis)": {
-        "rating": null,
+        "rating": 1,
         "remarks": ""
       },
       "Computer Vision & Image / Video Recognition": {
@@ -552,15 +552,15 @@
         "remarks": ""
       },
       "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
-        "rating": null,
+        "rating": 1,
         "remarks": ""
       },
       "AI Ethics, Bias, Data Privacy & Responsible AI": {
-        "rating": null,
+        "rating": 1,
         "remarks": ""
       },
       "Industry AI Trends, Modern Frameworks & API Ecosystems": {
-        "rating": null,
+        "rating": 1,
         "remarks": ""
       }
     },
@@ -718,10 +718,10 @@
     "noteTraining": "",
     "aiPotential": "",
     "noteRemarks": "",
-    "timestamp": "2026-11-05T07:10:31.723Z",
-    "avgKnowledge": "4.0",
+    "timestamp": "2026-11-05T07:16:37.752Z",
+    "avgKnowledge": "1.4",
     "avgSkills": "—",
     "avgSelfAssess": "—",
-    "overallScore": "4.0"
+    "overallScore": "1.4"
   }
 ]
