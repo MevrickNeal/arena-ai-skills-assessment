@@ -1190,5 +1190,231 @@
     "rawAvgSkills": "1.6",
     "avgSelfAssess": "2.5",
     "rawAvgSelfAssess": "2.5"
+  },
+  {
+    "id": 1793883408641,
+    "name": "Mostafizur Rahman",
+    "empId": "0030",
+    "department": "Technical",
+    "title": "Software engineer",
+    "project": "SMC,Tracking System,Aex drop shipping,Ai Assistant Sdk Development  etc",
+    "role": "Mobile App Developer",
+    "yearsCompany": "4",
+    "yearsTotal": "",
+    "languages": [
+      "Java",
+      "Dart / Flutter",
+      "Kotlin / Android",
+      "SQL"
+    ],
+    "otherLangs": "",
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": 2,
+        "remarks": ""
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": 2,
+        "remarks": ""
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": 4,
+        "remarks": ""
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "TensorFlow / Keras": {
+        "rating": 2,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": 3,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": 4,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": 3,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": 3,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": 2,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": null,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "yes",
+    "aiProjectCount": "2",
+    "aiProjectDesc": "Project: Enterprise RAG-Based AI Assistant & Intelligent Notification System\n\nProject Description:\n\nDesigned, developed, and deployed an AI-powered enterprise application using Retrieval-Augmented Generation (RAG). The application enables office colleagues to interact with internal knowledge through context-aware AI conversations and receive intelligent, AI-generated push notifications.\n\nThe system uses relevant contextual information to generate more accurate and useful responses, improving internal information accessibility and communication.\n\nKey Features:\n\nRAG-based context-aware AI conversations.\n\nAI-powered intelligent push notifications.\n\nContextual information retrieval.\n\nIntegration with AI APIs and backend services.\n\nMobile application integration and real-time communication.\n\nTechnologies Used:\n\nGenerative AI & Large Language Models (LLMs)\n\nRetrieval-Augmented Generation (RAG)\n\nAI API Integration\n\nPrompt Engineering\n\nREST API Integration\n\nMobile Application Development (Kotlin / Android)\n\nProject Status: Deployed and actively used by office colleagues.",
+    "aiProjectRole": "Responsible for designing, developing, and integrating the RAG-based AI assistant, implementing AI conversational features, integrating AI APIs with backend services, and developing AI-powered push notification functionality. Contributed to application architecture, API integration, and production deployment.",
+    "aiProjectImpact": "Developed a production-ready AI application that is actively used by office colleagues. Improved access to internal information through context-aware AI conversations and enhanced organizational communication through AI-powered push notifications. Reduced manual effort in accessing relevant information and made internal interactions more efficient.",
+    "aiDeployed": "yes",
+    "aiOpenSource": "no",
+    "aiOpenSourceDetails": "Developed an enterprise RAG-based AI assistant currently used internally within the organization. The project is part of professional development experience. Source code and implementation details are not publicly available due to organizational confidentiality.",
+    "usingAI": "yes",
+    "aiTools": [
+      "Google Antigravity",
+      "ChatGPT Plus / Team",
+      "Google Gemini / Vertex"
+    ],
+    "aiProductivity": "",
+    "aiOpportunities": "AI could be integrated into Arena's existing mobile and field-force solutions in several areas:\n\n1. **AI-Powered Field Intelligence:** Analyze outlet visit history, sales trends, and customer behavior to generate actionable insights and recommendations for sales representatives.\n\n2. **Intelligent Visit Briefings:** Generate contextual pre-visit summaries, important observations, and recommended actions for each outlet.\n\n3. **Conversational AI Assistant:** Allow field representatives and managers to ask questions about sales performance, outlet information, and business operations using natural language.\n\n4. **AI-Based Push Notifications:** Deliver personalized notifications based on business activities, sales trends, pending tasks, and important operational events.\n\n5. **Automated Reporting:** Generate daily activity summaries, performance insights, and management reports.\n\n6. **Predictive Analytics:** Identify potential sales opportunities, unusual sales patterns, and outlets requiring additional attention.\n\nAI should complement existing business rules and offline capabilities rather than replace critical business logic.",
+    "aiInitiatives": "",
+    "aiEffDailyTasks": "",
+    "aiRateDailyTasks": "4",
+    "aiEffCoding": "",
+    "aiRateCoding": "4",
+    "aiEffDebugging": "",
+    "aiRateDebugging": "4",
+    "aiEffTestingQA": "",
+    "aiRateTestingQA": "3",
+    "aiEffFeatureEng": "",
+    "aiRateFeatureEng": "3",
+    "aiEffCodeReview": "",
+    "aiRateCodeReview": "3",
+    "aiOverallBoost": "26% - 50% Boost",
+    "hasCerts": "no",
+    "currentLearning": "yes",
+    "certsList": "No formal AI/ML certifications completed yet. Practical knowledge gained through professional AI application development, hands-on RAG implementation, Generative AI integration, and continuous self-learning.",
+    "wantedTraining": "1. Advanced RAG Architecture – Hybrid Search, Re-ranking, Chunking Strategies, and Retrieval Optimization.\n2. AI Agents and Agentic AI – LangChain, LlamaIndex, Tool Calling, and Multi-Agent Systems.\n3. LLM Fine-Tuning – LoRA, QLoRA, PEFT, and Custom Model Adaptation.\n4. Vector Databases – Pinecone, Chroma, Qdrant, and Vector Search Optimization.\n5. Advanced Prompt Engineering and Context Engineering.\n6. Machine Learning and Deep Learning Fundamentals – PyTorch and TensorFlow.\n7. AI Model Deployment and MLOps – FastAPI, Docker, Model Serving, and Monitoring.\n8. Enterprise AI Security, Data Privacy, and Responsible AI.\n9. Multimodal AI – Voice, Image, Video, and Real-Time AI Applications.\n10. AI-Powered Mobile Application Development and On-Device AI.",
+    "learningFormats": [
+      "Hands-on Workshop",
+      "Online Self-Paced",
+      "Company-Sponsored Cert",
+      "Senior Mentorship",
+      "Internal Hackathon"
+    ],
+    "selfAssessment": {
+      "Overall Conceptual AI Knowledge": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Hands-On AI/ML Development & Coding": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Real-World AI Project Delivery Experience": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Readiness to Lead or Architect an Arena AI Initiative": {
+        "rating": 3,
+        "remarks": ""
+      }
+    },
+    "noteImpression": "A software engineer with over 4 years of experience in mobile application development and practical exposure to Generative AI technologies. Demonstrates the ability to integrate AI capabilities into real-world applications. Has successfully developed a production-used RAG-based AI application, demonstrating practical problem-solving skills and the ability to deliver business-oriented AI solutions",
+    "noteStrengths": "Practical experience in RAG-based AI application development.\n\nHands-on experience with Google Gemini API integration.\n\nAI conversational systems and intelligent push notification development.\n\nStrong mobile development background with Kotlin, Jetpack Compose, Flutter, and REST APIs.\n\nAbility to translate business requirements into practical AI-powered software solutions.\n\nInterest in exploring modern Generative AI technologies and enterprise automation.",
+    "noteGaps": "- Advanced machine learning and deep learning fundamentals.\n- LLM fine-tuning and model customization.\n- Advanced LangChain/LlamaIndex and AI agent architectures.\n- Vector database optimization and advanced retrieval techniques.\n- AI model deployment, MLOps, and enterprise-scale AI infrastructure.\n- Advanced AI evaluation, monitoring, and security practices.",
+    "noteTraining": "1. Advanced RAG Architecture and Vector Database Management. 2. LangChain, LlamaIndex, and Agentic AI Development. 3. Advanced LLM Integration and Context Engineering. 4. Python, PyTorch, and Machine Learning Fundamentals. 5. AI Model Deployment, MLOps, and Enterprise AI Security.",
+    "aiPotential": "Medium",
+    "noteRemarks": "With over 4 years of software development experience, I have developed a strong interest in applying AI technologies to solve real-world business problems.\n\nI have already gained practical experience by developing a RAG-based AI application that is actively used by office colleagues, featuring AI-powered conversations and intelligent push notifications.\n\nI would like to further strengthen my expertise in Generative AI, advanced RAG architectures, AI agents, and enterprise AI solutions.\n\nI am interested in contributing to Arena's AI initiatives, developing reusable AI solutions, and helping integrate intelligent automation into existing business applications. With appropriate technical training and opportunities to work on AI-driven projects, I believe I can contribute significantly to the company's AI adoption journey.",
+    "timestamp": "2026-11-05T12:56:48.641Z",
+    "answeredCount": 17,
+    "totalBenchmarkCount": 27,
+    "completenessPct": 63,
+    "rawOverallScore": "3.1",
+    "calibratedOverallScore": "2.3",
+    "overallScore": "2.3",
+    "isIncomplete": true,
+    "avgKnowledge": "3.0",
+    "rawAvgKnowledge": "3.0",
+    "avgSkills": "1.7",
+    "rawAvgSkills": "2.8",
+    "avgSelfAssess": "3.5",
+    "rawAvgSelfAssess": "3.5"
   }
 ]
