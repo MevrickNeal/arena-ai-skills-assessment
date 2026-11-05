@@ -735,7 +735,7 @@
     "answeredCount": 7
   },
   {
-    "id": 1793881997503,
+    "id": 1793882779127,
     "name": "Azizul Haque Srejan",
     "empId": "29",
     "department": "Technical",
@@ -755,19 +755,19 @@
     "otherLangs": "",
     "knowledge": {
       "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
-        "rating": 4,
+        "rating": 2,
         "remarks": ""
       },
       "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
-        "rating": 4,
+        "rating": 2,
         "remarks": ""
       },
       "Natural Language Processing (NLP & Text Analysis)": {
-        "rating": 4,
+        "rating": 2,
         "remarks": ""
       },
       "Computer Vision & Image / Video Recognition": {
-        "rating": 4,
+        "rating": 2,
         "remarks": ""
       },
       "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
@@ -775,47 +775,47 @@
         "remarks": ""
       },
       "AI Ethics, Bias, Data Privacy & Responsible AI": {
-        "rating": 2,
+        "rating": 4,
         "remarks": ""
       },
       "Industry AI Trends, Modern Frameworks & API Ecosystems": {
-        "rating": 1,
+        "rating": 5,
         "remarks": ""
       }
     },
     "skills": {
       "Python for AI/ML (NumPy, Pandas, SciPy)": {
-        "rating": 4,
+        "rating": 2,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
       },
       "PyTorch (Model training & inference)": {
-        "rating": 4,
+        "rating": 2,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
       },
       "TensorFlow / Keras": {
-        "rating": 4,
+        "rating": 2,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
       },
       "Scikit-learn (Classical ML algorithms)": {
-        "rating": 4,
+        "rating": 2,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
       },
       "Hugging Face Transformers & Datasets": {
-        "rating": 5,
+        "rating": 1,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
       },
       "OpenAI API & GPT Integration (Function Calling)": {
-        "rating": 1,
+        "rating": 5,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
@@ -827,13 +827,13 @@
         "isCustom": false
       },
       "LangChain / LlamaIndex (AI Agents & Chains)": {
-        "rating": null,
+        "rating": 2,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
       },
       "Prompt Engineering & Context Optimization": {
-        "rating": 1,
+        "rating": 5,
         "usedAtWork": "yes",
         "remarks": "",
         "isCustom": false
@@ -863,19 +863,19 @@
         "isCustom": false
       },
       "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
-        "rating": 1,
+        "rating": 5,
         "usedAtWork": "yes",
         "remarks": "",
         "isCustom": false
       },
       "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
-        "rating": 2,
+        "rating": 4,
         "usedAtWork": "yes",
         "remarks": "",
         "isCustom": false
       },
       "Data Engineering & Feature Extraction": {
-        "rating": 2,
+        "rating": 4,
         "usedAtWork": "yes",
         "remarks": "",
         "isCustom": false
@@ -906,17 +906,17 @@
     "aiOpportunities": "",
     "aiInitiatives": "",
     "aiEffDailyTasks": "",
-    "aiRateDailyTasks": "1",
+    "aiRateDailyTasks": "5",
     "aiEffCoding": "",
-    "aiRateCoding": "1",
+    "aiRateCoding": "5",
     "aiEffDebugging": "",
-    "aiRateDebugging": "1",
+    "aiRateDebugging": "5",
     "aiEffTestingQA": "",
-    "aiRateTestingQA": "1",
+    "aiRateTestingQA": "5",
     "aiEffFeatureEng": "",
-    "aiRateFeatureEng": "1",
+    "aiRateFeatureEng": "5",
     "aiEffCodeReview": "",
-    "aiRateCodeReview": "1",
+    "aiRateCodeReview": "5",
     "aiOverallBoost": "> 75% (2x+ Boost)",
     "hasCerts": "no",
     "currentLearning": "yes",
@@ -930,7 +930,7 @@
     ],
     "selfAssessment": {
       "Overall Conceptual AI Knowledge": {
-        "rating": 1,
+        "rating": 5,
         "remarks": ""
       },
       "Hands-On AI/ML Development & Coding": {
@@ -938,11 +938,11 @@
         "remarks": ""
       },
       "Real-World AI Project Delivery Experience": {
-        "rating": 1,
+        "rating": 5,
         "remarks": ""
       },
       "Readiness to Lead or Architect an Arena AI Initiative": {
-        "rating": 1,
+        "rating": 5,
         "remarks": ""
       }
     },
@@ -952,20 +952,20 @@
     "noteTraining": "",
     "aiPotential": "",
     "noteRemarks": "",
-    "timestamp": "2026-11-05T12:33:17.503Z",
-    "answeredCount": 24,
+    "timestamp": "2026-11-05T12:46:19.127Z",
+    "answeredCount": 25,
     "totalBenchmarkCount": 27,
-    "completenessPct": 89,
-    "rawOverallScore": "2.7",
-    "calibratedOverallScore": "2.5",
-    "overallScore": "2.5",
+    "completenessPct": 93,
+    "rawOverallScore": "3.2",
+    "calibratedOverallScore": "3.1",
+    "overallScore": "3.1",
     "isIncomplete": false,
-    "avgKnowledge": "3.1",
-    "rawAvgKnowledge": "3.1",
-    "avgSkills": "2.5",
-    "rawAvgSkills": "2.8",
-    "avgSelfAssess": "1.5",
-    "rawAvgSelfAssess": "1.5"
+    "avgKnowledge": "2.9",
+    "rawAvgKnowledge": "2.9",
+    "avgSkills": "2.8",
+    "rawAvgSkills": "3.1",
+    "avgSelfAssess": "4.5",
+    "rawAvgSelfAssess": "4.5"
   },
   {
     "id": 1793882674512,
