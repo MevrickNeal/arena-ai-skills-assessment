@@ -521,5 +521,207 @@
     "avgSkills": "2.8",
     "avgSelfAssess": "2.8",
     "overallScore": "2.9"
+  },
+  {
+    "id": 1793862631723,
+    "name": "MD Abdull AL Mamun",
+    "empId": "37",
+    "department": "Tech",
+    "title": "UI/UX Designer",
+    "project": "",
+    "role": "",
+    "yearsCompany": "12",
+    "yearsTotal": "15",
+    "languages": [],
+    "otherLangs": "",
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": null,
+        "remarks": ""
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": null,
+        "remarks": ""
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "TensorFlow / Keras": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "yes",
+    "aiProjectCount": "",
+    "aiProjectDesc": "",
+    "aiProjectRole": "",
+    "aiProjectImpact": "",
+    "aiDeployed": "",
+    "aiOpenSource": "",
+    "aiOpenSourceDetails": "",
+    "usingAI": "",
+    "aiTools": [],
+    "aiProductivity": "",
+    "aiOpportunities": "",
+    "aiInitiatives": "",
+    "aiEffDailyTasks": "",
+    "aiRateDailyTasks": "",
+    "aiEffCoding": "",
+    "aiRateCoding": "",
+    "aiEffDebugging": "",
+    "aiRateDebugging": "",
+    "aiEffTestingQA": "",
+    "aiRateTestingQA": "",
+    "aiEffFeatureEng": "",
+    "aiRateFeatureEng": "",
+    "aiEffCodeReview": "",
+    "aiRateCodeReview": "",
+    "aiOverallBoost": "",
+    "hasCerts": "",
+    "currentLearning": "",
+    "certsList": "",
+    "wantedTraining": "",
+    "learningFormats": [],
+    "selfAssessment": {
+      "Overall Conceptual AI Knowledge": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Hands-On AI/ML Development & Coding": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Real-World AI Project Delivery Experience": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Readiness to Lead or Architect an Arena AI Initiative": {
+        "rating": null,
+        "remarks": ""
+      }
+    },
+    "noteImpression": "",
+    "noteStrengths": "",
+    "noteGaps": "",
+    "noteTraining": "",
+    "aiPotential": "",
+    "noteRemarks": "",
+    "timestamp": "2026-11-05T07:10:31.723Z",
+    "avgKnowledge": "4.0",
+    "avgSkills": "—",
+    "avgSelfAssess": "—",
+    "overallScore": "4.0"
   }
 ]
