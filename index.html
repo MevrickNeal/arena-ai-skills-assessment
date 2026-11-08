@@ -2939,7 +2939,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
       </button>
       <button type="button" class="skeuo-segment-btn" id="segBtnCoord" onclick="switchLandingRoleTab('coord')" role="tab" aria-selected="false">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span>Coordinator</span>
+        <span>Admin</span>
       </button>
     </div>
 
@@ -2963,7 +2963,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 
       <div style="margin-top:14px; font-size:12px; color:#64748b;">
         Need management reports or squad builder? 
-        <a href="javascript:void(0)" onclick="switchLandingRoleTab('coord')" style="color:var(--arena-crimson); font-weight:700; text-decoration:none;">Coordinator Sign In →</a>
+        <a href="javascript:void(0)" onclick="switchLandingRoleTab('coord')" style="color:var(--arena-crimson); font-weight:700; text-decoration:none;">Admin Sign In →</a>
       </div>
     </div>
 
@@ -2971,7 +2971,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     <div id="landingCoordPanel" class="landing-role-panel" style="display:none;">
       <form onsubmit="event.preventDefault(); submitStartCoordinatorLogin();" style="text-align:left;">
         <div class="landing-field-group">
-          <label class="landing-field-label">Coordinator Email</label>
+          <label class="landing-field-label">Admin Email</label>
           <div class="landing-input-well">
             <span class="landing-field-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -3009,7 +3009,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         </button>
 
         <div style="margin-top:10px; font-size:11px; color:#94a3b8; text-align:center;">
-          Authorized Project Coordinator Personnel Only
+          Authorized Admin Personnel Only
         </div>
       </form>
     </div>
@@ -3099,15 +3099,15 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         <div class="user-avatar-circle" onclick="openStartLanding()" style="cursor:pointer;" title="Click to view sign in info">AD</div>
         <div class="user-info-col" onclick="openStartLanding()" style="cursor:pointer;" title="Click to view sign in info">
           <span class="user-info-name">Admin</span>
-          <span class="user-info-role" id="roleBadge">Coordinator</span>
+          <span class="user-info-role" id="roleBadge">Admin</span>
         </div>
-        <button class="btn-nav-auth logout coordinator-only" id="btnNavLogout" onclick="logoutCoordinator()" title="Sign out of Coordinator Mode">
+        <button class="btn-nav-auth logout coordinator-only" id="btnNavLogout" onclick="logoutCoordinator()" title="Sign out of Admin Mode">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Log Out
         </button>
-        <button class="btn-nav-auth signin developer-only" id="btnNavLogin" onclick="openStartLanding('coord')" title="Coordinator Sign In" style="display:none;">
+        <button class="btn-nav-auth signin developer-only" id="btnNavLogin" onclick="openStartLanding('coord')" title="Admin Sign In" style="display:none;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Coordinator Sign In
+          Admin Sign In
         </button>
       </div>
     </div>
@@ -4380,7 +4380,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         <span style="font-size:11px; color:#94a3b8;">Authorized Personnel Only</span>
       </div>
 
-      <button type="button" class="btn-login-coord-submit" onclick="submitCoordinatorLogin()">Sign In as Coordinator</button>
+      <button type="button" class="btn-login-coord-submit" onclick="submitCoordinatorLogin()">Sign In as Admin</button>
       
       <div id="loginFeedback" style="display:none; margin-top:10px; font-size:12.5px; padding:8px 12px; border-radius:8px; text-align:center;"></div>
 
@@ -4657,7 +4657,7 @@ function submitStartCoordinatorLogin() {
       feedback.style.display = 'block';
       feedback.style.background = '#fee2e2';
       feedback.style.color = '#b91c1c';
-      feedback.innerHTML = '✕ Please enter your Coordinator Security PIN.';
+      feedback.innerHTML = '✕ Please enter your Admin Security PIN.';
     }
     if (pwdInput) pwdInput.focus();
     return;
@@ -4689,7 +4689,7 @@ function submitStartCoordinatorLogin() {
       feedback.style.display = 'block';
       feedback.style.background = '#fee2e2';
       feedback.style.color = '#b91c1c';
-      feedback.innerHTML = '✕ Invalid PIN. Coordinator access denied.';
+      feedback.innerHTML = '✕ Invalid PIN. Admin access denied.';
     }
     if (pwdInput) {
       pwdInput.value = '';
@@ -4730,7 +4730,7 @@ function submitCoordinatorLogin() {
       feedback.style.display = 'block';
       feedback.style.background = '#fee2e2';
       feedback.style.color = '#b91c1c';
-      feedback.innerHTML = '✕ Please enter your Coordinator Security PIN.';
+      feedback.innerHTML = '✕ Please enter your Admin Security PIN.';
     }
     if (pwdInput) pwdInput.focus();
     return;
@@ -4746,7 +4746,7 @@ function submitCoordinatorLogin() {
       feedback.style.display = 'block';
       feedback.style.background = '#dcfce7';
       feedback.style.color = '#15803d';
-      feedback.innerHTML = '✓ Signed in successfully as Admin (Project Coordinator)!';
+      feedback.innerHTML = '✓ Signed in successfully as Admin!';
     }
     
     setTimeout(() => {
@@ -4761,7 +4761,7 @@ function submitCoordinatorLogin() {
       feedback.style.display = 'block';
       feedback.style.background = '#fee2e2';
       feedback.style.color = '#b91c1c';
-      feedback.innerHTML = '✕ Invalid PIN. Coordinator access denied.';
+      feedback.innerHTML = '✕ Invalid PIN. Admin access denied.';
     }
     if (pwdInput) {
       pwdInput.value = '';
@@ -4794,12 +4794,12 @@ function applyRoleUI() {
   if (isCoord) {
     if (navSub) navSub.innerHTML = 'Executive Management Portal &bull; Admin';
     if (roleBadge) {
-      roleBadge.textContent = 'Coordinator';
+      roleBadge.textContent = 'Admin';
       roleBadge.style.background = 'rgba(196, 30, 58, 0.1)';
       roleBadge.style.color = '#C41E3A';
     }
     if (userAvatar) userAvatar.textContent = 'AD';
-    if (userName) userName.textContent = 'Admin (Coordinator)';
+    if (userName) userName.textContent = 'Admin';
     if (btnLogout) {
       btnLogout.style.display = 'inline-flex';
       btnLogout.innerHTML = 'Log Out';
@@ -4837,7 +4837,7 @@ function applyRoleUI() {
     if (btnLogout) btnLogout.style.display = 'none';
     if (btnLogin) {
       btnLogin.style.display = 'inline-flex';
-      btnLogin.innerHTML = 'Coordinator Login';
+      btnLogin.innerHTML = 'Admin Sign In';
     }
     if (activeBanner) activeBanner.style.display = 'none';
 
@@ -6345,7 +6345,7 @@ function saveCurrentAssessment() {
 
   if (currentRole === 'developer') {
     document.getElementById('modalDevName').textContent = `Assessment Submitted!`;
-    document.getElementById('modalDevDesc').innerHTML = `Thank you, <strong>${data.name || 'Developer'}</strong>!<br><br>Your AI Skills Profile (Emp ID: ${data.empId || 'N/A'}) has been saved directly to <strong>Arena Central Cloud Database</strong> for Project Coordinator (Admin).<br><br><button class="btn btn-export-excel" style="width:100%; justify-content:center; margin-top:8px;" onclick="downloadSingleAssessmentJson()">Download Assessment Copy (.json)</button>`;
+    document.getElementById('modalDevDesc').innerHTML = `Thank you, <strong>${data.name || 'Developer'}</strong>!<br><br>Your AI Skills Profile (Emp ID: ${data.empId || 'N/A'}) has been saved directly to <strong>Arena Central Cloud Database</strong> for Admin Review.<br><br><button class="btn btn-export-excel" style="width:100%; justify-content:center; margin-top:8px;" onclick="downloadSingleAssessmentJson()">Download Assessment Copy (.json)</button>`;
     const nextBtn = document.querySelector('#successModal .btn-primary');
     if (nextBtn) nextBtn.textContent = 'Submit Another Profile';
   } else {
