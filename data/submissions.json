@@ -1863,5 +1863,232 @@
     "rawAvgSkills": "1.5",
     "avgSelfAssess": "3.0",
     "rawAvgSelfAssess": "3.0"
+  },
+  {
+    "id": 1794120002101,
+    "name": "Amit Saha",
+    "empId": "EMP -1016",
+    "department": "VAS -Technical",
+    "title": "Senior Software Engineer",
+    "project": "Teletalk OBD service, Edison Group Push Pull, DHAKA Bank Transaction & Promotional SMS Gateway, Arena SMS Gateway,  DEA ivr & SMS solution,  BDApps Service Implementation",
+    "role": "Senior Developer",
+    "yearsCompany": "",
+    "yearsTotal": "8",
+    "languages": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "PHP",
+      "SQL"
+    ],
+    "otherLangs": "",
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": 5,
+        "remarks": ""
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": 5,
+        "remarks": ""
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": 4,
+        "remarks": ""
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": 4,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "TensorFlow / Keras": {
+        "rating": 2,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": 4,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": 4,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": 5,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": 5,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": 5,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": null,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": 4,
+        "usedAtWork": "yes",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": 5,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "yes",
+    "aiProjectCount": "3",
+    "aiProjectDesc": "",
+    "aiProjectRole": "",
+    "aiProjectImpact": "",
+    "aiDeployed": "",
+    "aiOpenSource": "",
+    "aiOpenSourceDetails": "",
+    "usingAI": "yes",
+    "aiTools": [
+      "Google Antigravity",
+      "GitHub Copilot",
+      "ChatGPT Plus / Team",
+      "Google Gemini / Vertex",
+      "Claude (Anthropic)",
+      "Tabnine",
+      "Midjourney / Stable Diffusion"
+    ],
+    "aiProductivity": "",
+    "aiOpportunities": "",
+    "aiInitiatives": "",
+    "aiEffDailyTasks": "",
+    "aiRateDailyTasks": "",
+    "aiEffCoding": "",
+    "aiRateCoding": "",
+    "aiEffDebugging": "",
+    "aiRateDebugging": "",
+    "aiEffTestingQA": "",
+    "aiRateTestingQA": "",
+    "aiEffFeatureEng": "",
+    "aiRateFeatureEng": "",
+    "aiEffCodeReview": "",
+    "aiRateCodeReview": "",
+    "aiOverallBoost": "",
+    "hasCerts": "",
+    "currentLearning": "yes",
+    "certsList": "",
+    "wantedTraining": "",
+    "learningFormats": [
+      "Hands-on Workshop"
+    ],
+    "selfAssessment": {
+      "Overall Conceptual AI Knowledge": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Hands-On AI/ML Development & Coding": {
+        "rating": 4,
+        "remarks": ""
+      },
+      "Real-World AI Project Delivery Experience": {
+        "rating": null,
+        "remarks": ""
+      },
+      "Readiness to Lead or Architect an Arena AI Initiative": {
+        "rating": 5,
+        "remarks": ""
+      }
+    },
+    "noteImpression": "",
+    "noteStrengths": "",
+    "noteGaps": "",
+    "noteTraining": "",
+    "aiPotential": "",
+    "noteRemarks": "",
+    "timestamp": "2026-11-08T06:40:02.101Z",
+    "answeredCount": 25,
+    "totalBenchmarkCount": 27,
+    "completenessPct": 93,
+    "rawOverallScore": "4.3",
+    "calibratedOverallScore": "4.1",
+    "overallScore": "4.1",
+    "isIncomplete": false,
+    "avgKnowledge": "4.1",
+    "rawAvgKnowledge": "4.1",
+    "avgSkills": "4.2",
+    "rawAvgSkills": "4.4",
+    "avgSelfAssess": "3.5",
+    "rawAvgSelfAssess": "4.3"
   }
 ]
