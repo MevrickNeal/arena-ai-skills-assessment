@@ -1647,89 +1647,88 @@
   },
   {
     "id": 1794117925344,
-    "name": "Fahim Abser Navil",
-    "empId": "41",
-    "department": "Technical",
-    "title": "Jr. Software Engineer",
-    "project": "AI assistant(RAG)",
-    "role": "Full Stack Developer",
-    "yearsCompany": "2",
+    "name": "Lian Mollick Nehal",
+    "empId": "EMP-0014",
+    "department": "Software Technical",
+    "title": "Project-Coordinator",
+    "project": "OSRMS, ARENA HRMS, ISPAHANI CMS, AEx Shipping",
+    "role": "QA / Test Automation",
+    "yearsCompany": "0.1",
     "yearsTotal": "2",
     "languages": [
-      "JavaScript",
-      "TypeScript",
-      "PHP"
+      "Python",
+      "C / C++"
     ],
-    "otherLangs": "React js, Next js, Laravel, Codeigniter, MySQL, Vector Database, Express js, Node js, LLM",
+    "otherLangs": "",
     "knowledge": {
       "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
-        "rating": 1,
-        "remarks": ""
+        "rating": 2,
+        "remarks": "used for data training for research projects"
       },
       "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
-        "rating": 1,
-        "remarks": ""
+        "rating": 3,
+        "remarks": "used for prediction models for research project"
       },
       "Natural Language Processing (NLP & Text Analysis)": {
         "rating": 1,
         "remarks": ""
       },
       "Computer Vision & Image / Video Recognition": {
-        "rating": 1,
-        "remarks": ""
+        "rating": 4,
+        "remarks": "used for active control system for robot operation"
       },
       "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
-        "rating": 3,
+        "rating": 1,
         "remarks": ""
       },
       "AI Ethics, Bias, Data Privacy & Responsible AI": {
-        "rating": 1,
+        "rating": 3,
         "remarks": ""
       },
       "Industry AI Trends, Modern Frameworks & API Ecosystems": {
-        "rating": 3,
+        "rating": 2,
         "remarks": ""
       }
     },
     "skills": {
       "Python for AI/ML (NumPy, Pandas, SciPy)": {
-        "rating": 1,
-        "usedAtWork": "no",
-        "remarks": "",
+        "rating": 3,
+        "usedAtWork": "",
+        "remarks": "used for data cleaning, data preprocessing",
         "isCustom": false
       },
       "PyTorch (Model training & inference)": {
-        "rating": 1,
+        "rating": 3,
         "usedAtWork": "",
-        "remarks": "",
+        "remarks": "used for data classification,  model training",
         "isCustom": false
       },
       "TensorFlow / Keras": {
         "rating": 1,
         "usedAtWork": "",
-        "remarks": "",
+        "remarks": "used for open camera vision project",
         "isCustom": false
       },
       "Scikit-learn (Classical ML algorithms)": {
-        "rating": 1,
+        "rating": 3,
         "usedAtWork": "",
-        "remarks": "",
+        "remarks": "used in simulating quantum computing environment",
         "isCustom": false
       },
       "Hugging Face Transformers & Datasets": {
         "rating": 1,
         "usedAtWork": "",
-        "remarks": "",
+        "remarks": "used only for dataset collecting",
         "isCustom": false
       },
       "OpenAI API & GPT Integration (Function Calling)": {
-        "rating": 1,
+        "rating": 2,
         "usedAtWork": "",
         "remarks": "",
         "isCustom": false
       },
       "Google Gemini & Vertex AI SDK": {
-        "rating": 1,
+        "rating": 2,
         "usedAtWork": "",
         "remarks": "",
         "isCustom": false
@@ -1747,19 +1746,19 @@
         "isCustom": false
       },
       "RAG (Retrieval-Augmented Generation)": {
-        "rating": 3,
+        "rating": 1,
         "usedAtWork": "",
         "remarks": "",
         "isCustom": false
       },
       "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
-        "rating": 3,
+        "rating": 1,
         "usedAtWork": "",
         "remarks": "",
         "isCustom": false
       },
       "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
-        "rating": 3,
+        "rating": 1,
         "usedAtWork": "",
         "remarks": "",
         "isCustom": false
@@ -1771,9 +1770,9 @@
         "isCustom": false
       },
       "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
-        "rating": 1,
+        "rating": 3,
         "usedAtWork": "",
-        "remarks": "",
+        "remarks": "used fast api, docker",
         "isCustom": false
       },
       "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
@@ -1783,47 +1782,52 @@
         "isCustom": false
       },
       "Data Engineering & Feature Extraction": {
-        "rating": 1,
+        "rating": 4,
         "usedAtWork": "",
-        "remarks": "",
+        "remarks": "used for cleaning, preprocessing, data extractions, feature engineering",
         "isCustom": false
       }
     },
     "customSkills": [],
     "aiProjects": "yes",
     "aiProjectCount": "4",
-    "aiProjectDesc": "",
-    "aiProjectRole": "Full Stack",
+    "aiProjectDesc": "Camera vision controls robot movements, face detections, crop disease detections, blood cancer early detection using QML",
+    "aiProjectRole": "",
     "aiProjectImpact": "",
     "aiDeployed": "",
-    "aiOpenSource": "",
-    "aiOpenSourceDetails": "",
+    "aiOpenSource": "yes",
+    "aiOpenSourceDetails": "https://github.com/MevrickNeal/Quantum-Machine-Learning-Based-Cancer-Cell-Detection",
     "usingAI": "yes",
     "aiTools": [
-      "Google Antigravity"
+      "Google Antigravity",
+      "GitHub Copilot",
+      "Google Gemini / Vertex",
+      "Claude (Anthropic)"
     ],
     "aiProductivity": "",
     "aiOpportunities": "",
     "aiInitiatives": "",
     "aiEffDailyTasks": "",
-    "aiRateDailyTasks": "1",
+    "aiRateDailyTasks": "4",
     "aiEffCoding": "",
-    "aiRateCoding": "3",
+    "aiRateCoding": "4",
     "aiEffDebugging": "",
-    "aiRateDebugging": "3",
+    "aiRateDebugging": "5",
     "aiEffTestingQA": "",
-    "aiRateTestingQA": "3",
+    "aiRateTestingQA": "4",
     "aiEffFeatureEng": "",
-    "aiRateFeatureEng": "3",
+    "aiRateFeatureEng": "5",
     "aiEffCodeReview": "",
-    "aiRateCodeReview": "3",
-    "aiOverallBoost": "> 75% (2x+ Boost)",
-    "hasCerts": "no",
-    "currentLearning": "no",
+    "aiRateCodeReview": "5",
+    "aiOverallBoost": "",
+    "hasCerts": "yes",
+    "currentLearning": "yes",
     "certsList": "",
     "wantedTraining": "",
     "learningFormats": [
-      "Hands-on Workshop"
+      "Hands-on Workshop",
+      "Online Self-Paced",
+      "Internal Hackathon"
     ],
     "selfAssessment": {
       "Overall Conceptual AI Knowledge": {
@@ -1839,7 +1843,7 @@
         "remarks": ""
       },
       "Readiness to Lead or Architect an Arena AI Initiative": {
-        "rating": 3,
+        "rating": 4,
         "remarks": ""
       }
     },
@@ -1849,20 +1853,20 @@
     "noteTraining": "",
     "aiPotential": "",
     "noteRemarks": "",
-    "timestamp": "2026-11-08T06:05:25.344Z",
+    "timestamp": "2026-11-08T08:25:18.290Z",
     "answeredCount": 27,
     "totalBenchmarkCount": 27,
     "completenessPct": 100,
-    "rawOverallScore": "1.7",
-    "calibratedOverallScore": "1.7",
-    "overallScore": "1.7",
+    "rawOverallScore": "2.2",
+    "calibratedOverallScore": "2.2",
+    "overallScore": "2.2",
     "isIncomplete": false,
-    "avgKnowledge": "1.6",
-    "rawAvgKnowledge": "1.6",
-    "avgSkills": "1.5",
-    "rawAvgSkills": "1.5",
-    "avgSelfAssess": "3.0",
-    "rawAvgSelfAssess": "3.0"
+    "avgKnowledge": "2.3",
+    "rawAvgKnowledge": "2.3",
+    "avgSkills": "1.9",
+    "rawAvgSkills": "1.9",
+    "avgSelfAssess": "3.3",
+    "rawAvgSelfAssess": "3.3"
   },
   {
     "id": 1794120002101,
