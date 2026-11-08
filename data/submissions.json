@@ -2090,5 +2090,231 @@
     "rawAvgSkills": "4.4",
     "avgSelfAssess": "3.5",
     "rawAvgSelfAssess": "4.3"
+  },
+  {
+    "id": 1794121945008,
+    "name": "Saidul islam sohel",
+    "empId": "EMP-0018",
+    "department": "Educlerk",
+    "title": "Software Engineer",
+    "project": "Educlerk",
+    "role": "Full Stack Developer",
+    "yearsCompany": "3",
+    "yearsTotal": "4",
+    "languages": [
+      "JavaScript",
+      "C# / .NET",
+      "PHP",
+      "C / C++",
+      "SQL"
+    ],
+    "otherLangs": "",
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": 2,
+        "remarks": "Know the basic difference between supervised, unsupervised, and reinforcement learning. No project experience."
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": 1,
+        "remarks": "Have heard of neural networks, CNNs, and transformers. No practical knowledge."
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": 2,
+        "remarks": "Basic awareness of how AI chatbots understand text. No hands-on use."
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 3,
+        "remarks": "Basic awareness only. No hands-on use."
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": 2,
+        "remarks": "Use tools like ChatGPT and Claude. Understand that AI can sometimes give wrong answers."
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": 4,
+        "remarks": "Aware that AI can be biased and that sensitive data should not be shared with AI tools."
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": 2,
+        "remarks": "Follow general AI news. Interested in learning more about AI tools and APIs."
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": 2,
+        "usedAtWork": "no",
+        "remarks": "Basic knowledge of Python and data handling. Learning.",
+        "isCustom": false
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "No hands-on experience.",
+        "isCustom": false
+      },
+      "TensorFlow / Keras": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "No hands-on experience.",
+        "isCustom": false
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": 2,
+        "usedAtWork": "no",
+        "remarks": "Have not used it in projects.",
+        "isCustom": false
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": "Aware of it. No practical experience.",
+        "isCustom": false
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": 3,
+        "usedAtWork": "yes",
+        "remarks": "Basic awareness of how the API works. Limited practice.",
+        "isCustom": false
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": "Basic knowledge",
+        "isCustom": false
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "Heard of it. No hands-on use.",
+        "isCustom": false
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": 4,
+        "usedAtWork": "yes",
+        "remarks": "Have moderate knowledge",
+        "isCustom": false
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": "Understand the  idea. No implementation experience.",
+        "isCustom": false
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": 2,
+        "usedAtWork": "no",
+        "remarks": "Basic awareness only.",
+        "isCustom": false
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "No experience.",
+        "isCustom": false
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "No experience.",
+        "isCustom": false
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": 3,
+        "usedAtWork": "no",
+        "remarks": "No experience.",
+        "isCustom": false
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "No experience.",
+        "isCustom": false
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": 2,
+        "usedAtWork": "no",
+        "remarks": "Basic awareness only.",
+        "isCustom": false
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "no",
+    "aiProjectCount": "0",
+    "aiProjectDesc": "Worked on an existing School Management System using AI agents and LLM tools for module architecture enhancement, new feature development, and issue finding/debugging. Also worked on a Government MIS and an e-commerce site",
+    "aiProjectRole": "Developer",
+    "aiProjectImpact": "mproved system structure and maintainability, added new features, and resolved issues faster through AI-assisted development.",
+    "aiDeployed": "no",
+    "aiOpenSource": "no",
+    "aiOpenSourceDetails": "None at present. Actively using AI tools in real project work and learning more about AI/ML.",
+    "usingAI": "yes",
+    "aiTools": [
+      "Google Antigravity",
+      "GitHub Copilot",
+      "Google Gemini / Vertex"
+    ],
+    "aiProductivity": "AI agents speed up feature development, debugging, and understanding existing code. My workflow is to define the requirement clearly, let the AI generate or modify code, then review and test the output myself. AI sometimes gives incorrect or incomplete code, so human review is always needed.",
+    "aiOpportunities": "Automated test case generation, faster issue finding and debugging, auto-generated documentation, code review assistance, and smart search or a chatbot for users of the system.",
+    "aiInitiatives": "Provide approved AI tools for all developers, with guidelines on data privacy and security. Run AI training and prompt engineering sessions, share best practices across teams, and add AI-assisted code review and testing to the development process.",
+    "aiEffDailyTasks": "Use AI to write technical emails, summarize requirements, and draft documentation.",
+    "aiRateDailyTasks": "3",
+    "aiEffCoding": "Use AI agents for new feature development, module architecture enhancement, and refactoring in the School Management System.",
+    "aiRateCoding": "4",
+    "aiEffDebugging": "Paste errors and logs into AI to find the cause of issues and get fixes, then review and test them.",
+    "aiRateDebugging": "4",
+    "aiEffTestingQA": "Occasionally use AI to suggest test cases and check edge cases. Mostly manual testing.",
+    "aiRateTestingQA": "2",
+    "aiEffFeatureEng": "Basic use for sample data, SQL queries, and data cleanup scripts.",
+    "aiRateFeatureEng": "2",
+    "aiEffCodeReview": "Ask AI to review code for obvious bugs and improvements. Limited use for security or performance checks.",
+    "aiRateCodeReview": "2",
+    "aiOverallBoost": "51% - 75% Boost",
+    "hasCerts": "no",
+    "currentLearning": "yes",
+    "certsList": "None at present.",
+    "wantedTraining": "AI/ML fundamentals, prompt engineering, working with AI APIs (OpenAI, Claude), building AI features such as chatbots and smart search, RAG and vector databases, AI-assisted testing and code review, and AI security and data privacy.",
+    "learningFormats": [
+      "Hands-on Workshop",
+      "Online Self-Paced",
+      "Company-Sponsored Cert",
+      "Internal Hackathon"
+    ],
+    "selfAssessment": {
+      "Overall Conceptual AI Knowledge": {
+        "rating": 2,
+        "remarks": "I understand the basics of AI and how LLMs work as a user. I need to learn more about machine learning concepts and how AI systems are built."
+      },
+      "Hands-On AI/ML Development & Coding": {
+        "rating": 1,
+        "remarks": "I have not built or trained AI models yet. My hands-on work is limited to using AI agents and coding tools to develop software."
+      },
+      "Real-World AI Project Delivery Experience": {
+        "rating": 2,
+        "remarks": "I have delivered real project work (School Management System, Government SME MIS, e-commerce site) using AI-assisted development, but I have not delivered an AI/ML product."
+      },
+      "Readiness to Lead or Architect an Arena AI Initiative": {
+        "rating": 2,
+        "remarks": "Not ready to lead yet. I would need training and hands-on practice first. I can contribute as a team member and apply AI tools to improve development work."
+      }
+    },
+    "noteImpression": "",
+    "noteStrengths": "",
+    "noteGaps": "",
+    "noteTraining": "",
+    "aiPotential": "",
+    "noteRemarks": "",
+    "timestamp": "2026-11-08T07:12:25.008Z",
+    "answeredCount": 27,
+    "totalBenchmarkCount": 27,
+    "completenessPct": 100,
+    "rawOverallScore": "2.1",
+    "calibratedOverallScore": "2.1",
+    "overallScore": "2.1",
+    "isIncomplete": false,
+    "avgKnowledge": "2.3",
+    "rawAvgKnowledge": "2.3",
+    "avgSkills": "2.1",
+    "rawAvgSkills": "2.1",
+    "avgSelfAssess": "1.8",
+    "rawAvgSelfAssess": "1.8"
   }
 ]
