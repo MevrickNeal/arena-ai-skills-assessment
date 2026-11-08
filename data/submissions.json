@@ -2566,11 +2566,7 @@
     "yearsTotal": "3",
     "languages": [
       "Python",
-      "JavaScript",
-      "TypeScript",
-      "PHP",
-      "C / C++",
-      "SQL"
+      "C / C++"
     ],
     "otherLangs": "",
     "knowledge": {
@@ -2583,7 +2579,7 @@
         "remarks": "Thesis paper ready using CNNs Model"
       },
       "Natural Language Processing (NLP & Text Analysis)": {
-        "rating": 3,
+        "rating": 1,
         "remarks": ""
       },
       "Computer Vision & Image / Video Recognition": {
@@ -2595,11 +2591,11 @@
         "remarks": ""
       },
       "AI Ethics, Bias, Data Privacy & Responsible AI": {
-        "rating": 3,
+        "rating": 1,
         "remarks": ""
       },
       "Industry AI Trends, Modern Frameworks & API Ecosystems": {
-        "rating": 3,
+        "rating": 1,
         "remarks": ""
       }
     },
@@ -2623,13 +2619,13 @@
         "isCustom": false
       },
       "Scikit-learn (Classical ML algorithms)": {
-        "rating": 3,
+        "rating": 2,
         "usedAtWork": "yes",
         "remarks": "",
         "isCustom": false
       },
       "Hugging Face Transformers & Datasets": {
-        "rating": 2,
+        "rating": 1,
         "usedAtWork": "no",
         "remarks": "",
         "isCustom": false
@@ -2743,11 +2739,11 @@
     ],
     "selfAssessment": {
       "Overall Conceptual AI Knowledge": {
-        "rating": 3,
+        "rating": 2,
         "remarks": ""
       },
       "Hands-On AI/ML Development & Coding": {
-        "rating": 3,
+        "rating": 2,
         "remarks": ""
       },
       "Real-World AI Project Delivery Experience": {
@@ -2755,7 +2751,7 @@
         "remarks": ""
       },
       "Readiness to Lead or Architect an Arena AI Initiative": {
-        "rating": 3,
+        "rating": 2,
         "remarks": ""
       }
     },
@@ -2765,19 +2761,19 @@
     "noteTraining": "",
     "aiPotential": "",
     "noteRemarks": "",
-    "timestamp": "2026-11-08T10:33:27.512Z",
+    "timestamp": "2026-11-08T13:26:22.348Z",
     "answeredCount": 27,
     "totalBenchmarkCount": 27,
     "completenessPct": 100,
-    "rawOverallScore": "2.3",
-    "calibratedOverallScore": "2.3",
-    "overallScore": "2.3",
+    "rawOverallScore": "1.9",
+    "calibratedOverallScore": "1.9",
+    "overallScore": "1.9",
     "isIncomplete": false,
-    "avgKnowledge": "2.6",
-    "rawAvgKnowledge": "2.6",
-    "avgSkills": "2.0",
-    "rawAvgSkills": "2.0",
-    "avgSelfAssess": "3.0",
-    "rawAvgSelfAssess": "3.0"
+    "avgKnowledge": "1.7",
+    "rawAvgKnowledge": "1.7",
+    "avgSkills": "1.9",
+    "rawAvgSkills": "1.9",
+    "avgSelfAssess": "2.3",
+    "rawAvgSelfAssess": "2.3"
   }
 ]
