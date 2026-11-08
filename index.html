@@ -1220,7 +1220,8 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     padding: 20px;
   }
 
-  .modal-overlay.show {
+  .modal-overlay.show,
+  .modal-overlay.active {
     display: flex;
     animation: skeuo-modal-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -1559,7 +1560,8 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
   }
 
   .nav-dropdown:hover .nav-dropdown-menu,
-  .nav-dropdown:focus-within .nav-dropdown-menu {
+  .nav-dropdown:focus-within .nav-dropdown-menu,
+  .nav-dropdown.open .nav-dropdown-menu {
     display: block;
   }
 
@@ -3047,7 +3049,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 
       <!-- 2. UNIFIED DATA & EXPORT DROPDOWN -->
       <div class="nav-dropdown coordinator-only">
-        <button class="btn btn-secondary" style="gap:6px; padding:7px 14px; font-size:12.5px;">
+        <button class="btn btn-secondary" onclick="this.parentElement.classList.toggle('open')" style="gap:6px; padding:7px 14px; font-size:12.5px;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
           Reports & Data
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -3056,6 +3058,14 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
           <button class="dropdown-item" onclick="triggerExcelUpload()" style="color:#0f172a; font-weight:700;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
             Import Excel / JSON...
+          </button>
+          <button class="dropdown-item" onclick="openDeveloperFormsTab()" style="color:#C41E3A; font-weight:700;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit Developer Forms...
+          </button>
+          <button class="dropdown-item" onclick="openQrModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Desk QR Code & Portal Link...
           </button>
           <div style="height:1px; background:rgba(226,232,240,0.8); margin:4px 0;"></div>
           <button class="dropdown-item excel" onclick="exportToExcel()">
@@ -3173,6 +3183,9 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
     </button>
     <button class="tab-btn coordinator-only" onclick="switchTab('execReport')" id="tabBtn_execReport">
       <span class="tab-badge" style="background:#7c3aed; color:#fff;">Report</span> Executive Dossiers
+    </button>
+    <button class="tab-btn coordinator-only" onclick="openDeveloperFormsTab()" id="tabBtn_editForms" style="border:1px solid rgba(196,30,58,0.35); background:rgba(196,30,58,0.06); color:#C41E3A; font-weight:700;" title="Open and edit developer assessment forms">
+      <span class="tab-badge" style="background:#C41E3A; color:#fff;">Forms</span> Developer Forms
     </button>
 
 
@@ -3308,8 +3321,12 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         </div>
       </div>
       <div class="panel-header-actions" style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="printExecutiveDossier()">🖨️ Print Executive Dossier</button>
-        <button class="btn btn-glass" onclick="downloadCurrentDossierJson()">📥 Download Dossier (JSON)</button>
+        <button class="btn btn-primary" onclick="editCurrentExecutiveDossier()" style="background:#C41E3A; border-color:#9e182e; color:#fff; gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          ✏️ Edit Dossier Form
+        </button>
+        <button class="btn btn-glass" onclick="printExecutiveDossier()">🖨️ Print Dossier</button>
+        <button class="btn btn-glass" onclick="downloadCurrentDossierJson()">📥 Download JSON</button>
       </div>
     </div>
 
@@ -3344,13 +3361,13 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
 
       <div class="form-group" style="margin-bottom:14px;">
         <label class="form-label">Project Name *</label>
-        <input type="text" id="teamProjectName" class="form-control" placeholder="e.g. Enterprise Knowledge RAG & Intelligent Assistant">
+        <input type="text" id="teamName" class="form-control" placeholder="e.g. Enterprise Knowledge RAG & Intelligent Assistant">
       </div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
         <div class="form-group">
           <label class="form-label">Industry Vertical *</label>
-          <select id="teamIndustrySelect" class="form-select">
+          <select id="teamVertical" class="form-select">
             <option value="Enterprise SaaS">Enterprise SaaS & Knowledge</option>
             <option value="FinTech & Banking">FinTech & Banking</option>
             <option value="Telecom & VAS">Telecom & VAS</option>
@@ -3378,6 +3395,7 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
         <div id="teamMemberChecklist" style="max-height:220px; overflow-y:auto; border:1.5px solid #cbd5e1; border-radius:10px; padding:10px; background:#f8fafc;">
           <!-- Dynamically populated candidate selection rows -->
         </div>
+        <div id="teamMemberCountStatus" style="font-size:12px; font-weight:700; margin-top:6px;"></div>
       </div>
 
       <div class="modal-btn-row" style="justify-content:flex-end;">
@@ -3616,6 +3634,26 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
        PANEL A: DEVELOPER INFO
   ═══════════════════════════════════════════════ -->
   <div class="panel" id="panel_secA">
+    <!-- Coordinator Developer Selection & Form Switcher Toolbar -->
+    <div class="coordinator-only" id="coordFormToolbar" style="background:linear-gradient(135deg, rgba(248,250,252,0.98), rgba(241,245,249,0.98)); border:1.5px solid #cbd5e1; border-radius:12px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; box-shadow:0 4px 16px -2px rgba(15,23,42,0.06);">
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span style="font-size:16px;">👤</span>
+        <label style="font-size:12px; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; margin:0;">Edit Developer Form:</label>
+        <select id="formDevSelector" class="form-select" style="max-width:380px; padding:7px 12px; font-weight:700; font-size:12.5px; border-color:#94a3b8; background-color:#fff;" onchange="loadAssessmentForEdit(parseInt(this.value))">
+          <!-- Populated dynamically with all candidate dossiers -->
+        </select>
+        <span id="formDevSlotBadge" class="badge-arena" style="font-size:10.5px; padding:3px 8px;">Dossier #1</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="btn btn-sm btn-glass" onclick="switchTab('roster')" style="padding:6px 12px; font-size:11.5px; font-weight:700;">← Back to Roster</button>
+        <button class="btn btn-sm btn-glass" onclick="viewCandidateExecutiveReport(currentDevIndex >= 0 ? currentDevIndex : 0)" style="padding:6px 12px; font-size:11.5px; font-weight:700; color:#7c3aed; border-color:#ddd6fe; background:#f5f3ff;">📑 Executive Dossier</button>
+        <button class="btn btn-sm btn-primary" onclick="quickSaveActiveDossier()" style="background:#059669; border-color:#047857; color:#fff; padding:6px 14px; font-size:11.5px; font-weight:700; gap:5px; box-shadow:0 4px 10px rgba(5,150,105,0.2);">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Save Changes
+        </button>
+      </div>
+    </div>
+
     <div class="panel-header">
       <div class="panel-title-group">
         <div class="panel-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
@@ -3624,8 +3662,17 @@ if (typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF.prototype.a
           <p class="panel-subheading">Capture core identification and current individual project assignment.</p>
         </div>
       </div>
-      <div id="interviewingBadge" class="live-indicator">
-        Interviewing: Developer #1
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div id="interviewingBadge" class="live-indicator">
+          Interviewing: Developer #1
+        </div>
+        <button id="btnQuickSaveDossier" class="btn btn-sm btn-primary" onclick="quickSaveActiveDossier()" style="display:none; background:#059669; border-color:#047857; color:#fff; padding:6px 14px; font-size:12px; font-weight:700; gap:5px;" title="Quick save edits directly to dossier and database">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Save Edits
+        </button>
+        <button id="btnCancelEditDossier" class="btn btn-sm btn-glass" onclick="cancelEditingDossier()" style="display:none; padding:6px 12px; font-size:12px;" title="Cancel editing and return to roster">
+          ✕ Close
+        </button>
       </div>
     </div>
 
@@ -4761,7 +4808,11 @@ function applyRoleUI() {
 
     // Show all coordinator tabs and actions
     document.querySelectorAll('.coordinator-only').forEach(el => {
-      el.style.setProperty('display', 'inline-flex', 'important');
+      if (el.tagName === 'DIV' || el.tagName === 'SECTION') {
+        el.style.setProperty('display', 'flex', 'important');
+      } else {
+        el.style.setProperty('display', 'inline-flex', 'important');
+      }
     });
     document.querySelectorAll('.developer-only').forEach(el => el.style.display = 'none');
     
@@ -6009,6 +6060,10 @@ function startNewInterview() {
   document.getElementById('interviewingBadge').textContent = `Interviewing: Developer #${nextNum} of ${targetDevelopers}`;
   const delBtn = document.getElementById('btnDeleteInReview');
   if (delBtn) delBtn.style.display = 'none';
+  const quickSaveBtn = document.getElementById('btnQuickSaveDossier');
+  if (quickSaveBtn) quickSaveBtn.style.display = 'none';
+  const cancelEditBtn = document.getElementById('btnCancelEditDossier');
+  if (cancelEditBtn) cancelEditBtn.style.display = 'none';
   switchTab('secA');
   setTimeout(() => {
     const nameInput = document.getElementById('devName');
@@ -6309,6 +6364,30 @@ function closeModal() {
 // ════════════════════════════════════════════════════════════
 // LOAD EXISTING ASSESSMENT INTO FORM FOR EDITING / VIEW
 // ════════════════════════════════════════════════════════════
+
+function populateFormDevSelector() {
+  const sel = document.getElementById('formDevSelector');
+  if (!sel || allAssessments.length === 0) return;
+  sel.innerHTML = allAssessments.map((d, idx) => `
+    <option value="${idx}" ${idx === currentDevIndex ? 'selected' : ''}>
+      ${d.name || 'Developer'} (${d.empId || 'No ID'}) &bull; ${d.title || 'Developer'} [Score: ${d.overallScore}/5]
+    </option>
+  `).join('');
+  const badge = document.getElementById('formDevSlotBadge');
+  if (badge) {
+    badge.textContent = `Dossier #${(currentDevIndex >= 0 ? currentDevIndex + 1 : 1)} of ${allAssessments.length}`;
+  }
+}
+
+function openDeveloperFormsTab() {
+  if (currentDevIndex < 0 && allAssessments.length > 0) {
+    loadAssessmentForEdit(0);
+  } else {
+    switchTab('secA');
+    populateFormDevSelector();
+  }
+}
+
 function loadAssessmentForEdit(idx) {
   currentDevIndex = idx;
   const d = allAssessments[idx];
@@ -6467,15 +6546,27 @@ function loadAssessmentForEdit(idx) {
   const delBtn = document.getElementById('btnDeleteInReview');
   if (delBtn) delBtn.style.display = 'inline-flex';
   
-  // Update Active Dossier Banner for Admin
+  // Update Active Dossier Banner / Header Status for Admin
   const banner = document.getElementById('activeDossierBanner');
   if (banner) {
-    document.getElementById('bannerDevAvatar').textContent = getDeveloperInitials(d.name || 'Dev');
-    document.getElementById('bannerDevStatus').textContent = `EDITING DOSSIER • SLOT #${idx + 1} OF ${targetDevelopers}`;
-    document.getElementById('bannerDevName').textContent = `${d.name || 'Unnamed Developer'} (${d.empId || 'No ID'})`;
-    document.getElementById('bannerDevMeta').textContent = `Title: ${d.title || 'Developer'} • Project: ${d.project || 'Unassigned'} • Score: ${d.overallScore || '0.0'} / 5.0`;
-    banner.style.display = 'flex';
+    const avatarEl = document.getElementById('bannerDevAvatar');
+    if (avatarEl) avatarEl.textContent = getDeveloperInitials(d.name || 'Dev');
+    const statusEl = document.getElementById('bannerDevStatus');
+    if (statusEl) statusEl.textContent = `EDITING DOSSIER • SLOT #${idx + 1} OF ${targetDevelopers}`;
+    const nameEl = document.getElementById('bannerDevName');
+    if (nameEl) nameEl.textContent = `${d.name || 'Unnamed Developer'} (${d.empId || 'No ID'})`;
+    const metaEl = document.getElementById('bannerDevMeta');
+    if (metaEl) metaEl.textContent = `Title: ${d.title || 'Developer'} • Project: ${d.project || 'Unassigned'} • Score: ${d.overallScore || '0.0'} / 5.0`;
+    banner.style.display = 'none'; // Keep hidden per clean navbar
   }
+
+  // Show Quick Save and Cancel buttons in Section A header
+  const quickSaveBtn = document.getElementById('btnQuickSaveDossier');
+  if (quickSaveBtn) quickSaveBtn.style.display = 'inline-flex';
+  const cancelEditBtn = document.getElementById('btnCancelEditDossier');
+  if (cancelEditBtn) cancelEditBtn.style.display = 'inline-flex';
+
+  populateFormDevSelector();
   switchTab('secA');
 }
 
@@ -7060,7 +7151,8 @@ function exportToWord() {
   }
 
   .nav-dropdown:hover .nav-dropdown-menu,
-  .nav-dropdown:focus-within .nav-dropdown-menu {
+  .nav-dropdown:focus-within .nav-dropdown-menu,
+  .nav-dropdown.open .nav-dropdown-menu {
     display: block;
   }
 
@@ -8524,67 +8616,81 @@ function sanitizeAssessmentScores(dev) {
 // ══════════════════════════════════════════════════════════════════════════
 const DEFAULT_SUGGESTED_SQUADS = [
   {
-    id: "squad_rag_fintech",
-    name: "Enterprise FinTech RAG & Autonomous Agent System",
+    id: "squad_smc_field_mobility",
+    name: "SMC Field Sales & Enterprise Mobility Intelligence Squad",
+    vertical: "Enterprise SaaS & Field Mobility",
+    synergy: 96,
+    objective: "Real-time field sales sync, outlet distribution intelligence, offline order dispatching, and intelligent route optimization for SMC, Sales SaaS, and E-Sales enterprise portals.",
+    members: [
+      { name: "sumit roy", empId: "ARENA0061", role: "Lead Backend & Sales Sync Architect" },
+      { name: "Md.Nahid Hasan", empId: "31", role: "EDMS & Core API Integration Lead" },
+      { name: "Mostafizur Rahman", empId: "0030", role: "Mobile Offline Sync & Tracking Engineer" },
+      { name: "Anamul Haque Shanto", empId: "60", role: "Field UI & Analytics Dashboard Engineer" }
+    ]
+  },
+  {
+    id: "squad_rag_assistant_platform",
+    name: "Enterprise AI Assistant SDK & RAG Knowledge Platform",
+    vertical: "Enterprise SaaS & AI Copilot",
+    synergy: 98,
+    objective: "Production-grade Retrieval-Augmented Generation (RAG) assistant, context-aware notification engine, vector search pipelines, and cross-application AI Assistant SDK.",
+    members: [
+      { name: "Mostafizur Rahman", empId: "0030", role: "Production RAG & Mobile AI SDK Lead" },
+      { name: "Fahim Abser Navil", empId: "41", role: "RAG Pipeline & AI Assistant Developer" },
+      { name: "Shuvo Basak", empId: "0033", role: "Context Orchestration & Backend Engineer" },
+      { name: "A.K.M Mainul Hasan", empId: "Arena0032", role: "Core AI Architect & Governance Lead" }
+    ]
+  },
+  {
+    id: "squad_fintech_telecom_gateway",
+    name: "FinTech Gateway & Telecom VAS Intelligence Squad",
     vertical: "FinTech & Banking",
     synergy: 97,
-    objective: "Sub-second regulatory compliance & portfolio intelligence copilot with zero hallucination guardrails, multi-tenant RBAC, and automated financial filing analysis.",
+    objective: "Sub-second banking SMS gateways (Dhaka Bank), bKash VMS payment verification, high-throughput telecom VAS microservices (Teletalk/Banglalink), and carrier billing integrations.",
     members: [
-      { name: "A.K.M Mainul Hasan", empId: "Arena0032", role: "Lead AI & Agent Architect" },
-      { name: "Azizul Haque Srejan", empId: "29", role: "Systems Core & Vector DB Engineer" },
-      { name: "sumit roy", empId: "ARENA0061", role: "Full-Stack API & Integration Engineer" },
-      { name: "Shuvo Basak", empId: "0033", role: "RAG Pipeline & Backend Engineer" }
+      { name: "Amit Saha", empId: "EMP -1016", role: "Principal Gateway & Telecommunications Architect" },
+      { name: "sumit roy", empId: "ARENA0061", role: "Banking Integration & bKash Microservices Lead" },
+      { name: "Shuvo Basak", empId: "0033", role: "High-Throughput VAS & Streaming Engineer" },
+      { name: "Azizul Haque Srejan", empId: "29", role: "Scalable Docker & API Infrastructure Engineer" }
     ]
   },
   {
-    id: "squad_multimodal_ecommerce",
-    name: "Multimodal AI UI/UX & Generative Commerce Platform",
-    vertical: "E-Commerce & Retail",
-    synergy: 94,
-    objective: "Real-time design token synthesis, AI-generated multi-format banner assets, responsive conversational commerce, and automated Figma-to-code components.",
+    id: "squad_aex_logistics_fleet",
+    name: "Logistics, Supply Chain & Fleet Tracking Squad (AEX Shipping)",
+    vertical: "Logistics & Supply Chain",
+    synergy: 95,
+    objective: "End-to-end parcel telemetry for AEX Shipping, real-time vehicle fleet tracking (Vfleet-Banglalink), automated attendance capture (FootstepMS), and supply chain drop-shipping automation.",
     members: [
-      { name: "MD Abdull AL Mamun", empId: "37", role: "Multimodal UX & Creative Asset Lead" },
-      { name: "Anamul Haque Shanto", empId: "60", role: "Frontend Component Integration" },
-      { name: "Md.Nahid Hasan", empId: "31", role: "Interactive Prototyping & Feature Eng" },
-      { name: "A.K.M Mainul Hasan", empId: "Arena0032", role: "Generative AI Core Architect" }
+      { name: "Azizul Haque Srejan", empId: "29", role: "Logistics & Shipping Core Systems Lead" },
+      { name: "Mostafizur Rahman", empId: "0030", role: "Tracking & Mobile Geofencing Engineer" },
+      { name: "sumit roy", empId: "ARENA0061", role: "Fleet & Attendance Database Specialist" },
+      { name: "A.K.M Mainul Hasan", empId: "Arena0032", role: "B2B Supply Chain & ERP Integrator" }
     ]
   },
   {
-    id: "squad_qa_sentinel",
-    name: "Autonomous QA Sentinel & Continuous DevOps Swarm",
-    vertical: "Telecom & Cloud Infrastructure",
-    synergy: 93,
-    objective: "Autonomous test-case synthesis, end-to-end synthetic traffic simulation, container health monitoring, and automated regression triage bots.",
-    members: [
-      { name: "sumit roy", empId: "ARENA0061", role: "QA Automation & Test Architect" },
-      { name: "Mostafizur Rahman", empId: "0030", role: "Backend Reliability & API Pipeline" },
-      { name: "Azizul Haque Srejan", empId: "29", role: "Agentic Workflows & CI/CD Lead" }
-    ]
-  },
-  {
-    id: "squad_erp_copilot",
-    name: "Corporate ERP Copilot & Smart Workflow Automation",
+    id: "squad_erp_corporate_operations",
+    name: "Corporate ERP, HRMS & Internal Operations Copilot",
     vertical: "HR Tech & Corporate ERP",
-    synergy: 92,
-    objective: "Intelligent invoice & resume OCR extraction, cross-departmental approval orchestration, and natural-language database querying with strict column-level RBAC.",
+    synergy: 94,
+    objective: "Unified corporate workflows for ARENA HRMS, OSRMS, corporate accounting, canteen & lunch management, and automated document lifecycle indexing with column-level RBAC.",
     members: [
-      { name: "A.K.M Mainul Hasan", empId: "Arena0032", role: "Enterprise Solutions Architect" },
-      { name: "Mostafizur Rahman", empId: "0030", role: "Database & Pipeline Engineer" },
-      { name: "Md.Nahid Hasan", empId: "31", role: "Rapid Integration Engineer" },
-      { name: "MD Abdull AL Mamun", empId: "37", role: "Enterprise Portal UI Specialist" }
+      { name: "A.K.M Mainul Hasan", empId: "Arena0032", role: "HRMS & Enterprise Solutions Architect" },
+      { name: "Azizul Haque Srejan", empId: "29", role: "Accounting & Operations Logic Lead" },
+      { name: "Md.Nahid Hasan", empId: "31", role: "EDMS Workflow & Document Indexing Engineer" },
+      { name: "MD Abdull AL Mamun", empId: "37", role: "Enterprise Portal UX Design Specialist" }
     ]
   },
   {
-    id: "squad_edge_telecom",
-    name: "Low-Latency Edge AI & Telecom Microservices",
-    vertical: "Telecom VAS & Messaging",
-    synergy: 91,
-    objective: "High-throughput local LLM inference (vLLM/Ollama), sub-50ms streaming response dispatching, and low-latency client API endpoints.",
+    id: "squad_multimodal_creative_commerce",
+    name: "Multimodal Generative UI/UX & Digital Commerce Platform",
+    vertical: "E-Commerce & Retail",
+    synergy: 93,
+    objective: "Dynamic generative UI design token generation, marketing banner synthesis, CMS pagebuilder automation, and responsive front-end customer journey optimization.",
     members: [
-      { name: "Azizul Haque Srejan", empId: "29", role: "Lead Systems Engineer" },
-      { name: "sumit roy", empId: "ARENA0061", role: "Full-Stack Integrator & Security Lead" },
-      { name: "Anamul Haque Shanto", empId: "60", role: "Client UI & Telemetry Engineer" },
-      { name: "Shuvo Basak", empId: "0033", role: "VAS & Edge Microservices Engineer" }
+      { name: "MD Abdull AL Mamun", empId: "37", role: "Multimodal Creative & UI System Lead" },
+      { name: "Anamul Haque Shanto", empId: "60", role: "Frontend Component & React Architect" },
+      { name: "Shuvo Basak", empId: "0033", role: "E-Commerce & Pagebuilder Pipeline Engineer" },
+      { name: "Fahim Abser Navil", empId: "41", role: "Conversational UI & Client Agent Integrator" }
     ]
   }
 ];
@@ -8594,12 +8700,13 @@ function getProjectTeams() {
     const saved = localStorage.getItem('arena_ai_project_teams');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      const hasInterlinks = Array.isArray(parsed) && parsed.some(t => t.id && (t.id.includes('smc') || t.id.includes('aex') || t.id.includes('assistant')));
+      if (hasInterlinks && parsed.length >= 6) return parsed;
     }
   } catch(e) {
     console.warn('Error reading arena_ai_project_teams from localStorage', e);
   }
-  // Fallback to default suggested squads
+  // Fallback / upgrade to updated suggested squads based on project interlinks
   saveProjectTeams(DEFAULT_SUGGESTED_SQUADS);
   return DEFAULT_SUGGESTED_SQUADS;
 }
@@ -8724,6 +8831,7 @@ function renderTeamBuilderDashboard() {
           </div>
 
           <div style="display:flex; justify-content:flex-end; gap:8px; border-top:1px solid #f1f5f9; padding-top:12px;">
+            <button class="btn btn-sm btn-glass" onclick="editProjectTeam('${team.id || tIdx}')" style="color:#2563eb; border-color:#bfdbfe;">✏️ Edit Squad</button>
             <button class="btn btn-sm btn-glass" onclick="deleteProjectTeam('${team.id || tIdx}')" style="color:#ef4444; border-color:#fecaca;">🗑️ Disband</button>
           </div>
         </div>
@@ -8732,24 +8840,48 @@ function renderTeamBuilderDashboard() {
   }).join('');
 }
 
-function openCreateTeamModal() {
+function openCreateTeamModal(editId) {
   const modal = document.getElementById('teamModal');
   if (!modal) return;
 
-  // Clear fields
-  document.getElementById('teamName').value = '';
-  document.getElementById('teamVertical').value = 'FinTech & Banking';
-  document.getElementById('teamObjective').value = '';
+  const editIdInput = document.getElementById('editTeamId');
+  if (editIdInput) editIdInput.value = editId || '';
+  const titleEl = document.getElementById('teamModalTitle');
+  if (titleEl) titleEl.textContent = editId ? 'Edit AI Industry Project Squad' : 'Create AI Industry Project Squad';
+
+  const nameInput = document.getElementById('teamName') || document.getElementById('teamProjectName');
+  const verticalInput = document.getElementById('teamVertical') || document.getElementById('teamIndustrySelect');
+  const objInput = document.getElementById('teamObjective');
+
+  let existingTeam = null;
+  if (editId) {
+    const teams = getProjectTeams();
+    existingTeam = teams.find((t, idx) => t.id === editId || String(idx) === String(editId));
+  }
+
+  if (nameInput) nameInput.value = existingTeam ? (existingTeam.name || '') : '';
+  if (verticalInput) verticalInput.value = existingTeam ? (existingTeam.vertical || 'FinTech & Banking') : 'FinTech & Banking';
+  if (objInput) objInput.value = existingTeam ? (existingTeam.objective || '') : '';
 
   // Render member checklist
   const checklist = document.getElementById('teamMemberChecklist');
   if (checklist) {
     checklist.innerHTML = allAssessments.map(dev => {
       const squadCount = getDeveloperSquadCount(dev.empId, dev.name);
+      let isChecked = false;
+      let existingRole = '';
+      if (existingTeam && existingTeam.members) {
+        const foundMem = existingTeam.members.find(m => (m.empId && m.empId === dev.empId) || (m.name && m.name === dev.name));
+        if (foundMem) {
+          isChecked = true;
+          existingRole = foundMem.role || '';
+        }
+      }
+
       return `
         <div style="display:flex; align-items:center; justify-content:space-between; padding:8px; background:#fff; border:1px solid #e2e8f0; border-radius:8px; margin-bottom:6px;">
           <div style="display:flex; align-items:center; gap:8px;">
-            <input type="checkbox" class="team-dev-checkbox" value="${dev.empId || dev.name}" id="chk_dev_${dev.empId}" onchange="updateTeamMemberCountStatus()">
+            <input type="checkbox" class="team-dev-checkbox" value="${dev.empId || dev.name}" id="chk_dev_${dev.empId}" onchange="updateTeamMemberCountStatus()" ${isChecked ? 'checked' : ''}>
             <label for="chk_dev_${dev.empId}" style="margin:0; cursor:pointer;">
               <span style="font-size:13px; font-weight:700; color:#0f172a;">${dev.name}</span>
               <span style="font-size:11px; color:#64748b;">(${dev.title || 'Developer'})</span>
@@ -8757,7 +8889,7 @@ function openCreateTeamModal() {
             </label>
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
-            <input type="text" class="form-control squad-dev-role-input" id="role_for_${dev.empId || dev.name}" placeholder="Role: e.g. Lead, Full-Stack, QA" style="width:170px; font-size:11.5px; padding:4px 8px;">
+            <input type="text" class="form-control squad-dev-role-input" id="role_for_${dev.empId || dev.name}" value="${existingRole}" placeholder="Role: e.g. Lead, Full-Stack, QA" style="width:170px; font-size:11.5px; padding:4px 8px;">
             <span style="font-size:11px; font-weight:800; color:var(--arena-crimson);">${dev.overallScore}/5</span>
           </div>
         </div>
@@ -8765,13 +8897,21 @@ function openCreateTeamModal() {
     }).join('');
   }
 
+  modal.classList.add('show');
   modal.classList.add('active');
   updateTeamMemberCountStatus();
 }
 
+function editProjectTeam(teamId) {
+  openCreateTeamModal(teamId);
+}
+
 function closeTeamModal() {
   const modal = document.getElementById('teamModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) {
+    modal.classList.remove('show');
+    modal.classList.remove('active');
+  }
 }
 
 function updateTeamMemberCountStatus() {
@@ -8790,9 +8930,15 @@ function updateTeamMemberCountStatus() {
 }
 
 function saveCustomTeam() {
-  const name = document.getElementById('teamName').value.trim();
-  const vertical = document.getElementById('teamVertical').value;
-  const objective = document.getElementById('teamObjective').value.trim();
+  const nameEl = document.getElementById('teamName') || document.getElementById('teamProjectName');
+  const verticalEl = document.getElementById('teamVertical') || document.getElementById('teamIndustrySelect');
+  const objEl = document.getElementById('teamObjective');
+  const editIdEl = document.getElementById('editTeamId');
+
+  const name = nameEl ? nameEl.value.trim() : '';
+  const vertical = verticalEl ? verticalEl.value : 'FinTech & Banking';
+  const objective = objEl ? objEl.value.trim() : '';
+  const editId = editIdEl ? editIdEl.value : '';
   const checkedBoxes = Array.from(document.querySelectorAll('.team-dev-checkbox:checked'));
 
   if (!name) {
@@ -8851,7 +8997,7 @@ function deleteProjectTeam(teamId) {
 }
 
 function resetToSuggestedTeams() {
-  if (confirm('Reset to the 4 default suggested industry project squads (FinTech, E-Commerce, Telecom, HR ERP)?')) {
+  if (confirm('Reset to the 6 project-interlinked industry squads (SMC Mobility, AI RAG Platform, FinTech Gateways, AEX Shipping, Corporate ERP, Multimodal E-Commerce)?')) {
     saveProjectTeams(DEFAULT_SUGGESTED_SQUADS);
     renderTeamBuilderDashboard();
     renderRoster();
@@ -9019,7 +9165,13 @@ function renderIndividualExecutiveReport(devIndex) {
     <div class="report-section-card">
       <div class="report-section-title">
         <span>👤 Candidate Executive Profile</span>
-        <span style="font-size:12px; font-weight:600; color:#64748b; margin-left:auto;">Emp ID: <strong>${dev.empId || 'N/A'}</strong> &bull; Dept: <strong>${dev.department || 'N/A'}</strong></span>
+        <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
+          <span style="font-size:12px; font-weight:600; color:#64748b;">Emp ID: <strong>${dev.empId || 'N/A'}</strong> &bull; Dept: <strong>${dev.department || 'N/A'}</strong></span>
+          <button class="btn btn-sm btn-primary" onclick="loadAssessmentForEdit(${devIndex})" style="background:#C41E3A; border-color:#9e182e; color:#fff; padding:5px 12px; font-size:11.5px; font-weight:700; gap:5px; box-shadow:0 4px 10px rgba(196,30,58,0.2);" title="Edit this candidate's assessment, remarks and notes">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit Dossier
+          </button>
+        </div>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
         <div>
@@ -9395,6 +9547,23 @@ function generateFreshEnterpriseIdeas(devIndex) {
   const dev = allAssessments[devIndex];
   grid.innerHTML = generateEnterpriseIdeasForCandidate(dev);
   alert('⚡ Generated fresh enterprise project concepts tailored to ' + dev.name + '!');
+}
+
+
+function editCurrentExecutiveDossier() {
+  const select = document.getElementById('execReportDevSelect');
+  const idx = select && select.value !== '' ? parseInt(select.value) : 0;
+  loadAssessmentForEdit(idx);
+}
+
+function cancelEditingDossier() {
+  currentDevIndex = -1;
+  resetFormFields();
+  const quickSaveBtn = document.getElementById('btnQuickSaveDossier');
+  if (quickSaveBtn) quickSaveBtn.style.display = 'none';
+  const cancelEditBtn = document.getElementById('btnCancelEditDossier');
+  if (cancelEditBtn) cancelEditBtn.style.display = 'none';
+  switchTab('roster');
 }
 
 function printExecutiveDossier() {
