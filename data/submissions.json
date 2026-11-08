@@ -1418,7 +1418,7 @@
     "rawAvgSelfAssess": "3.5"
   },
   {
-    "id": 1794116192030,
+    "id": 1794116422997,
     "name": "Shuvo Basak",
     "empId": "0033",
     "department": "IT",
@@ -1616,11 +1616,11 @@
         "remarks": ""
       },
       "Real-World AI Project Delivery Experience": {
-        "rating": 3,
+        "rating": 4,
         "remarks": ""
       },
       "Readiness to Lead or Architect an Arena AI Initiative": {
-        "rating": 3,
+        "rating": 4,
         "remarks": ""
       }
     },
@@ -1630,19 +1630,19 @@
     "noteTraining": "# Recommended AI Training Priorities  ### Priority 1: Advanced RAG Engineering - Advanced RAG architecture and implementation. - Hybrid search (Vector + Keyword Search). - Embedding models and vector database optimization. - Reranking, query rewriting, and contextual retrieval. - RAG evaluation and hallucination reduction.  **Goal:** Build accurate, scalable, production-ready knowledge-based AI systems.  ### Priority 2: AI Agents & Agentic Workflows - AI agents and autonomous workflows. - Function calling and tool calling. - Multi-agent architecture. - Workflow orchestration using LangGraph. - Human-in-the-loop approval mechanisms.  **Goal:** Develop AI systems capable of interacting with business applications and executing controlled tasks.  ### Priority 3: MCP Development & Integration - MCP architecture and communication protocols. - Custom MCP server and client development. - Tool and resource integration. - Authentication and authorization. - Connecting MCP with Laravel and external services.  **Goal:** Build reusable AI tool integrations across Arena's software ecosystem.  ### Priority 4: LLM Evaluation & Production Optimization - AI response evaluation and benchmarking. - Retrieval accuracy and relevance measurement. - Prompt injection protection. - Token and API cost optimization. - Logging, monitoring, and observability.  **Goal:** Make AI applications reliable, secure, cost-efficient, and production-ready.  ### Priority 5: Machine Learning & Deep Learning Fundamentals - Machine learning fundamentals. - Neural networks and deep learning. - Embeddings and transformer architecture. - Model training, fine-tuning, and evaluation. - Understanding open-source and commercial LLMs.  **Goal:** Develop a deeper understanding of the technologies behind modern AI models.  ### Priority 6: AI Infrastructure & Deployment - Python for AI engineering. - FastAPI for AI microservices. - Docker and scalable AI deployment. - Redis and asynchronous processing. - Vector database infrastructure and distributed systems.  **Goal:** Independently build, deploy, monitor, and maintain scalable AI solutions.  ## Recommended Learning Sequence  | Phase | Training Focus | Priority | |---|---|---| | Phase 1 | Advanced RAG Engineering | Critical | | Phase 2 | AI Agents & LangGraph | Critical | | Phase 3 | MCP Development | High | | Phase 4 | LLM Evaluation & Security | High | | Phase 5 | Machine Learning Fundamentals | Medium | | Phase 6 | AI Infrastructure & Scaling | High |  ## Expected Professional Outcome  My objective is to evolve from an AI-integrated software engineer into a capable Applied AI Engineer who can independently design and deliver production-grade AI systems, intelligent agents, RAG-based knowledge platforms, and AI-powered business automation solutions.",
     "aiPotential": "High",
     "noteRemarks": "I would like to express my sincere appreciation to the management for providing opportunities to explore and work with emerging AI technologies alongside my regular software engineering responsibilities.\n\nOver the past year, I have taken a strong personal initiative to learn, experiment with, and implement AI technologies in practical business applications. I have independently developed AI-powered features and explored advanced technologies such as LLM integration, RAG architecture, vector databases, MCP, and AI automation.\n\nI believe AI represents a significant opportunity for Arena to improve internal productivity, optimize business operations, enhance existing products, and develop new technology-driven services.\n\nI would welcome the opportunity to take greater ownership of AI-related initiatives, contribute to a centralized AI development strategy, and help introduce practical AI solutions across Arena's projects and departments.\n\nI am also committed to continuously improving my technical expertise through structured learning, practical implementation, and knowledge sharing with the engineering team.\n\n**My long-term goal is to contribute to Arena's evolution into an AI-enabled technology company by turning emerging AI capabilities into reliable, scalable, and measurable business solutions.**",
-    "timestamp": "2026-11-08T05:36:32.030Z",
+    "timestamp": "2026-11-08T05:40:22.997Z",
     "answeredCount": 27,
     "totalBenchmarkCount": 27,
     "completenessPct": 100,
-    "rawOverallScore": "2.6",
-    "calibratedOverallScore": "2.6",
-    "overallScore": "2.6",
+    "rawOverallScore": "2.7",
+    "calibratedOverallScore": "2.7",
+    "overallScore": "2.7",
     "isIncomplete": false,
     "avgKnowledge": "2.4",
     "rawAvgKnowledge": "2.4",
     "avgSkills": "2.5",
     "rawAvgSkills": "2.5",
-    "avgSelfAssess": "3.3",
-    "rawAvgSelfAssess": "3.3"
+    "avgSelfAssess": "3.8",
+    "rawAvgSelfAssess": "3.8"
   }
 ]
