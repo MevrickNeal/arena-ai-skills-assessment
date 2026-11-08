@@ -1644,5 +1644,224 @@
     "rawAvgSkills": "2.5",
     "avgSelfAssess": "3.8",
     "rawAvgSelfAssess": "3.8"
+  },
+  {
+    "id": 1794117909816,
+    "name": "Fahim Abser Navil",
+    "empId": "41",
+    "department": "Technical",
+    "title": "Jr. Software Engineer",
+    "project": "AI assistant(RAG)",
+    "role": "Full Stack Developer",
+    "yearsCompany": "2",
+    "yearsTotal": "2",
+    "languages": [
+      "JavaScript",
+      "TypeScript",
+      "PHP"
+    ],
+    "otherLangs": "React js, Next js, Laravel, Codeigniter, MySQL, Vector Database, Express js, Node js, LLM",
+    "knowledge": {
+      "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Natural Language Processing (NLP & Text Analysis)": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Computer Vision & Image / Video Recognition": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "AI Ethics, Bias, Data Privacy & Responsible AI": {
+        "rating": 1,
+        "remarks": ""
+      },
+      "Industry AI Trends, Modern Frameworks & API Ecosystems": {
+        "rating": 3,
+        "remarks": ""
+      }
+    },
+    "skills": {
+      "Python for AI/ML (NumPy, Pandas, SciPy)": {
+        "rating": 1,
+        "usedAtWork": "no",
+        "remarks": "",
+        "isCustom": false
+      },
+      "PyTorch (Model training & inference)": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "TensorFlow / Keras": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Scikit-learn (Classical ML algorithms)": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Hugging Face Transformers & Datasets": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "OpenAI API & GPT Integration (Function Calling)": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Google Gemini & Vertex AI SDK": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "LangChain / LlamaIndex (AI Agents & Chains)": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Prompt Engineering & Context Optimization": {
+        "rating": 3,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "RAG (Retrieval-Augmented Generation)": {
+        "rating": 3,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Vector Databases (Pinecone, Chroma, Milvus, Qdrant)": {
+        "rating": 3,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Fine-Tuning LLMs (LoRA, QLoRA, PEFT)": {
+        "rating": 3,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "MLOps & Pipelines (MLflow, Kubeflow, Weights & Biases)": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Model Serving & Deployment (FastAPI, ONNX, vLLM, Docker)": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Cloud AI Platforms (AWS SageMaker, Azure AI, GCP Vertex)": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      },
+      "Data Engineering & Feature Extraction": {
+        "rating": 1,
+        "usedAtWork": "",
+        "remarks": "",
+        "isCustom": false
+      }
+    },
+    "customSkills": [],
+    "aiProjects": "yes",
+    "aiProjectCount": "4",
+    "aiProjectDesc": "",
+    "aiProjectRole": "Full Stack",
+    "aiProjectImpact": "",
+    "aiDeployed": "",
+    "aiOpenSource": "",
+    "aiOpenSourceDetails": "",
+    "usingAI": "yes",
+    "aiTools": [
+      "Google Antigravity"
+    ],
+    "aiProductivity": "",
+    "aiOpportunities": "",
+    "aiInitiatives": "",
+    "aiEffDailyTasks": "",
+    "aiRateDailyTasks": "1",
+    "aiEffCoding": "",
+    "aiRateCoding": "3",
+    "aiEffDebugging": "",
+    "aiRateDebugging": "3",
+    "aiEffTestingQA": "",
+    "aiRateTestingQA": "3",
+    "aiEffFeatureEng": "",
+    "aiRateFeatureEng": "3",
+    "aiEffCodeReview": "",
+    "aiRateCodeReview": "3",
+    "aiOverallBoost": "> 75% (2x+ Boost)",
+    "hasCerts": "no",
+    "currentLearning": "no",
+    "certsList": "",
+    "wantedTraining": "",
+    "learningFormats": [
+      "Hands-on Workshop"
+    ],
+    "selfAssessment": {
+      "Overall Conceptual AI Knowledge": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Hands-On AI/ML Development & Coding": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Real-World AI Project Delivery Experience": {
+        "rating": 3,
+        "remarks": ""
+      },
+      "Readiness to Lead or Architect an Arena AI Initiative": {
+        "rating": 3,
+        "remarks": ""
+      }
+    },
+    "noteImpression": "",
+    "noteStrengths": "",
+    "noteGaps": "",
+    "noteTraining": "",
+    "aiPotential": "",
+    "noteRemarks": "",
+    "timestamp": "2026-11-08T06:05:09.816Z",
+    "answeredCount": 27,
+    "totalBenchmarkCount": 27,
+    "completenessPct": 100,
+    "rawOverallScore": "1.7",
+    "calibratedOverallScore": "1.7",
+    "overallScore": "1.7",
+    "isIncomplete": false,
+    "avgKnowledge": "1.6",
+    "rawAvgKnowledge": "1.6",
+    "avgSkills": "1.5",
+    "rawAvgSkills": "1.5",
+    "avgSelfAssess": "3.0",
+    "rawAvgSelfAssess": "3.0"
   }
 ]
