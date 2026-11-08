@@ -2353,19 +2353,19 @@
     "otherLangs": "React js, Next js, Laravel, Codeigniter, MySQL, Vector Database, Express js, Node js, LLM",
     "knowledge": {
       "Core AI & Machine Learning (Supervised, Unsupervised, Reinforcement)": {
-        "rating": 1,
+        "rating": 2,
         "remarks": ""
       },
       "Deep Learning & Neural Architectures (CNNs, RNNs, Transformers)": {
-        "rating": 1,
+        "rating": 2,
         "remarks": ""
       },
       "Natural Language Processing (NLP & Text Analysis)": {
-        "rating": 1,
+        "rating": 2,
         "remarks": ""
       },
       "Computer Vision & Image / Video Recognition": {
-        "rating": 1,
+        "rating": 2,
         "remarks": ""
       },
       "Generative AI & Large Language Models (LLMs, Diffusion Models)": {
@@ -2373,7 +2373,7 @@
         "remarks": ""
       },
       "AI Ethics, Bias, Data Privacy & Responsible AI": {
-        "rating": 1,
+        "rating": 5,
         "remarks": ""
       },
       "Industry AI Trends, Modern Frameworks & API Ecosystems": {
@@ -2496,7 +2496,7 @@
     "aiOpportunities": "",
     "aiInitiatives": "",
     "aiEffDailyTasks": "",
-    "aiRateDailyTasks": "1",
+    "aiRateDailyTasks": "2",
     "aiEffCoding": "",
     "aiRateCoding": "3",
     "aiEffDebugging": "",
@@ -2539,16 +2539,16 @@
     "noteTraining": "",
     "aiPotential": "",
     "noteRemarks": "",
-    "timestamp": "2026-11-08T09:11:44.426Z",
+    "timestamp": "2026-11-08T09:13:58.938Z",
     "answeredCount": 27,
     "totalBenchmarkCount": 27,
     "completenessPct": 100,
-    "rawOverallScore": "2.3",
-    "calibratedOverallScore": "2.3",
-    "overallScore": "2.3",
+    "rawOverallScore": "2.6",
+    "calibratedOverallScore": "2.6",
+    "overallScore": "2.6",
     "isIncomplete": false,
-    "avgKnowledge": "1.6",
-    "rawAvgKnowledge": "1.6",
+    "avgKnowledge": "2.7",
+    "rawAvgKnowledge": "2.7",
     "avgSkills": "2.5",
     "rawAvgSkills": "2.5",
     "avgSelfAssess": "3.0",
